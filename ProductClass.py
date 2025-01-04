@@ -1,6 +1,7 @@
 import TowerClass
 import ButtonClass
 
+
 def buy_tower(additional_image, image, scale,tower_array, damage, radius, coordinate, index, improve_cost_array):
     if additional_image is not None:
         tower_array.append(TowerClass.Tower(image, scale, damage, coordinate, index, improve_cost_array, radius, additional_image))
@@ -20,3 +21,5 @@ class Product:
             self.__additional_image = None
             self.button_product = ButtonClass.Button(coordinate[0], coordinate[1], image, scale, scale, buy_tower)
 
+    def draw(self, screen):
+        self.button_product.draw(screen)
