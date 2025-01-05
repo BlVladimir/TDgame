@@ -1,10 +1,7 @@
 import pygame
 
-import MainManu
-import TowerClass
-import ButtonClass
 import Function
-import ProductClass
+from ProductClass import Product
 
 from MainManu import  height
 pygame.init()
@@ -17,8 +14,8 @@ imageShop = pygame.transform.scale(imageShop, (height * 0.4, height))
 towers_object_array = []
 button_update_array = []
 scale_products = 100
-products = [ProductClass.Product("images/tower/commonFoundation.png", 3, scale_products, (20, 150),  2, 170, (4, 6), "images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)
-            ProductClass.Product("images/tower/sniperFoundation.png", 5, scale_products, (20, 270),  3, 230, (6, 8), "images/tower/sniperGun.png")]
+products = [Product("images/tower/commonFoundation.png", 3, scale_products, (20, 150),  2, 170, (4, 6), "images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)
+            Product("images/tower/sniperFoundation.png", 5, scale_products, (20, 270),  3, 230, (6, 8), "images/tower/sniperGun.png")]
 
 
 def draw(state, screen, moneyPicture, current_tile = None): #  в будущим магазин будет закрываться

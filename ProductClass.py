@@ -1,12 +1,23 @@
 import TowerClass
 import ButtonClass
-
+from Shop import towers_object_array, button_update_array, height
 
 def buy_tower(parameter_array):
     if parameter_array[0] is not None:
-        parameter_array[1].append(TowerClass.Tower(parameter_array[2], parameter_array[3], parameter_array[4], parameter_array[5], parameter_array[6], parameter_array[7], parameter_array[8], parameter_array[0]))
+        print(parameter_array[0])
+        parameter_array[1].append(TowerClass.Tower(parameter_array[2], parameter_array[3], parameter_array[4], parameter_array[5], parameter_array[6], parameter_array[7], parameter_array[0], parameter_array[8]))
     else:
         parameter_array[1].append(TowerClass.Tower(parameter_array[2], parameter_array[3], parameter_array[4], parameter_array[5], parameter_array[6], parameter_array[7], parameter_array[8]))
+    return parameter_array[1]
+
+def upgrade_tower(parameter_array):
+    if towers_object_array[parameter_array[0]].level != 3:
+        cost = towers_object_array[parameter_array[0]].improve_cost_array[towers_object_array[parameter_array[0]].level - 1]
+        if parameter_array[1] >= cost:
+            towers_object_array[parameter_array[0]].upgrade(1, 60)
+            towers_object_array[parameter_array[0]].level += 1
+            button_update_array[parameter_array[0]].change_image('images/upgrade/2lvl.png') if towers_object_array[parameter_array[0]].level == 2 else button_update_array[parameter_array[0]].change_image('images/upgrade/3lvl.png')
+            parameter_array[1] -= cost
     return parameter_array[1]
 
 class Product:
@@ -35,6 +46,7 @@ class Product:
                 case 2:
                     self.__damage_tower += 1
                     self.button_product.handle_event_parameter([self.__additional_image, tower_array, self.__image, scale_tower, self.__damage_tower, coordinate_tower, index, self.__improve_cost_array, self.__radius_tower])
+                    button_update_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                     money -= self.cost
                 case 3:
                     self.__radius_tower = self.__radius_tower * 1.2
