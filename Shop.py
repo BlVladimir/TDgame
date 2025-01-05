@@ -23,6 +23,7 @@ products = [ProductClass.Product("images/tower/commonFoundation.png", 3, scale_p
 
 def draw(state, screen, moneyPicture, current_tile = None): #  в будущим магазин будет закрываться
     if state == 1:
+        draw_store(screen, moneyPicture)
         for i in products:
             i.draw(screen)
     elif state == 2:
@@ -38,6 +39,12 @@ def draw_up(screen, current_tile):
         draw_tower_parameter(screen, tower_characteristic_image[0], 0, damage_count)
         draw_tower_parameter(screen, tower_characteristic_image[1], 1, radius_value, ' tile')
         button_update_array[current_tower].draw(screen)
+
+def draw_store(screen, moneyPicture): #  проходится по массиву возможных покупок и рисует магазин
+    screen.blit(imageShop, (0, 0))
+    for i in products:
+        Function.draw_text(screen, 'x' + str(i.cost), 100, (i.coordinate[0] + scale_products * 1.5, i.coordinate[1] + scale_products * 0.5))
+        screen.blit(pygame.transform.scale(moneyPicture, (scale_products * 0.9, scale_products * 0.9)), (i.coordinate[0] + scale_products * 2.1, i.coordinate[1] + scale_products * 0.1))
 
 def draw_tower_parameter(screen, parameter_image, number_this_parameter, value, additional_text = ''):
     screen.blit(parameter_image, (height * 0.05, height * 0.16 + 170 + number_this_parameter * 120))
@@ -55,7 +62,8 @@ def upgrade_tower(parameter_array):
 
 def build_tower(event, coins, scale_tower, current_tile, build_array):
     mouse_pose = pygame.mouse.get_pos()
-    for i in products:
-        if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
-            coins = i.buy(event, coins, build_array[current_tile]['type'], False, scale_tower, build_array[current_tile]['coordinate'], towers_object_array, current_tile)
+    if current_tile is not None:
+        for i in products:
+            if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
+                coins = i.buy(event, coins, build_array[current_tile]['type'], False, scale_tower, build_array[current_tile]['coordinate'], towers_object_array, current_tile)
     return coins #  меняет значение денег
