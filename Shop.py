@@ -4,6 +4,7 @@ import MainManu
 import TowerClass
 import ButtonClass
 import Function
+import ProductClass
 
 from MainManu import  height
 pygame.init()
@@ -19,7 +20,8 @@ button_buy_array = []
 products_image_file = [["images/tower/commonFoundation.png", "images/tower/commonGun.png"],
                        ["images/tower/sniperFoundation.png", "images/tower/sniperGun.png"]]
 cost_mas = [3, 5]
-products = []
+products = [ProductClass.Product("images/tower/commonFoundation.png", 3, 100, (20, 150),  2, 170, (4, 6), "images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)
+            ProductClass.Product("images/tower/sniperFoundation.png", 5, 100, (20, 270),  3, 230, (6, 8), "images/tower/sniperGun.png")]
 scale_products = 100
 
 position_products = [] #  создание массива координат продуктов
