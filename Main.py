@@ -121,7 +121,6 @@ while True:  # основной цикл
                     if towers_object_array[i].index == current_tile:
                         towers_object_array[i].rotate_gun()
                         towers_object_array[i].draw_radius(screen)
-                print(len(button_update_array), current_tower)
                 if current_tower is not None and button_update_array[current_tower].is_pressed(event):
                     money = button_update_array[current_tower].handle_event_parameter([current_tower, money])
                 amount_of_money = 'x' + str(money) #  рисует количество денег
