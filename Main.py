@@ -50,11 +50,8 @@ def action_exit():  # функция, закрывающая окно
 def change_using_additional_parameter(additionalParameters):
     if additionalParameters:
         additionalParameters = False
-        print(1)
     else:
         additionalParameters = True
-        print(2)
-    print(additionalParameters)
     return additionalParameters
 
 button_exit = Button(MainManu.width - 170, 20, "images/UI/exit.png", 150, 75, action_exit)
