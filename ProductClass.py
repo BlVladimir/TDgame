@@ -1,6 +1,9 @@
 import TowerClass
 import ButtonClass
-from Shop import towers_object_array, button_update_array, height
+from MainManu import  height
+
+towers_object_array = []
+button_update_array = []
 
 def buy_tower(parameter_array):
     if parameter_array[0] is not None:
@@ -43,6 +46,10 @@ class Product:
     def buy(self, event, money, type_tile, is_free, scale_tower, coordinate_tower, tower_array, index):
         if self.button_product.is_pressed(event) and (money >= self.cost or is_free):
             match type_tile:
+                case 1:
+                    self.button_product.handle_event_parameter([self.__additional_image, tower_array, self.__image, scale_tower, self.__damage_tower, coordinate_tower, index, self.__improve_cost_array, self.__radius_tower])
+                    button_update_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
+                    money -= self.cost
                 case 2:
                     self.__damage_tower += 1
                     self.button_product.handle_event_parameter([self.__additional_image, tower_array, self.__image, scale_tower, self.__damage_tower, coordinate_tower, index, self.__improve_cost_array, self.__radius_tower])
@@ -51,5 +58,6 @@ class Product:
                 case 3:
                     self.__radius_tower = self.__radius_tower * 1.2
                     self.button_product.handle_event_parameter([self.__additional_image, tower_array, self.__image, scale_tower, self.__damage_tower, coordinate_tower, index, self.__improve_cost_array, self.__radius_tower])
+                    button_update_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                     money -= self.cost
         return money

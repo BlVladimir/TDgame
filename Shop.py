@@ -1,8 +1,8 @@
 import pygame
 
 import Function
-from ProductClass import Product
 
+from ProductClass import Product, towers_object_array, button_update_array
 from MainManu import  height
 pygame.init()
 
@@ -11,8 +11,6 @@ imageShop = pygame.image.load("images/UI/shopBackground.png")
 tower_characteristic_image = (pygame.transform.scale(pygame.image.load('images/UI/up/damageUpUp.png'), (100, 100)),
                               pygame.transform.scale(pygame.image.load('images/UI/up/radiusUpUp.png'), (100, 100)))
 imageShop = pygame.transform.scale(imageShop, (height * 0.4, height))
-towers_object_array = []
-button_update_array = []
 scale_products = 100
 products = [Product("images/tower/commonFoundation.png", 3, scale_products, (20, 150),  2, 170, (4, 6), "images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)
             Product("images/tower/sniperFoundation.png", 5, scale_products, (20, 270),  3, 230, (6, 8), "images/tower/sniperGun.png")]
