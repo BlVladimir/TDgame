@@ -114,7 +114,7 @@ while True:  # основной цикл
                     shop_tipe = 2
                 else:
                     shop_tipe = 0
-                money = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                money, Map.lvl1.build_array = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
                 for i in range(len(towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if towers_object_array[i].index == current_tile:
