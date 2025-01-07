@@ -85,6 +85,8 @@ while True:  # основной цикл
                     button_setting.handle_event_parameter('setting')
             case 'lvl1':
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
+                    # towers_object_array = []
+                    # button_update_array = []
                     waves = create_waves(10, 1) #  создает волны
                     current_wave = 1  # текущая волна 1
                     EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array)  # создает врагов на 1 клетке
@@ -92,7 +94,7 @@ while True:  # основной цикл
                     money = 30  # обнуляет все тайлы
                     for i in range(len(Map.lvl1.build_array)):
                         Map.lvl1.build_array[i]['is_filled'] = False
-                if towers_object_array:
+                if towers_object_array is not []:
                     current_tower = Function.define_current_tower(current_tile, towers_object_array)
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
                     current_enemy = DefinitionCurrentTile.highlight_enemy(enemy_array)  # определяет, какой враг выделен
@@ -145,20 +147,19 @@ while True:  # основной цикл
                     always_use_additional_parameters = Function.file_change('alwaysUseAdditionalParameter')
                 if button_main_manu.is_pressed(event):
                     button_main_manu.handle_event_parameter('mainMenu')
-
         button_exit.handle_event(event)
     if is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
         is_fail = EnemyClass.move_all_enemies(enemy_array, trajectory, Map.lvl1.gaps, Map.lvl1.tile_scale)
         if is_fail:
             MainManu.scene = 'mainMenu'
         ti += 1
-        for i in range(len(Shop.towers_object_array)):
-            Shop.towers_object_array[i].is_used = True
+        for i in range(len(towers_object_array)):
+            towers_object_array[i].is_used = True
         if ti % 60 == 0:
             ti = 0
             is_move = False
-            for i in range(len(Shop.towers_object_array)):
-                Shop.towers_object_array[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
+            for i in range(len(towers_object_array)):
+                towers_object_array[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
                 EnemyClass.create_enemy_on_lvl1(waves, current_wave, enemy_array)
                 current_wave  += 1
