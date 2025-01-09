@@ -66,4 +66,4 @@ class Product:
                     button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                     build_array[current_tile]['is_filled'] = True
                     money -= self.cost
-        return money, build_array, tower_array
+        return money, build_array
