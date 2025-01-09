@@ -1,11 +1,13 @@
 import pygame
-
 import Function
 
-from ProductClass import Product, towers_object_array, button_update_array
 from MainManu import  height
+from ProductClass import Product
 pygame.init()
 
+
+towers_object_array = []
+button_update_array = []
 isOpen = False
 imageShop = pygame.image.load("images/UI/shopBackground.png")
 tower_characteristic_image = (pygame.transform.scale(pygame.image.load('images/UI/up/damageUpUp.png'), (100, 100)),
@@ -45,15 +47,6 @@ def draw_tower_parameter(screen, parameter_image, number_this_parameter, value, 
     screen.blit(parameter_image, (height * 0.05, height * 0.16 + 170 + number_this_parameter * 120))
     Function.draw_text(screen, str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120))
 
-def upgrade_tower(parameter_array):
-    if towers_object_array[parameter_array[0]].level != 3:
-        cost = towers_object_array[parameter_array[0]].improve_cost_array[towers_object_array[parameter_array[0]].level - 1]
-        if parameter_array[1] >= cost:
-            towers_object_array[parameter_array[0]].upgrade(1, 60)
-            towers_object_array[parameter_array[0]].level += 1
-            button_update_array[parameter_array[0]].change_image('images/upgrade/2lvl.png') if towers_object_array[parameter_array[0]].level == 2 else button_update_array[parameter_array[0]].change_image('images/upgrade/3lvl.png')
-            parameter_array[1] -= cost
-    return parameter_array[1]
 
 def build_tower(event, coins, scale_tower, current_tile, build_array):
     mouse_pose = pygame.mouse.get_pos()
