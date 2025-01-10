@@ -12,6 +12,7 @@ import Function
 
 from ButtonClass import Button
 from EnemyClass import Enemy, create_waves  # импорт классов из других файлов(чтобы уменьшить основной код)
+from Shop import towers_object_array, button_update_array
 
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
@@ -120,7 +121,7 @@ while True:  # основной цикл
                         Shop.towers_object_array[i].rotate_gun()
                         Shop.towers_object_array[i].draw_radius(screen)
                 if current_tower is not None and Shop.button_update_array[current_tower].is_pressed(event):
-                    money = Shop.button_update_array[current_tower].handle_event_parameter([current_tower, money])
+                    money = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': towers_object_array, 'number':current_tower, 'money':money, 'button_array':button_update_array})
                 amount_of_money = 'x' + str(money) #  рисует количество денег
                 if button_setting.is_pressed(event):
                     button_setting.handle_event_parameter('setting')

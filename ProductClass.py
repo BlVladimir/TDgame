@@ -13,13 +13,13 @@ def buy_tower(parameter_dict):
     return parameter_dict['tower_array']
 
 def upgrade_tower(parameter_dict):
-    if parameter_dict['tower_array'][parameter_dict['level']].level != 3:
-        cost = parameter_dict['tower_array'][parameter_dict['number']].improve_cost_array[parameter_dict['tower_array'][parameter_dict['level']].level - 1]
+    if parameter_dict['tower_array'][parameter_dict['number']].level != 3:
+        cost = parameter_dict['tower_array'][parameter_dict['number']].improve_cost_array[parameter_dict['tower_array'][parameter_dict['number']].level - 1]
         if parameter_dict['money'] >= cost:
             parameter_dict['tower_array'][parameter_dict['number']].upgrade(1, 60)
             parameter_dict['tower_array'][parameter_dict['number']].level += 1
-            parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/2lvl.png') if parameter_dict['tower_array'][parameter_dict['level']].level == 2 \
-                else parameter_dict['button_array'][parameter_dict[0]].change_image('images/upgrade/3lvl.png')
+            parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/2lvl.png') if parameter_dict['tower_array'][parameter_dict['number']].level == 2 \
+                else parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/3lvl.png')
             parameter_dict['money'] -= cost
     return parameter_dict['money']
 

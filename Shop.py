@@ -53,5 +53,5 @@ def build_tower(event, coins, scale_tower, current_tile, build_array):
     if current_tile is not None:
         for i in products:
             if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
-                coins, build_array= i.buy(event, towers_object_array, button_update_array, coins, build_array[current_tile]['type'], False, scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile)
+                coins, build_array = i.buy(event, towers_object_array, button_update_array, coins, build_array[current_tile]['type'], False, scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile)
     return coins, build_array, towers_object_array #  меняет значение денег
