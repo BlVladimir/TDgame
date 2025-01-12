@@ -10,7 +10,6 @@ def buy_tower(parameter_dict):
     else:
         parameter_dict['tower_array'].append(TowerClass.Tower(parameter_dict['image'], parameter_dict['scale'], parameter_dict['damage'], parameter_dict['coordinate'], parameter_dict['index'],
                                                               parameter_dict['improve_array'], parameter_dict['radius']))
-    return parameter_dict['tower_array']
 
 def upgrade_tower(parameter_dict):
     if parameter_dict['tower_array'][parameter_dict['number']].level != 3:
@@ -47,21 +46,21 @@ class Product:
         if self.button_product.is_pressed(event) and (money >= self.cost or is_free):
             match type_tile:
                 case 1:
-                    tower_array = self.button_product.handle_event_parameter({'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
+                    self.button_product.handle_event_parameter({'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
                                                                               'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'radius': self.__radius_tower})
                     button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                     build_array[current_tile]['is_filled'] = True
                     money -= self.cost
                 case 2:
                     self.__damage_tower += 1
-                    tower_array = self.button_product.handle_event_parameter({'additional_image':self.__additional_image, 'tower_array':tower_array, 'image':self.__image, 'scale':scale_tower, 'damage':self.__damage_tower,
+                    self.button_product.handle_event_parameter({'additional_image':self.__additional_image, 'tower_array':tower_array, 'image':self.__image, 'scale':scale_tower, 'damage':self.__damage_tower,
                                                                               'coordinate':coordinate_tower, 'index':index, 'improve_array':self.__improve_cost_array, 'radius':self.__radius_tower})
                     button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                     build_array[current_tile]['is_filled'] = True
                     money -= self.cost
                 case 3:
                     self.__radius_tower = self.__radius_tower * 1.2
-                    tower_array = self.button_product.handle_event_parameter({'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
+                    self.button_product.handle_event_parameter({'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
                                                                               'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'radius': self.__radius_tower})
                     button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                     build_array[current_tile]['is_filled'] = True

@@ -85,14 +85,12 @@ while True:  # основной цикл
                     button_setting.handle_event_parameter('setting')
             case 'lvl1':
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
-                    # towers_object_array = []
-                    # button_update_array = []
                     waves = create_waves(10, 1) #  создает волны
                     current_wave = 1  # текущая волна 1
                     EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array)  # создает врагов на 1 клетке
                     is_started = False  # переменная отвечает за то, началась ли игра или нет
-                    money = 30  # обнуляет все тайлы
-                    for i in range(len(Map.lvl1.build_array)):
+                    money = 300
+                    for i in range(len(Map.lvl1.build_array)):  # обнуляет все тайлы
                         Map.lvl1.build_array[i]['is_filled'] = False
                 if Shop.towers_object_array is not []:
                     current_tower = Function.define_current_tower(current_tile, Shop.towers_object_array)
@@ -114,14 +112,14 @@ while True:  # основной цикл
                     shop_tipe = 2
                 else:
                     shop_tipe = 0
-                money, Map.lvl1.build_array, Shop.towers_object_array = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if Shop.towers_object_array[i].index == current_tile:
                         Shop.towers_object_array[i].rotate_gun()
                         Shop.towers_object_array[i].draw_radius(screen)
                 if current_tower is not None and Shop.button_update_array[current_tower].is_pressed(event):
-                    money = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': towers_object_array, 'number':current_tower, 'money':money, 'button_array':button_update_array})
+                    money = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': Shop.towers_object_array, 'number':current_tower, 'money':money, 'button_array':Shop.button_update_array})
                 amount_of_money = 'x' + str(money) #  рисует количество денег
                 if button_setting.is_pressed(event):
                     button_setting.handle_event_parameter('setting')
