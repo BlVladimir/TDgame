@@ -48,10 +48,10 @@ def draw_tower_parameter(screen, parameter_image, number_this_parameter, value, 
     Function.draw_text(screen, str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120))
 
 
-def build_tower(event, coins, scale_tower, current_tile, build_array):
+def build_tower(event, coins, scale_tower, current_tile, build_array, is_free, price_up):
     mouse_pose = pygame.mouse.get_pos()
     if current_tile is not None:
         for i in products:
             if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
-                coins, build_array = i.buy(event, towers_object_array, button_update_array, coins, build_array[current_tile]['type'], False, scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile)
-    return coins, build_array, towers_object_array, button_update_array #  меняет значение денег
+                coins, build_array, price_up, is_free = i.buy(event, towers_object_array, button_update_array, coins, build_array[current_tile]['type'], is_free, price_up, scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile)
+    return coins, build_array, towers_object_array, button_update_array, price_up, is_free #  меняет значение денег

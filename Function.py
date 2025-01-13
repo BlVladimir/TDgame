@@ -14,8 +14,10 @@ def draw_text(screen, words, size, coordinate_center): #  рисует текс�
     screen.blit(text, rect_text)
 
 def bugs(tower_array, enemy_array, money): #  модификаторы при убийстве врагов
-    type_of_bugs = randrange(1, 4)
+    type_of_bugs = randrange(1, 5)
     influence = random.getrandbits(1)
+    is_free = False
+    price_up = False
     match type_of_bugs:
         case 1:
             if influence == 0:
@@ -45,7 +47,14 @@ def bugs(tower_array, enemy_array, money): #  модификаторы при у
             else:
                 money += 1
                 print('money + 1')
-    return money
+        case 4:
+            if influence == 1:
+                is_free = True
+                print('free tower')
+            else:
+                price_up = True
+                print('price up')
+    return money, is_free, price_up
 
 def file_change(changed_parameter):
     file_save = open('Save', 'r')

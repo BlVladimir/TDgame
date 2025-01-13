@@ -37,6 +37,8 @@ current_wave = 0
 current_enemy = None
 current_tower = None
 is_started = False
+is_free = False
+price_up = False
 attacked_enemies = []
 shop_tipe = 0
 
@@ -103,7 +105,7 @@ while True:  # основной цикл
                                 Shop.towers_object_array[i].is_used = True  # переменная отвечает за то, что башня была использована
                                 if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
-                                    money = Function.bugs(Shop.towers_object_array, enemy_array, money)
+                                    money, is_free, price_up  = Function.bugs(Shop.towers_object_array, enemy_array, money)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
                 if current_tile is not None and not Map.lvl1.build_array[current_tile]['is_filled']:
@@ -112,14 +114,14 @@ while True:  # основной цикл
                     shop_tipe = 2
                 else:
                     shop_tipe = 0
-                money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, price_up, is_free = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, is_free, price_up )  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if Shop.towers_object_array[i].index == current_tile:
                         Shop.towers_object_array[i].rotate_gun()
                         Shop.towers_object_array[i].draw_radius(screen)
                 if current_tower is not None and Shop.button_update_array[current_tower].is_pressed(event):
-                    money = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': Shop.towers_object_array, 'number':current_tower, 'money':money, 'button_array':Shop.button_update_array})
+                    money, is_free, price_up = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': Shop.towers_object_array, 'number':current_tower, 'money':money, 'button_array':Shop.button_update_array, 'is_free':is_free, 'price_up':price_up})
                 amount_of_money = 'x' + str(money) #  рисует количество денег
                 if button_setting.is_pressed(event):
                     button_setting.handle_event_parameter('setting')
