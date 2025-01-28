@@ -56,7 +56,7 @@ def bugs(tower_array, enemy_array, money): #  модификаторы при у
                 print('price up')
     return money, is_free, price_up
 
-def file_change(changed_parameter):
+def file_change(changed_parameter):  # изменяет значение в файле
     file_save = open('Save', 'r')
     parameter = file_save.readlines()
     changed_line = None
@@ -79,7 +79,7 @@ def file_change(changed_parameter):
             file_save.write(parameter[i])
     return returning_value
 
-def find_in_file(changed_parameter):
+def find_in_file(changed_parameter):  # находит значение в файле
     file_save = open('Save', 'r')
     parameter = file_save.readlines()
     for i in range(len(parameter)):
@@ -89,7 +89,7 @@ def find_in_file(changed_parameter):
             else:
                 return False
 
-def define_current_tower(current_tile, tower_array):
+def define_current_tower(current_tile, tower_array):  # определяет текущую башню по индексу
     for i in range(len(tower_array)):
         if tower_array[i].index == current_tile:
             return i

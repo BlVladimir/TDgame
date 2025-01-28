@@ -12,7 +12,7 @@ import Function
 
 from ButtonClass import Button
 from EnemyClass import Enemy, create_waves  # импорт классов из других файлов(чтобы уменьшить основной код)
-from Shop import towers_object_array, button_update_array
+from InformationClass import Information
 
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
@@ -41,6 +41,7 @@ is_free = False
 price_up = False
 attacked_enemies = []
 shop_tipe = 0
+information_table = Information(MainManu.height, MainManu.width)
 
 always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
 
@@ -56,7 +57,7 @@ def change_using_additional_parameter(additionalParameters):
         additionalParameters = True
     return additionalParameters
 
-button_exit = Button(MainManu.width - 170, 20, "images/UI/exit.png", 150, 75, action_exit)
+button_exit = Button(MainManu.width - 170 - MainManu.height * 0.4, 20, "images/UI/exit.png", 150, 75, action_exit)
 button_main_manu = Button(150, 20, "images/UI/exitInMainManu.png", 100, 100, MainManu.actionScene)
 button_setting = Button(20, 20, "images/UI/settings.png", 100, 100, MainManu.actionScene)  # объекты кнопок
 button_additional_parameter = Button(MainManu.width / 2, MainManu.height / 2, 'images/UI/satingButtonTrue.png', 150, 150, change_using_additional_parameter)
@@ -105,6 +106,7 @@ while True:  # основной цикл
                                 Shop.towers_object_array[i].is_used = True  # переменная отвечает за то, что башня была использована
                                 if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
+                                    current_enemy = None
                                     money, is_free, price_up  = Function.bugs(Shop.towers_object_array, enemy_array, money)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
@@ -170,7 +172,7 @@ while True:  # основной цикл
             MainManu.draw_buttons(screen)
             button_setting.draw(screen)
         case 'lvl1':
-            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, use_additional_parameters, always_use_additional_parameters, shop_tipe)
+            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, use_additional_parameters, always_use_additional_parameters, shop_tipe, information_table)
         case 'lvl2':
             Map.lvl2.draw(screen)
             button_main_manu.draw(screen)

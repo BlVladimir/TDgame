@@ -16,7 +16,7 @@ class Enemy:
         self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
         self.health =health
 
-    def get_center(self):
+    def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
         return self.center
 

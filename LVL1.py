@@ -3,11 +3,12 @@ import Map
 import Shop
 import DefinitionCurrentTile
 import Function
+from MainManu import height
 
 
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
 
-def draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, is_used_additional_parameters, always_use, shop_tipe):
+def draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, is_used_additional_parameters, always_use, shop_tipe, information_table):
         Map.lvl1.draw(screen)
         DefinitionCurrentTile.draw_highlighting(highlight_tile_images, highlight_tile, current_tile, Map.lvl1.build_array, screen)
         for i in range(len(Shop.towers_object_array)):  # проходится по массиву объектов башен и рисует их
@@ -22,5 +23,6 @@ def draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_arr
         button_setting.draw(screen)
         screen.blit(money_picture, (420, 20))
         Function.draw_text(screen, amount_of_money, 100, amount_of_money_pos)
+        information_table.draw(screen, height, enemy_array, current_enemy)
         
 

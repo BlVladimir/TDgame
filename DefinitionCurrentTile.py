@@ -21,7 +21,7 @@ def draw_highlighting(highlighting_tile_image, current_tile, highlighting_tile, 
     if highlighting_tile is not None:
         screen.blit(highlighting_tile_image, build_array[highlighting_tile]['coordinate'])  # выделяет текущий тайл, на который в последний раз нажимала мышка
 
-def highlight_enemy(enemy_mas):
+def highlight_enemy(enemy_mas):  # определяет врага, на которого наведена мышка
     current_enemy = None
     if enemy_mas:
         scale = enemy_mas[0].scale
@@ -34,5 +34,3 @@ def highlight_enemy(enemy_mas):
 
 
 
-# def controlRotation(towerObjectMass):
-#     towerObjectMass[0].r
