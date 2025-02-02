@@ -86,7 +86,7 @@ while True:  # основной цикл
                     button_setting.handle_event_parameter('setting')
             case 'lvl1':
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
-                    waves = create_waves(100, 1) #  создает волны
+                    waves = create_waves(100, 3) #  создает волны
                     current_wave = 1  # текущая волна 1
                     EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array)  # создает врагов на 1 клетке
                     is_started = False  # переменная отвечает за то, началась ли игра или нет
@@ -106,7 +106,6 @@ while True:  # основной цикл
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
                                     current_enemy = None
                                     money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence  = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free, Function.price_up)
-                                    print(Function.type_new_modifier, Function.influence)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
                 if current_tile is not None and not Map.lvl1.build_array[current_tile]['is_filled']:
@@ -159,6 +158,8 @@ while True:  # основной цикл
         if ti % 60 == 0:
             ti = 0
             is_move = False
+            for i in range(len(enemy_array)):
+                enemy_array[i].treat()
             for i in range(len(Shop.towers_object_array)):
                 Shop.towers_object_array[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны

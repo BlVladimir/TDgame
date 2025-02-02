@@ -7,14 +7,16 @@ import Function
 
 class Enemy:
     # инициализация класса
-    def __init__(self, image, rect, scale, health, pos = 0):
+    def __init__(self, image, rect, scale, health, armor = 0, treatment = 0,pos = 0):
         self.image = pygame.image.load(image)
         self.scale = scale
         self.image = pygame.transform.scale(self.image, (self.scale, self.scale))
         self.rect = rect
         self.pos = pos
+        self.__armor = armor
+        self.__treatment = treatment
         self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
-        self.health =health
+        self.health = health
 
     def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
@@ -45,9 +47,14 @@ class Enemy:
         else:
             return True
 
-    def remove_health(self, damage): #  убрать хп
-        self.health -= damage
+    def remove_health(self, damage, armor_piercing): #  убрать хп
+        if armor_piercing:
+            self.health -= damage
+        else:
+            self.health -= damage - self.__armor
 
+    def treat(self):
+        self.health += self.__treatment
 
 def create_waves(number_of_waves, lvl):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне
     waves_mas = [[]]
@@ -61,34 +68,40 @@ def create_waves(number_of_waves, lvl):  # Функция создает мас�
 
 
 def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas):  # Добавляет в массив врагов новые элементы. В зависимости от количества врагов у каждого врага разные координаты
-    additional_health = 0
-
     if (current_wave + 1) % 4 == 0:
         additional_health = ((current_wave + 1) // 4 - 1) * 2 + 1
     else:
         additional_health = ((current_wave + 1) // 4) * 2 + (current_wave + 1) % 4 - 1
-
-
+    additional_health += randrange(-1, 2)
     image_enemy = 'images/enemy/common.png'
     health = 3
+    armor = 0
+    treatment = 0
     match waves_mas[current_wave][1]:
         case 1:
             image_enemy = 'images/enemy/armoredEnemy.png'
             health = 6
+        case 2:
+            image_enemy = 'images/enemy/ShieldEnemy.png'
+            armor = 3
+        case 3:
+            image_enemy = 'images/enemy/regen.png'
+            health = 4
+            treatment = 2
     if waves_mas[current_wave][0] == 1:
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(0), Map.lvl1.tile_scale / 2, health + additional_health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(0), Map.lvl1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
     elif waves_mas[current_wave][0] == 2:
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(1), Map.lvl1.tile_scale / 2, health + additional_health))
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health + additional_health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(1), Map.lvl1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
     elif waves_mas[current_wave][0] == 3:
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(3), Map.lvl1.tile_scale / 2, health + additional_health))
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(4), Map.lvl1.tile_scale / 2, health + additional_health))
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health + additional_health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(3), Map.lvl1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(4), Map.lvl1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
 
 def move_all_enemies(enemy_mas, trajectory, gaps, tile_scale, speed = 60):  # двигает всех врагов
-    isFail = False
+    is_fail = False
     for i in range(len(enemy_mas)):
-        isFail = enemy_mas[i].move(trajectory, gaps, tile_scale, speed)
-        if isFail:
+        is_fail = enemy_mas[i].move(trajectory, gaps, tile_scale, speed)
+        if is_fail:
             break
-    return isFail
+    return is_fail

@@ -35,7 +35,6 @@ class Information:
             if self.__current_modifier[0] == self.__modifier_array[0] or self.__current_modifier[0] == self.__modifier_array[1]:
                 if text == self.__modifier_array[0] and self.__current_modifier[0] == self.__modifier_array[1]:
                     self.__current_modifier[0] = text
-                    print(1)
                 elif text != self.__modifier_array[0] and text != self.__modifier_array[1]:
                     self.__current_modifier.insert(1, text)
             else:
