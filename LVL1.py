@@ -3,7 +3,7 @@ import Map
 import Shop
 import DefinitionCurrentTile
 import Function
-from MainManu import height
+from MainManu import height, width
 
 
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
@@ -23,6 +23,6 @@ def draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_arr
         button_setting.draw(screen)
         screen.blit(money_picture, (420, 20))
         Function.draw_text(screen, amount_of_money, 100, amount_of_money_pos)
-        information_table.draw(screen, height, enemy_array, current_enemy)
+        Function.type_modifier, Function.influence = information_table.draw(screen, height, width, enemy_array, current_enemy, Function.type_new_modifier, Function.influence, Function.is_free, Function.price_up)
         
 

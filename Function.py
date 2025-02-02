@@ -6,6 +6,11 @@ import random
 
 pygame.font.init()
 
+is_free = False
+price_up = False
+type_new_modifier = None
+influence = None
+
 def draw_text(screen, words, size, coordinate_center): #  рисует текст
     f = pygame.font.Font(None, size)
     text = f.render(words, False, (255, 255, 255))
@@ -16,8 +21,8 @@ def draw_text(screen, words, size, coordinate_center): #  рисует текс�
 def bugs(tower_array, enemy_array, money): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
     influence = random.getrandbits(1)
-    is_free = False
-    price_up = False
+    is_free_new = False
+    price_up_new = False
     match type_of_bugs:
         case 1:
             if influence == 0:
@@ -49,12 +54,12 @@ def bugs(tower_array, enemy_array, money): #  модификаторы при у
                 print('money + 1')
         case 4:
             if influence == 1:
-                is_free = True
+                is_free_new = True
                 print('free tower')
             else:
-                price_up = True
+                price_up_new = True
                 print('price up')
-    return money, is_free, price_up
+    return money, is_free_new, price_up_new, type_of_bugs, influence
 
 def file_change(changed_parameter):  # изменяет значение в файле
     file_save = open('Save', 'r')
