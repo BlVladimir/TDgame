@@ -18,11 +18,11 @@ def draw_text(screen, words, size, coordinate_center): #  рисует текс�
 
     screen.blit(text, rect_text)
 
-def bugs(tower_array, enemy_array, money): #  модификаторы при убийстве врагов
+def bugs(tower_array, enemy_array, money, current_is_free, current_price_up): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
     influence = random.getrandbits(1)
-    is_free_new = False
-    price_up_new = False
+    is_free_new = current_is_free
+    price_up_new = current_price_up
     match type_of_bugs:
         case 1:
             if influence == 0:

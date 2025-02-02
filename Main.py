@@ -105,7 +105,7 @@ while True:  # основной цикл
                                 if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
                                     current_enemy = None
-                                    money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence  = Function.bugs(Shop.towers_object_array, enemy_array, money)
+                                    money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence  = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free, Function.price_up)
                                     print(Function.type_new_modifier, Function.influence)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
