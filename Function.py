@@ -29,36 +29,28 @@ def bugs(tower_array, enemy_array, money, current_is_free, current_price_up): # 
                 for i in range(len(tower_array)):
                     if tower_array[i].damage > 1:
                         tower_array[i].damage -= 1
-                print('damage - 1')
             else:
                 for i in range(len(tower_array)):
                     tower_array[i].damage += 1
-                print('damage + 1')
         case 2:
             if influence == 1:
                 for i in range(len(enemy_array)):
                     if enemy_array[i].health > 1:
                         enemy_array[i].health -= 1
-                print('health - 1')
             else:
                 for i in range(len(enemy_array)):
                     enemy_array[i].health += 1
-                print('health + 1')
         case 3:
             if influence == 0:
                 if money > 0:
                     money -= 1
-                print('money - 1')
             else:
                 money += 1
-                print('money + 1')
         case 4:
             if influence == 1:
                 is_free_new = True
-                print('free tower')
             else:
                 price_up_new = True
-                print('price up')
     return money, is_free_new, price_up_new, type_of_bugs, influence
 
 def file_change(changed_parameter):  # изменяет значение в файле

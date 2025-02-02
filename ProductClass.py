@@ -94,4 +94,4 @@ class Product:  # класс продуктов
             money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 0)
             price_up = False
             is_free = True
-        return money, build_array, price_up, is_free
+        return money, build_array, is_free, price_up

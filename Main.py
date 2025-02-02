@@ -86,7 +86,7 @@ while True:  # основной цикл
                     button_setting.handle_event_parameter('setting')
             case 'lvl1':
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
-                    waves = create_waves(10, 1) #  создает волны
+                    waves = create_waves(100, 1) #  создает волны
                     current_wave = 1  # текущая волна 1
                     EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array)  # создает врагов на 1 клетке
                     is_started = False  # переменная отвечает за то, началась ли игра или нет
@@ -115,7 +115,7 @@ while True:  # основной цикл
                     shop_tipe = 2
                 else:
                     shop_tipe = 0
-                money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, Function.price_up, Function.is_free = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, Function.is_free, Function.price_up )  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, Function.is_free, Function.price_up )  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if Shop.towers_object_array[i].index == current_tile:

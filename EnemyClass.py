@@ -61,6 +61,14 @@ def create_waves(number_of_waves, lvl):  # Функция создает мас�
 
 
 def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas):  # Добавляет в массив врагов новые элементы. В зависимости от количества врагов у каждого врага разные координаты
+    additional_health = 0
+
+    if (current_wave + 1) % 4 == 0:
+        additional_health = ((current_wave + 1) // 4 - 1) * 2 + 1
+    else:
+        additional_health = ((current_wave + 1) // 4) * 2 + (current_wave + 1) % 4 - 1
+
+
     image_enemy = 'images/enemy/common.png'
     health = 3
     match waves_mas[current_wave][1]:
@@ -68,14 +76,14 @@ def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas):  # Добавля�
             image_enemy = 'images/enemy/armoredEnemy.png'
             health = 6
     if waves_mas[current_wave][0] == 1:
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(0), Map.lvl1.tile_scale / 2, health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(0), Map.lvl1.tile_scale / 2, health + additional_health))
     elif waves_mas[current_wave][0] == 2:
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(1), Map.lvl1.tile_scale / 2, health))
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(1), Map.lvl1.tile_scale / 2, health + additional_health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health + additional_health))
     elif waves_mas[current_wave][0] == 3:
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(3), Map.lvl1.tile_scale / 2, health))
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(4), Map.lvl1.tile_scale / 2, health))
-        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(3), Map.lvl1.tile_scale / 2, health + additional_health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(4), Map.lvl1.tile_scale / 2, health + additional_health))
+        enemy_mas.append(Enemy(image_enemy, Map.lvl1.get_started_position(2), Map.lvl1.tile_scale / 2, health + additional_health))
 
 def move_all_enemies(enemy_mas, trajectory, gaps, tile_scale, speed = 60):  # двигает всех врагов
     isFail = False
