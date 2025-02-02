@@ -7,7 +7,7 @@ import Function
 
 class Enemy:
     # инициализация класса
-    def __init__(self, image, rect, scale, health, armor = 0, treatment = 0,pos = 0):
+    def __init__(self, image, rect, scale, health, armor =0, treatment = 0,pos = 0):
         self.image = pygame.image.load(image)
         self.scale = scale
         self.image = pygame.transform.scale(self.image, (self.scale, self.scale))
@@ -17,6 +17,7 @@ class Enemy:
         self.__treatment = treatment
         self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
         self.health = health
+        self.time_poison = 0
 
     def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]

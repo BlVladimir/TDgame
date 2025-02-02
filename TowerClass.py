@@ -4,7 +4,7 @@ import math
 
 class Tower:
     # инициализация класса
-    def __init__(self, image_foundation, scale, damage, coordinate, index, improve_cost_array, imageGun = None, radius = None):
+    def __init__(self, image_foundation, scale, damage, coordinate, index, improve_cost_array, armor_piercing, poison, image_gun = None, radius = None):
         self.is_used = False
         self.index = index
         self.__image_foundation = pygame.image.load(image_foundation)
@@ -13,13 +13,18 @@ class Tower:
         self.scale = scale
         self.__coordinate = coordinate
         self.angle = 0
+        self.armor_piercing = armor_piercing
+        self.poison = poison
         self.level = 1
         self.improve_cost_array = improve_cost_array
-        if imageGun is not None:
-            self.image_gun = pygame.image.load(imageGun)
+        if image_gun is not None:
+            self.image_gun = pygame.image.load(image_gun)
             self.image_gun = pygame.transform.scale(self.image_gun, (scale, scale))
             self.__rotated_image = self.image_gun
             self.__rotated_image_rect = coordinate
+        else:
+            self.image_gun = None
+            self.__rotated_image = self.image_gun
         if radius is not None:
             self.radius = radius
             self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), (radius * 2, radius * 2))

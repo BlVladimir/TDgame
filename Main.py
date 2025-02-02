@@ -100,7 +100,7 @@ while True:  # основной цикл
                     if current_enemy is not None and Shop.towers_object_array != []:  # если выделенный враг существует и существует хотя бы одна башня
                         for i in range(len(Shop.towers_object_array)):  # проходится по всему массиву башен
                             if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].is_in_radius(enemy_array[current_enemy].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
-                                enemy_array[current_enemy].remove_health(Shop.towers_object_array[i].damage)  # отнимает у врага здоровье, равное урону башни
+                                enemy_array[current_enemy].remove_health(Shop.towers_object_array[i].damage, Shop.towers_object_array[i].armor_piercing)  # отнимает у врага здоровье, равное урону башни
                                 Shop.towers_object_array[i].is_used = True  # переменная отвечает за то, что башня была использована
                                 if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
@@ -117,7 +117,7 @@ while True:  # основной цикл
                 money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, Function.is_free, Function.price_up )  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
-                    if Shop.towers_object_array[i].index == current_tile:
+                    if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].image_gun is not None:
                         Shop.towers_object_array[i].rotate_gun()
                         Shop.towers_object_array[i].draw_radius(screen)
                 if current_tower is not None and Shop.button_update_array[current_tower].is_pressed(event):

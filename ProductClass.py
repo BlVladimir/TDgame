@@ -6,10 +6,10 @@ from MainManu import  height
 def buy_tower(parameter_dict):  # добавляет в массив башен новую
     if 'additional_image' in parameter_dict.keys():
         parameter_dict['tower_array'].append(TowerClass.Tower(parameter_dict['image'], parameter_dict['scale'], parameter_dict['damage'], parameter_dict['coordinate'], parameter_dict['index'],
-                                                              parameter_dict['improve_array'], parameter_dict['additional_image'], parameter_dict['radius']))
+                                                              parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], parameter_dict['additional_image'], parameter_dict['radius']))
     else:
         parameter_dict['tower_array'].append(TowerClass.Tower(parameter_dict['image'], parameter_dict['scale'], parameter_dict['damage'], parameter_dict['coordinate'], parameter_dict['index'],
-                                                              parameter_dict['improve_array'], parameter_dict['radius']))
+                                                              parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], parameter_dict['radius']))
 
 def upgrade_tower(parameter_dict):  # улучшение башни по номеру
     if parameter_dict['tower_array'][parameter_dict['number']].level != 3:
@@ -38,9 +38,11 @@ def upgrade_tower(parameter_dict):  # улучшение башни по ном�
 
 
 class Product:  # класс продуктов
-    def __init__(self, image, cost, scale, coordinate, damage, radius, improve_cost_array, additional_image = None):
+    def __init__(self, image, cost, scale, coordinate, damage, radius, improve_cost_array, armor_piercing, poison, additional_image = None):
         self.__image = image
         self.cost = cost
+        self.armor_piercing = armor_piercing
+        self.poison = poison
         self.__damage_tower = damage
         self.__radius_tower = radius
         self.__improve_cost_array = improve_cost_array
@@ -62,7 +64,7 @@ class Product:  # класс продуктов
             case 1:
                 self.button_product.handle_event_parameter(
                     {'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
-                     'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'radius': self.__radius_tower})
+                     'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'armor_piercing': self.armor_piercing, 'poison': self.poison, 'radius': self.__radius_tower})
                 button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                 build_array[current_tile]['is_filled'] = True
                 money -= self.cost * price_coefficient
@@ -70,7 +72,7 @@ class Product:  # класс продуктов
                 self.__damage_tower += 1
                 self.button_product.handle_event_parameter(
                     {'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
-                     'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'radius': self.__radius_tower})
+                     'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'armor_piercing': self.armor_piercing, 'poison': self.poison, 'radius': self.__radius_tower})
                 button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                 build_array[current_tile]['is_filled'] = True
                 money -= self.cost * price_coefficient
@@ -78,7 +80,7 @@ class Product:  # класс продуктов
                 self.__radius_tower = self.__radius_tower * 1.2
                 self.button_product.handle_event_parameter(
                     {'additional_image': self.__additional_image, 'tower_array': tower_array, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
-                     'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'radius': self.__radius_tower})
+                     'coordinate': coordinate_tower, 'index': index, 'improve_array': self.__improve_cost_array, 'armor_piercing': self.armor_piercing, 'poison': self.poison, 'radius': self.__radius_tower})
                 button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
                 build_array[current_tile]['is_filled'] = True
                 money -= self.cost * price_coefficient
