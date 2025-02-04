@@ -17,7 +17,7 @@ class Enemy:
         self.__treatment = treatment
         self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
         self.health = health
-        self.time_poison = 0
+        self.__poison_dict = []
 
     def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
@@ -48,15 +48,27 @@ class Enemy:
         else:
             return True
 
-    def remove_health(self, damage, armor_piercing): #  убрать хп
+    def remove_health(self, damage, armor_piercing, poison): #  убрать хп
         if armor_piercing:
             self.health -= damage
         else:
             if damage - self.__armor > 0:
                 self.health -= damage - self.__armor
+        if poison != 0:
+            self.__poison_dict.append({'time': 2, 'damage':poison})
+            self.__treatment -= poison
 
     def treat(self):  # отравление/лечение
         self.health += self.__treatment
+        remove_array = []
+        for i in range(len(self.__poison_dict)):
+            self.__poison_dict[i]['time'] -= 1
+            if self.__poison_dict[i]['time'] == 0:
+                self.__treatment += self.__poison_dict[i]['damage']
+                remove_array.append(i)
+        for i in range(len(remove_array)):
+            self.__poison_dict.pop(remove_array[i])
+
 
 def create_waves(number_of_waves, lvl):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне
     waves_mas = [[]]
