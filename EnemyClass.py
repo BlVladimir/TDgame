@@ -52,7 +52,8 @@ class Enemy:
         if armor_piercing:
             self.health -= damage
         else:
-            self.health -= damage - self.__armor
+            if damage - self.__armor > 0:
+                self.health -= damage - self.__armor
 
     def treat(self):  # отравление/лечение
         self.health += self.__treatment
