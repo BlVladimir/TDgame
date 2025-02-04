@@ -54,7 +54,7 @@ class Enemy:
         else:
             self.health -= damage - self.__armor
 
-    def treat(self):
+    def treat(self):  # отравление/лечение
         self.health += self.__treatment
 
 def create_waves(number_of_waves, lvl):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне

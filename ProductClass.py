@@ -56,10 +56,10 @@ class Product:  # класс продуктов
             self.__additional_image = None
             self.button_product = ButtonClass.Button(coordinate[0], coordinate[1], image, scale, scale, buy_tower)
 
-    def draw(self, screen):
+    def draw(self, screen):  # рисует продукт
         self.button_product.draw(screen)
 
-    def __create_tower(self, type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, price_coefficient):  # различные параметры, в зависимости от текущего тайла
+    def __create_tower(self, type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, price_coefficient):  # создает башню с характеристиками, зависящими от текущего тайла
         match type_tile:
             case 1:
                 self.button_product.handle_event_parameter(
@@ -86,7 +86,7 @@ class Product:  # класс продуктов
                 money -= self.cost * price_coefficient
         return money
 
-    def buy(self, event, tower_array, button_array, money, type_tile, is_free, price_up, scale_tower, coordinate_tower, index, build_array, current_tile):  # покупка
+    def buy(self, event, tower_array, button_array, money, type_tile, is_free, price_up, scale_tower, coordinate_tower, index, build_array, current_tile):  # покупка башни
         if not price_up and not is_free and self.button_product.is_pressed(event) and money >= self.cost:
             money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 1)
         elif price_up and not is_free and self.button_product.is_pressed(event) and money >= self.cost * 2:

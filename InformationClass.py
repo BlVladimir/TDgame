@@ -1,7 +1,7 @@
 import pygame
 import Function
 
-def get_coordinate_list(interval_x, interval_y, value_lines, coordinate):
+def get_coordinate_list(interval_x, interval_y, value_lines, coordinate):  # получает список координат из интервала x и y и количества строк
     height_one_line = interval_y / value_lines
     coordinate_list = []
     for i in range(value_lines):
@@ -17,20 +17,20 @@ class Information:
         self.__current_modifier = []
 
 
-    def __draw_characteristic(self, screen, enemy_array, current_enemy, height):
+    def __draw_characteristic(self, screen, enemy_array, current_enemy, height):  # рисует характеристики врага
         if current_enemy is not None:
             health_line = 'health ' + str(enemy_array[current_enemy].health)
             screen.blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
             Function.draw_text(screen, health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15))
 
-    def draw(self, screen, height, width, enemy_array, current_enemy, type_modifier, influence, is_free, price_up):
+    def draw(self, screen, height, width, enemy_array, current_enemy, type_modifier, influence, is_free, price_up):  # рисует панель информации
         screen.blit(self.__image, self.__coordinate)
         screen.blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.2))
         self.__draw_characteristic(screen, enemy_array, current_enemy, height)
         type_modifier, influence = self.draw_bugs(screen, type_modifier,  influence, is_free, price_up, height, width)
         return type_modifier, influence
 
-    def __change_modifier_array(self, text):
+    def __change_modifier_array(self, text):  # меняет массив модификаторов
         if self.__current_modifier:
             if self.__current_modifier[0] == self.__modifier_array[0] or self.__current_modifier[0] == self.__modifier_array[1]:
                 if text == self.__modifier_array[0] and self.__current_modifier[0] == self.__modifier_array[1]:
@@ -44,7 +44,7 @@ class Information:
         else:
             self.__current_modifier.append(text)
 
-    def draw_bugs(self, screen, type_modifier, influence, is_free, price_up, height, width):
+    def draw_bugs(self, screen, type_modifier, influence, is_free, price_up, height, width):  # рисует массив модификаторов
         if is_free:
             self.__change_modifier_array(self.__modifier_array[0])
         elif price_up:

@@ -20,7 +20,7 @@ products = [Product("images/tower/commonFoundation.png", 3, scale_products, (20,
             Product("images/tower/venomFoundation.png", 5, scale_products, (20, 510),  2, 170, (6, 8),False, 2, "images/tower/venomGun.png")]
 
 
-def draw(state, screen, moneyPicture, current_tile = None): #  в будущим магазин будет закрываться
+def draw(state, screen, moneyPicture, current_tile = None): #  рисует магазин
     if state == 1:
         draw_store(screen, moneyPicture)
         for i in products:
@@ -28,7 +28,7 @@ def draw(state, screen, moneyPicture, current_tile = None): #  в будущим
     elif state == 2:
         draw_up(screen, current_tile)
 
-def draw_up(screen, current_tile):
+def draw_up(screen, current_tile):  # рисует кнопку улучшения
     screen.blit(imageShop, (0, 0))
     current_tower = Function.define_current_tower(current_tile, towers_object_array)
     if current_tower is not None:
@@ -45,12 +45,12 @@ def draw_store(screen, moneyPicture): #  проходится по массив�
         Function.draw_text(screen, 'x' + str(i.cost), 100, (i.coordinate[0] + scale_products * 1.5, i.coordinate[1] + scale_products * 0.5))
         screen.blit(pygame.transform.scale(moneyPicture, (scale_products * 0.9, scale_products * 0.9)), (i.coordinate[0] + scale_products * 2.1, i.coordinate[1] + scale_products * 0.1))
 
-def draw_tower_parameter(screen, parameter_image, number_this_parameter, value, additional_text = ''):
+def draw_tower_parameter(screen, parameter_image, number_this_parameter, value, additional_text = ''):  # рисует параметры башни в магазине
     screen.blit(parameter_image, (height * 0.05, height * 0.16 + 170 + number_this_parameter * 120))
     Function.draw_text(screen, str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120))
 
 
-def build_tower(event, coins, scale_tower, current_tile, build_array, is_free, price_up):
+def build_tower(event, coins, scale_tower, current_tile, build_array, is_free, price_up):  # проверяет, нажата ли кнопка продуктов и покупает башню
     mouse_pose = pygame.mouse.get_pos()
     if current_tile is not None:
         for i in products:
