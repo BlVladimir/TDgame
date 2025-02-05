@@ -9,8 +9,7 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-import ConfigParameterScreenClass
-import ConfigButtonClass
+from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigMapClass
 import ContextClass
 
 from ButtonClass import Button
@@ -30,13 +29,13 @@ def actionScene(lvl):  # функция, меняющая переменную �
 
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
 config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
-context = ContextClass.Context(config_parameter_screen, config_button_screen)
-
+config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
+context = ContextClass.Context(config_button_screen, config_map, config_parameter_screen)
 
 use_additional_parameters = False
 is_move = False
 ti = 0
-screen = pygame.display.set_mode((MainManu.width, MainManu.height))  # задает размер экрана и создает его
+screen = pygame.display.set_mode((config_parameter_screen.get_width(), config_parameter_screen.get_height()))  # задает размер экрана и создает его
 trajectory = ()
 money = 3
 current_tile = None
@@ -53,7 +52,7 @@ current_tower = None
 is_started = False
 attacked_enemies = []
 shop_tipe = 0
-information_table = Information(MainManu.height, MainManu.width)
+information_table = Information(config_parameter_screen.get_height(), config_parameter_screen.get_width())
 
 always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
 
@@ -69,11 +68,11 @@ def change_using_additional_parameter(additionalParameters):
         additionalParameters = True
     return additionalParameters
 
-button_exit = Button(MainManu.width - 170 - MainManu.height * 0.4, 20, "images/UI/exit.png", 150, 75, action_exit)
+button_exit = Button(config_parameter_screen.get_width() - 170 - config_parameter_screen.get_height() * 0.4, 20, "images/UI/exit.png", 150, 75, action_exit)
 button_main_manu = Button(150, 20, "images/UI/exitInMainManu.png", 100, 100, actionScene)
 button_setting = Button(20, 20, "images/UI/settings.png", 100, 100, actionScene)  # объекты кнопок
-button_additional_parameter = Button(MainManu.width / 2, MainManu.height / 2, 'images/UI/satingButtonTrue.png', 150, 150, change_using_additional_parameter)
-enemy = Enemy("images/enemy/common.png", Map.lvl1.get_started_position(4), Map.lvl1.tile_scale / 2, 3)
+button_additional_parameter = Button(config_parameter_screen.get_width() / 2, config_parameter_screen.get_height() / 2, 'images/UI/satingButtonTrue.png', 150, 150, change_using_additional_parameter)
+enemy = Enemy("images/enemy/common.png", config_map.get_map_array()[0].get_started_position(4), config_map.get_map_array()[0].tile_scale / 2, 3)
 highlight_tile_images = pygame.transform.scale(pygame.image.load("images/UI/highlighting/highlightingTower.png"), (100, 100))
 
 while True:  # основной цикл
@@ -102,11 +101,11 @@ while True:  # основной цикл
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
                     waves = create_waves(100, 3) #  создает волны
                     current_wave = 1  # текущая волна 1
-                    EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array)  # создает врагов на 1 клетке
+                    EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array, context)  # создает врагов на 1 клетке
                     is_started = False  # переменная отвечает за то, началась ли игра или нет
                     money = 300
-                    for i in range(len(Map.lvl1.build_array)):  # обнуляет все тайлы
-                        Map.lvl1.build_array[i]['is_filled'] = False
+                    for i in range(len(config_map.get_map_array()[0].build_array)):  # обнуляет все тайлы
+                        config_map.get_map_array()[0].build_array[i]['is_filled'] = False
                 if Shop.towers_object_array is not []:
                     current_tower = Function.define_current_tower(current_tile, Shop.towers_object_array)
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
@@ -122,15 +121,15 @@ while True:  # основной цикл
                                     money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence  = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free, Function.price_up)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
-                if current_tile is not None and not Map.lvl1.build_array[current_tile]['is_filled']:
+                if current_tile is not None and not config_map.get_map_array()[0].build_array[current_tile]['is_filled']:
                     shop_tipe = 1
-                elif current_tile is not None and Map.lvl1.build_array[current_tile]['is_filled']:
+                elif current_tile is not None and config_map.get_map_array()[0].build_array[current_tile]['is_filled']:
                     shop_tipe = 2
                 else:
                     shop_tipe = 0
                 if shop_tipe == 1:
-                    money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, Function.is_free, Function.price_up)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
-                current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
+                    money, config_map.get_map_array()[0].build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, config_map.get_map_array()[0].build_array, Function.is_free, Function.price_up, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                current_tile, highlight_tile = DefinitionCurrentTile.definition(event, config_map.get_map_array()[0].build_array, 100, current_tile, context)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].image_gun is not None:
                         Shop.towers_object_array[i].rotate_gun()
@@ -164,7 +163,7 @@ while True:  # основной цикл
                     button_main_manu.handle_event_parameter('mainMenu')
         button_exit.handle_event(event)
     if is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
-        is_fail = EnemyClass.move_all_enemies(enemy_array, trajectory, Map.lvl1.gaps, Map.lvl1.tile_scale)
+        is_fail = EnemyClass.move_all_enemies(enemy_array, trajectory, config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale)
         if is_fail:
             scene = 'mainMenu'
         ti += 1
@@ -187,10 +186,10 @@ while True:  # основной цикл
             for i in range(len(Shop.towers_object_array)):
                 Shop.towers_object_array[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
-                EnemyClass.create_enemy_on_lvl1(waves, current_wave, enemy_array)
+                EnemyClass.create_enemy_on_lvl1(waves, current_wave, enemy_array, context)
                 current_wave  += 1
     screen.fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
-    trajectory = Map.lvl1.get_trajectory()
+    trajectory = config_map.get_map_array()[0].get_trajectory()
     match scene:  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
         case 'mainMenu':
             MainManu.draw_buttons(screen, context)
@@ -198,23 +197,23 @@ while True:  # основной цикл
         case 'lvl1':
             LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, use_additional_parameters, always_use_additional_parameters, shop_tipe, information_table, context)
         case 'lvl2':
-            Map.lvl2.draw(screen)
+            config_map.get_map_array()[1].draw(screen)
             button_main_manu.draw(screen)
             button_setting.draw(screen)
         case 'lvl3':
-            Map.lvl3.draw(screen)
+            config_map.get_map_array()[2].draw(screen)
             button_main_manu.draw(screen)
             button_setting.draw(screen)
         case 'lvl4':
-            Map.lvl4.draw(screen)
+            config_map.get_map_array()[3].draw(screen)
             button_main_manu.draw(screen)
             button_setting.draw(screen)
         case 'lvl5':
-            Map.lvl5.draw(screen)
+            config_map.get_map_array()[4].draw(screen)
             button_main_manu.draw(screen)
             button_setting.draw(screen)
         case 'lvl6':
-            Map.lvl6.draw(screen)
+            config_map.get_map_array()[5].draw(screen)
             button_main_manu.draw(screen)
             button_setting.draw(screen)
         case 'setting':

@@ -1,10 +1,9 @@
 import pygame
-from MainManu import width, height
 
-def definition(event, build_array, scale_tile, current_tile):
+def definition(event, build_array, scale_tile, current_tile, context):
     mouse_pose = pygame.mouse.get_pos()  # получает позицию мышки
     dedicatedTile = None
-    if width - height * 0.4 > mouse_pose[0] > height * 0.4:
+    if context.get_config_parameter_scene().get_width() - context.get_config_parameter_scene().get_height() * 0.4 > mouse_pose[0] > context.get_config_parameter_scene().get_height() * 0.4:
         for i in range(len(build_array)):  # Проходит по координатам всех тайлов, и если они совпадут с координатой мышки, то этот тайл сохранится как текущий тайл. Если мышка была нажата, та как действующий тайл
             if build_array[i]['coordinate'][0] <= mouse_pose[0] <= build_array[i]['coordinate'][0] + scale_tile and build_array[i]['coordinate'][1] <= mouse_pose[1] <= build_array[i]['coordinate'][1] + scale_tile:
                 dedicatedTile = i  # + 1, чтобы если ноль, то ничего не выделяло

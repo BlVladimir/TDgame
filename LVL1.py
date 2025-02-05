@@ -3,14 +3,13 @@ import Map
 import Shop
 import DefinitionCurrentTile
 import Function
-from MainManu import height, width
 
 
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
 
 def draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, is_used_additional_parameters, always_use, shop_tipe, information_table, context):
-        Map.lvl1.draw(screen)
-        DefinitionCurrentTile.draw_highlighting(highlight_tile_images, highlight_tile, current_tile, Map.lvl1.build_array, screen)
+        context.get_config_map().get_map_array()[0].draw(screen)
+        DefinitionCurrentTile.draw_highlighting(highlight_tile_images, highlight_tile, current_tile, context.get_config_map().get_map_array()[0].build_array, screen)
         for i in range(len(Shop.towers_object_array)):  # проходится по массиву объектов башен и рисует их
             Shop.towers_object_array[i].draw_tower(screen, is_used_additional_parameters, always_use)
         for i in range(len(enemy_array)):  # рисует каждого врага
@@ -23,6 +22,6 @@ def draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_arr
         button_setting.draw(screen)
         screen.blit(money_picture, (420, 20))
         Function.draw_text(screen, amount_of_money, 100, amount_of_money_pos)
-        Function.type_modifier, Function.influence = information_table.draw(screen, height, width, enemy_array, current_enemy, Function.type_new_modifier, Function.influence, Function.is_free, Function.price_up)
+        Function.type_modifier, Function.influence = information_table.draw(screen, context.get_config_parameter_scene().get_height(), context.get_config_parameter_scene().get_width(), enemy_array, current_enemy, Function.type_new_modifier, Function.influence, Function.is_free, Function.price_up)
         
 

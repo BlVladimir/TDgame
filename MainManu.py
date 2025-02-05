@@ -1,7 +1,3 @@
-
-width, height = 1500, 1000
-
-
 def draw_buttons(screen, context):
     buttons_level = context.get_config_button().get_button_level_array()
     for i in buttons_level:

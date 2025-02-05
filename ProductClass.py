@@ -1,6 +1,5 @@
 import TowerClass
 import ButtonClass
-from MainManu import  height
 
 
 def buy_tower(parameter_dict):  # добавляет в массив башен новую
@@ -59,7 +58,7 @@ class Product:  # класс продуктов
     def draw(self, screen):  # рисует продукт
         self.button_product.draw(screen)
 
-    def __create_tower(self, type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, price_coefficient):  # создает башню с характеристиками, зависящими от текущего тайла
+    def __create_tower(self, type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, price_coefficient, height):  # создает башню с характеристиками, зависящими от текущего тайла
         match type_tile:
             case 1:
                 self.button_product.handle_event_parameter(
@@ -86,14 +85,14 @@ class Product:  # класс продуктов
                 money -= self.cost * price_coefficient
         return money
 
-    def buy(self, event, tower_array, button_array, money, type_tile, is_free, price_up, scale_tower, coordinate_tower, index, build_array, current_tile):  # покупка башни
+    def buy(self, event, tower_array, button_array, money, type_tile, is_free, price_up, scale_tower, coordinate_tower, index, build_array, current_tile, context):  # покупка башни
         if not price_up and not is_free and self.button_product.is_pressed(event) and money >= self.cost:
-            money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 1)
+            money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 1, context.get_config_parameter_scene().get_height())
         elif price_up and not is_free and self.button_product.is_pressed(event) and money >= self.cost * 2:
-            money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 2)
+            money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 2, context.get_config_parameter_scene().get_height())
             price_up = False
         elif is_free and self.button_product.is_pressed(event) and money >= self.cost * 2:
-            money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 0)
+            money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 0, context.get_config_parameter_scene().get_height())
             price_up = False
             is_free = True
         return money, build_array, is_free, price_up
