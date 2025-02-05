@@ -98,7 +98,7 @@ def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas):  # Добавля�
         additional_health = ((current_wave + 1) // 4 - 1) * 2 + 1
     else:
         additional_health = ((current_wave + 1) // 4) * 2 + (current_wave + 1) % 4 - 1
-    additional_health += randrange(-1, 20)
+    additional_health += randrange(-1, 2)
     image_enemy = 'images/enemy/common.png'
     health = 3
     armor = 0

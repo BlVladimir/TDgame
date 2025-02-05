@@ -9,6 +9,9 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
+import ConfigParameterScreenClass
+import ConfigButtonClass
+import ContextClass
 
 from ButtonClass import Button
 from EnemyClass import Enemy, create_waves  # импорт классов из других файлов(чтобы уменьшить основной код)
@@ -17,6 +20,18 @@ from InformationClass import Information
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
 clock = pygame.time.Clock()
+
+scene = 'mainMenu'
+
+
+def actionScene(lvl):  # функция, меняющая переменную сцены
+    global scene
+    scene = lvl
+
+config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
+config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
+context = ContextClass.Context(config_parameter_screen, config_button_screen)
+
 
 use_additional_parameters = False
 is_move = False
@@ -55,8 +70,8 @@ def change_using_additional_parameter(additionalParameters):
     return additionalParameters
 
 button_exit = Button(MainManu.width - 170 - MainManu.height * 0.4, 20, "images/UI/exit.png", 150, 75, action_exit)
-button_main_manu = Button(150, 20, "images/UI/exitInMainManu.png", 100, 100, MainManu.actionScene)
-button_setting = Button(20, 20, "images/UI/settings.png", 100, 100, MainManu.actionScene)  # объекты кнопок
+button_main_manu = Button(150, 20, "images/UI/exitInMainManu.png", 100, 100, actionScene)
+button_setting = Button(20, 20, "images/UI/settings.png", 100, 100, actionScene)  # объекты кнопок
 button_additional_parameter = Button(MainManu.width / 2, MainManu.height / 2, 'images/UI/satingButtonTrue.png', 150, 150, change_using_additional_parameter)
 enemy = Enemy("images/enemy/common.png", Map.lvl1.get_started_position(4), Map.lvl1.tile_scale / 2, 3)
 highlight_tile_images = pygame.transform.scale(pygame.image.load("images/UI/highlighting/highlightingTower.png"), (100, 100))
@@ -67,15 +82,15 @@ while True:  # основной цикл
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:  # если кнопка была нажата
-            if MainManu.scene == 'lvl1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
+            if scene == 'lvl1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
                 is_move = True  # переменная isMove нужна, чтобы определять, закончено движение или нет
         if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
             use_additional_parameters = True
         else:
             use_additional_parameters = False
-        match MainManu.scene:
+        match scene:
             case 'mainMenu':
-                is_started = MainManu.handle_event(event)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
+                is_started = MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
                 if waves != [] or enemy_array != []:  # обнуляет массив врагов и их количество на каждой волне в меню
                     waves = []
                     enemy_array = []
@@ -151,7 +166,7 @@ while True:  # основной цикл
     if is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
         is_fail = EnemyClass.move_all_enemies(enemy_array, trajectory, Map.lvl1.gaps, Map.lvl1.tile_scale)
         if is_fail:
-            MainManu.scene = 'mainMenu'
+            scene = 'mainMenu'
         ti += 1
         for i in range(len(Shop.towers_object_array)):
             Shop.towers_object_array[i].is_used = True
@@ -176,12 +191,12 @@ while True:  # основной цикл
                 current_wave  += 1
     screen.fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     trajectory = Map.lvl1.get_trajectory()
-    match MainManu.scene:  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
+    match scene:  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
         case 'mainMenu':
-            MainManu.draw_buttons(screen)
+            MainManu.draw_buttons(screen, context)
             button_setting.draw(screen)
         case 'lvl1':
-            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, use_additional_parameters, always_use_additional_parameters, shop_tipe, information_table)
+            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, use_additional_parameters, always_use_additional_parameters, shop_tipe, information_table, context)
         case 'lvl2':
             Map.lvl2.draw(screen)
             button_main_manu.draw(screen)
