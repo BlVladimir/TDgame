@@ -19,7 +19,6 @@ pygame.init()  # импорт библиотеки pygame и sys, и импор�
 clock = pygame.time.Clock()
 
 use_additional_parameters = False
-always_use_additional_parameters = False
 is_move = False
 ti = 0
 screen = pygame.display.set_mode((MainManu.width, MainManu.height))  # задает размер экрана и создает его
@@ -114,7 +113,8 @@ while True:  # основной цикл
                     shop_tipe = 2
                 else:
                     shop_tipe = 0
-                money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, Function.is_free, Function.price_up )  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                if shop_tipe == 1:
+                    money, Map.lvl1.build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, Map.lvl1.build_array, Function.is_free, Function.price_up)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, Map.lvl1.build_array, 100, current_tile)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].image_gun is not None:
@@ -158,14 +158,17 @@ while True:  # основной цикл
         if ti % 60 == 0:
             ti = 0
             is_move = False
+            remove_array = []
             for i in range(len(enemy_array)):
                 enemy_array[i].treat()
                 if enemy_array[i].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
-                    enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
-                    current_enemy = None
-                    money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free,Function.price_up)
-                    money += 2
-                break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
+                    remove_array.append(i)
+            for i in range(len(remove_array)):
+                enemy_array.pop(i)  # если да, то удаляет его и прибавляет деньги
+                current_enemy = None
+                money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free,Function.price_up)
+                money += 2
+
             for i in range(len(Shop.towers_object_array)):
                 Shop.towers_object_array[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны

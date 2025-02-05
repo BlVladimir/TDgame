@@ -18,6 +18,7 @@ class Enemy:
         self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
         self.health = health
         self.__poison_dict = []
+        self.__current_damage_poison = 0
 
     def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
@@ -55,19 +56,30 @@ class Enemy:
             if damage - self.__armor > 0:
                 self.health -= damage - self.__armor
         if poison != 0:
-            self.__poison_dict.append({'time': 2, 'damage':poison})
-            self.__treatment -= poison
+            if self.__current_damage_poison < poison:
+                self.__treatment -= poison - self.__current_damage_poison
+                self.__current_damage_poison = poison
+            self.__poison_dict.append({'damage': poison, 'time': 2})
 
     def treat(self):  # отравление/лечение
-        self.health += self.__treatment
+        if self.__treatment > 0:
+            self.health += self.__treatment
+        elif self.__treatment + self.__armor < 0:
+            self.health += self.__treatment + self.__armor
         remove_array = []
         for i in range(len(self.__poison_dict)):
             self.__poison_dict[i]['time'] -= 1
             if self.__poison_dict[i]['time'] == 0:
-                self.__treatment += self.__poison_dict[i]['damage']
                 remove_array.append(i)
-        for i in range(len(remove_array)):
-            self.__poison_dict.pop(remove_array[i])
+        if remove_array:
+            for i in range(len(remove_array)):
+                self.__poison_dict.pop(remove_array[i])
+            max_damage = 0
+            for i in range(len(self.__poison_dict)):
+                if self.__poison_dict[i]['damage'] > max_damage:
+                    max_damage = self.__poison_dict[i]['damage']
+            self.__treatment -= max_damage - self.__current_damage_poison
+            self.__current_damage_poison = max_damage
 
 
 def create_waves(number_of_waves, lvl):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне
@@ -86,7 +98,7 @@ def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas):  # Добавля�
         additional_health = ((current_wave + 1) // 4 - 1) * 2 + 1
     else:
         additional_health = ((current_wave + 1) // 4) * 2 + (current_wave + 1) % 4 - 1
-    additional_health += randrange(-1, 2)
+    additional_health += randrange(-1, 20)
     image_enemy = 'images/enemy/common.png'
     health = 3
     armor = 0

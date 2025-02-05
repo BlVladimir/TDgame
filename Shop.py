@@ -14,10 +14,10 @@ tower_characteristic_image = (pygame.transform.scale(pygame.image.load('images/U
                               pygame.transform.scale(pygame.image.load('images/UI/up/radiusUpUp.png'), (100, 100)))
 imageShop = pygame.transform.scale(imageShop, (height * 0.4, height))
 scale_products = 100
-products = [Product("images/tower/commonFoundation.png", 3, scale_products, (20, 150),  2, 170, (4, 6), False, 0,"images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)
+products = [Product("images/tower/commonFoundation.png", 3, scale_products, (20, 150),  2, 170, (4, 6), False, 0, "images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)
             Product("images/tower/sniperFoundation.png", 5, scale_products, (20, 270),  4, 230, (6, 8), False, 0, "images/tower/sniperGun.png"),
             Product("images/tower/antyShield.png", 4, scale_products, (20, 390),  3, 200, (5, 7), True, 0),
-            Product("images/tower/venomFoundation.png", 5, scale_products, (20, 510),  2, 170, (6, 8),False, 2, "images/tower/venomGun.png")]
+            Product("images/tower/venomFoundation.png", 5, scale_products, (20, 510),  2, 170, (6, 8), False, 2, "images/tower/venomGun.png")]
 
 
 def draw(state, screen, moneyPicture, current_tile = None): #  рисует магазин
@@ -27,6 +27,7 @@ def draw(state, screen, moneyPicture, current_tile = None): #  рисует ма
             i.draw(screen)
     elif state == 2:
         draw_up(screen, current_tile)
+
 
 def draw_up(screen, current_tile):  # рисует кнопку улучшения
     screen.blit(imageShop, (0, 0))
