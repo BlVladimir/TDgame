@@ -7,7 +7,6 @@ pygame.init()
 
 towers_object_array = []
 button_update_array = []
-isOpen = False
 imageShop = pygame.image.load("images/UI/shopBackground.png")
 tower_characteristic_image = (pygame.transform.scale(pygame.image.load('images/UI/up/damageUpUp.png'), (100, 100)),
                               pygame.transform.scale(pygame.image.load('images/UI/up/radiusUpUp.png'), (100, 100)))

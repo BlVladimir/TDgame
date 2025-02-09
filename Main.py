@@ -8,7 +8,7 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigMapClass, ConfigModifierClass
+from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
 import ContextClass
 
 from ButtonClass import Button
@@ -30,7 +30,8 @@ config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500,
 config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
 config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
-context = ContextClass.Context(config_button_screen, config_map, config_modifier, config_parameter_screen)
+config_shop = ConfigShopClass.ConfigShop(100)
+context = ContextClass.Context(config_button_screen, config_map, config_modifier, config_parameter_screen, config_shop)
 
 use_additional_parameters = False
 is_move = False
