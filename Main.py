@@ -4,12 +4,11 @@ import sys
 
 import EnemyClass
 import MainManu
-import Map
 import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigMapClass
+from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigMapClass, ConfigModifierClass
 import ContextClass
 
 from ButtonClass import Button
@@ -30,7 +29,8 @@ def actionScene(lvl):  # функция, меняющая переменную �
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
 config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
 config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
-context = ContextClass.Context(config_button_screen, config_map, config_parameter_screen)
+config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
+context = ContextClass.Context(config_button_screen, config_map, config_modifier, config_parameter_screen)
 
 use_additional_parameters = False
 is_move = False
@@ -118,7 +118,7 @@ while True:  # основной цикл
                                 if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
                                     current_enemy = None
-                                    money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence  = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free, Function.price_up)
+                                    money  = Function.bugs(Shop.towers_object_array, enemy_array, money, context)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
                 if current_tile is not None and not config_map.get_map_array()[0].build_array[current_tile]['is_filled']:
@@ -128,14 +128,14 @@ while True:  # основной цикл
                 else:
                     shop_tipe = 0
                 if shop_tipe == 1:
-                    money, config_map.get_map_array()[0].build_array, Shop.towers_object_array, Shop.button_update_array, Function.is_free, Function.price_up = Shop.build_tower(event, money, 100, current_tile, config_map.get_map_array()[0].build_array, Function.is_free, Function.price_up, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                    money, config_map.get_map_array()[0].build_array, Shop.towers_object_array, Shop.button_update_array = Shop.build_tower(event, money, 100, current_tile, config_map.get_map_array()[0].build_array, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, config_map.get_map_array()[0].build_array, 100, current_tile, context)  # определяет текущий тайл
                 for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                     if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].image_gun is not None:
                         Shop.towers_object_array[i].rotate_gun()
                         Shop.towers_object_array[i].draw_radius(screen)
                 if current_tower is not None and Shop.button_update_array[current_tower].is_pressed(event):
-                    money, Function.is_free, Function.price_up = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': Shop.towers_object_array, 'number':current_tower, 'money':money, 'button_array':Shop.button_update_array, 'is_free':Function.is_free, 'price_up':Function.price_up})
+                    money = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': Shop.towers_object_array, 'number':current_tower, 'money':money, 'button_array':Shop.button_update_array, 'context': context})
                 amount_of_money = 'x' + str(money) #  рисует количество денег
                 if button_setting.is_pressed(event):
                     button_setting.handle_event_parameter('setting')
@@ -180,7 +180,7 @@ while True:  # основной цикл
             for i in range(len(remove_array)):
                 enemy_array.pop(i)  # если да, то удаляет его и прибавляет деньги
                 current_enemy = None
-                money, Function.is_free, Function.price_up, Function.type_new_modifier, Function.influence = Function.bugs(Shop.towers_object_array, enemy_array, money, Function.is_free,Function.price_up)
+                money = Function.bugs(Shop.towers_object_array, enemy_array, money, context)
                 money += 2
 
             for i in range(len(Shop.towers_object_array)):

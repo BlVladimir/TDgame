@@ -13,27 +13,29 @@ def buy_tower(parameter_dict):  # добавляет в массив башен 
 def upgrade_tower(parameter_dict):  # улучшение башни по номеру
     if parameter_dict['tower_array'][parameter_dict['number']].level != 3:
         cost = parameter_dict['tower_array'][parameter_dict['number']].improve_cost_array[parameter_dict['tower_array'][parameter_dict['number']].level - 1]
-        if parameter_dict['is_free']:
+        is_free = parameter_dict['context'].get_config_modifier().get_is_free()
+        price_up = parameter_dict['context'].get_config_modifier().get_price_up()
+        if is_free:
             parameter_dict['tower_array'][parameter_dict['number']].upgrade(1, 60)
             parameter_dict['tower_array'][parameter_dict['number']].level += 1
             parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/2lvl.png') if parameter_dict['tower_array'][parameter_dict['number']].level == 2 \
                 else parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/3lvl.png')
-            parameter_dict['is_free'] = False
-            parameter_dict['price_up'] = False
-        elif parameter_dict['price_up'] and parameter_dict['money'] >= cost * 2:
+            is_free = parameter_dict['context'].get_config_modifier().get_new_value_is_free(False)
+            price_up = parameter_dict['context'].get_config_modifier().get_new_value_price_up(False)
+        elif price_up and parameter_dict['money'] >= cost * 2:
             parameter_dict['tower_array'][parameter_dict['number']].upgrade(1, 60)
             parameter_dict['tower_array'][parameter_dict['number']].level += 1
             parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/2lvl.png') if parameter_dict['tower_array'][parameter_dict['number']].level == 2 \
                 else parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/3lvl.png')
             parameter_dict['money'] -= cost * 2
-            parameter_dict['price_up'] = False
-        elif not parameter_dict['price_up'] and parameter_dict['money'] >= cost:
+            price_up = parameter_dict['context'].get_config_modifier().get_new_value_price_up(False)
+        elif not price_up and parameter_dict['money'] >= cost:
             parameter_dict['tower_array'][parameter_dict['number']].upgrade(1, 60)
             parameter_dict['tower_array'][parameter_dict['number']].level += 1
             parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/2lvl.png') if parameter_dict['tower_array'][parameter_dict['number']].level == 2 \
                 else parameter_dict['button_array'][parameter_dict['number']].change_image('images/upgrade/3lvl.png')
             parameter_dict['money'] -= cost
-    return parameter_dict['money'], parameter_dict['is_free'], parameter_dict['price_up']
+    return parameter_dict['money']
 
 
 class Product:  # класс продуктов
@@ -85,14 +87,16 @@ class Product:  # класс продуктов
                 money -= self.cost * price_coefficient
         return money
 
-    def buy(self, event, tower_array, button_array, money, type_tile, is_free, price_up, scale_tower, coordinate_tower, index, build_array, current_tile, context):  # покупка башни
+    def buy(self, event, tower_array, button_array, money, type_tile, scale_tower, coordinate_tower, index, build_array, current_tile, context):  # покупка башни
+        is_free = context.get_config_modifier().get_is_free()
+        price_up = context.get_config_modifier().get_price_up()
         if not price_up and not is_free and self.button_product.is_pressed(event) and money >= self.cost:
             money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 1, context.get_config_parameter_scene().get_height())
         elif price_up and not is_free and self.button_product.is_pressed(event) and money >= self.cost * 2:
             money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 2, context.get_config_parameter_scene().get_height())
-            price_up = False
+            context.get_config_modifier().get_new_value_price_up(False)
         elif is_free and self.button_product.is_pressed(event) and money >= self.cost * 2:
             money = self.__create_tower(type_tile, tower_array, scale_tower, coordinate_tower, index, button_array, build_array, current_tile, money, 0, context.get_config_parameter_scene().get_height())
-            price_up = False
-            is_free = True
-        return money, build_array, is_free, price_up
+            context.get_config_modifier().get_new_value_price_up(False)
+            context.get_config_modifier().get_new_value_is_free(False)
+        return money, build_array

@@ -6,10 +6,6 @@ import random
 
 pygame.font.init()
 
-is_free = False
-price_up = False
-type_new_modifier = None
-influence = None
 
 def draw_text(screen, words, size, coordinate_center): #  рисует текст
     f = pygame.font.Font(None, size)
@@ -18,14 +14,12 @@ def draw_text(screen, words, size, coordinate_center): #  рисует текс�
 
     screen.blit(text, rect_text)
 
-def bugs(tower_array, enemy_array, money, current_is_free, current_price_up): #  модификаторы при убийстве врагов
+def bugs(tower_array, enemy_array, money, context): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
-    influence = random.getrandbits(1)
-    is_free_new = current_is_free
-    price_up_new = current_price_up
+    current_influence = random.getrandbits(1)
     match type_of_bugs:
         case 1:
-            if influence == 0:
+            if current_influence == 0:
                 for i in range(len(tower_array)):
                     if tower_array[i].damage > 1:
                         tower_array[i].damage -= 1
@@ -33,7 +27,7 @@ def bugs(tower_array, enemy_array, money, current_is_free, current_price_up): # 
                 for i in range(len(tower_array)):
                     tower_array[i].damage += 1
         case 2:
-            if influence == 1:
+            if current_influence == 1:
                 for i in range(len(enemy_array)):
                     if enemy_array[i].health > 1:
                         enemy_array[i].health -= 1
@@ -41,17 +35,19 @@ def bugs(tower_array, enemy_array, money, current_is_free, current_price_up): # 
                 for i in range(len(enemy_array)):
                     enemy_array[i].health += 1
         case 3:
-            if influence == 0:
+            if current_influence == 0:
                 if money > 0:
                     money -= 1
             else:
                 money += 1
         case 4:
-            if influence == 1:
-                is_free_new = True
+            if current_influence == 1:
+                context.get_config_modifier().get_new_value_is_free(True)
             else:
-                price_up_new = True
-    return money, is_free_new, price_up_new, type_of_bugs, influence
+                context.get_config_modifier().get_new_value_price_up(True)
+    context.get_config_modifier().get_new_value_type_new_modifier(type_of_bugs)
+    context.get_config_modifier().get_new_value_influence(current_influence)
+    return money
 
 def file_change(changed_parameter):  # изменяет значение в файле
     file_save = open('Save', 'r')
