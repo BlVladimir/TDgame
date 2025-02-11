@@ -8,7 +8,7 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
+from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
 import ContextClass
 
 from ButtonClass import Button
@@ -28,6 +28,7 @@ def actionScene(lvl):  # функция, меняющая переменную �
 
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
 config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
+config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
 config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 config_shop = ConfigShopClass.ConfigShop(100)

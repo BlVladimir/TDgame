@@ -1,7 +1,8 @@
 class Context:
 
-    def __init__(self, config_button, config_map, config_modifier, config_parameter_scene, config_shop):
+    def __init__(self, config_button, config_gameplay, config_map, config_modifier, config_parameter_scene, config_shop):
         self.config_button = config_button
+        self.config_gameplay = config_gameplay
         self.config_map = config_map
         self.config_modifier = config_modifier
         self.config_parameter_scene = config_parameter_scene
@@ -9,6 +10,9 @@ class Context:
 
     def get_config_button(self):
         return self.config_button
+
+    def get_config_gameplay(self):
+        return self.config_gameplay
 
     def get_config_map(self):
         return self.config_map
