@@ -24,7 +24,7 @@ class ConfigShop:
     def new_value_towers_object_array(self, new_value):
         self.towers_object_array = new_value
 
-    def new_value_update_array(self, new_value):
+    def new_value_button_update_array(self, new_value):
         self.button_update_array = new_value
 
     def get_scale_products(self):

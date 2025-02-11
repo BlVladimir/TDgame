@@ -88,6 +88,8 @@ while True:  # основной цикл
             use_additional_parameters = True
         else:
             use_additional_parameters = False
+        towers_array = config_shop.get_towers_object_array()
+        buttons_update_array = config_shop.get_button_update_array()
         match scene:
             case 'mainMenu':
                 is_started = MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
@@ -107,19 +109,19 @@ while True:  # основной цикл
                     money = 300
                     for i in range(len(config_map.get_map_array()[0].build_array)):  # обнуляет все тайлы
                         config_map.get_map_array()[0].build_array[i]['is_filled'] = False
-                if Shop.towers_object_array is not []:
-                    current_tower = Function.define_current_tower(current_tile, Shop.towers_object_array)
+                if towers_array:
+                    current_tower = Function.define_current_tower(current_tile, towers_array)
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
                     current_enemy = DefinitionCurrentTile.highlight_enemy(enemy_array)  # определяет, какой враг выделен
-                    if current_enemy is not None and Shop.towers_object_array != []:  # если выделенный враг существует и существует хотя бы одна башня
-                        for i in range(len(Shop.towers_object_array)):  # проходится по всему массиву башен
-                            if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].is_in_radius(enemy_array[current_enemy].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
-                                enemy_array[current_enemy].remove_health(Shop.towers_object_array[i].damage, Shop.towers_object_array[i].armor_piercing, Shop.towers_object_array[i].poison)  # отнимает у врага здоровье, равное урону башни
-                                Shop.towers_object_array[i].is_used = True  # переменная отвечает за то, что башня была использована
+                    if current_enemy is not None and towers_array:  # если выделенный враг существует и существует хотя бы одна башня
+                        for i in range(len(towers_array)):  # проходится по всему массиву башен
+                            if towers_array[i].index == current_tile and towers_array[i].is_in_radius(enemy_array[current_enemy].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
+                                enemy_array[current_enemy].remove_health(towers_array[i].damage, towers_array[i].armor_piercing, towers_array[i].poison)  # отнимает у врага здоровье, равное урону башни
+                                towers_array[i].is_used = True  # переменная отвечает за то, что башня была использована
                                 if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
                                     enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
                                     current_enemy = None
-                                    money  = Function.bugs(Shop.towers_object_array, enemy_array, money, context)
+                                    money  = Function.bugs(enemy_array, money, context)
                                     money += 2
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
                 if current_tile is not None and not config_map.get_map_array()[0].build_array[current_tile]['is_filled']:
@@ -129,14 +131,15 @@ while True:  # основной цикл
                 else:
                     shop_tipe = 0
                 if shop_tipe == 1:
-                    money, config_map.get_map_array()[0].build_array, Shop.towers_object_array, Shop.button_update_array = Shop.build_tower(event, money, 100, current_tile, config_map.get_map_array()[0].build_array, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                    money, config_map.get_map_array()[0].build_array = Shop.build_tower(event, money, 100, current_tile, config_map.get_map_array()[0].build_array, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 current_tile, highlight_tile = DefinitionCurrentTile.definition(event, config_map.get_map_array()[0].build_array, 100, current_tile, context)  # определяет текущий тайл
-                for i in range(len(Shop.towers_object_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
-                    if Shop.towers_object_array[i].index == current_tile and Shop.towers_object_array[i].image_gun is not None:
-                        Shop.towers_object_array[i].rotate_gun()
-                        Shop.towers_object_array[i].draw_radius(screen)
-                if current_tower is not None and Shop.button_update_array[current_tower].is_pressed(event):
-                    money = Shop.button_update_array[current_tower].handle_event_parameter({'tower_array': Shop.towers_object_array, 'number':current_tower, 'money':money, 'button_array':Shop.button_update_array, 'context': context})
+                if towers_array:
+                    for i in range(len(towers_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
+                        if towers_array[i].index == current_tile and towers_array[i].image_gun is not None:
+                            towers_array[i].rotate_gun()
+                            towers_array[i].draw_radius(screen)
+                if current_tower is not None and context.get_config_shop().get_button_update_array()[current_tower].is_pressed(event):
+                    money = context.get_config_shop().get_button_update_array()[current_tower].handle_event_parameter({'number':current_tower, 'money':money, 'context': context})
                 amount_of_money = 'x' + str(money) #  рисует количество денег
                 if button_setting.is_pressed(event):
                     button_setting.handle_event_parameter('setting')
@@ -168,8 +171,10 @@ while True:  # основной цикл
         if is_fail:
             scene = 'mainMenu'
         ti += 1
-        for i in range(len(Shop.towers_object_array)):
-            Shop.towers_object_array[i].is_used = True
+        towers_array = context.get_config_shop().get_towers_object_array()
+        for i in range(len(towers_array)):
+            towers_array[i].is_used = True
+        context.get_config_shop().new_value_towers_object_array(towers_array)
         if ti % 60 == 0:
             ti = 0
             is_move = False
@@ -181,11 +186,11 @@ while True:  # основной цикл
             for i in range(len(remove_array)):
                 enemy_array.pop(i)  # если да, то удаляет его и прибавляет деньги
                 current_enemy = None
-                money = Function.bugs(Shop.towers_object_array, enemy_array, money, context)
+                money = Function.bugs(enemy_array, money, context)
                 money += 2
 
-            for i in range(len(Shop.towers_object_array)):
-                Shop.towers_object_array[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
+            for i in range(len(config_shop.get_towers_object_array())):
+                config_shop.get_towers_object_array()[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
                 EnemyClass.create_enemy_on_lvl1(waves, current_wave, enemy_array, context)
                 current_wave  += 1
