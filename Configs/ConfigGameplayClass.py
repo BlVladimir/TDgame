@@ -9,8 +9,8 @@ class ConfigGameplay:
         self.current_tile = None
         self.is_move = False
         self.time = 0
-        self.shop_tipe = 0
-        self.money = 3
+        self.shop_type = 0
+        self.money = 0
         self.trajectory = ()
         self.enemy_array = []
 
@@ -29,7 +29,7 @@ class ConfigGameplay:
     def get_highlight_tile(self):
         return self.highlight_tile
 
-    def new_highlight_tile(self, new_value):
+    def new_value_highlight_tile(self, new_value):
         self.highlight_tile = new_value
 
     def get_current_tile(self):
@@ -57,19 +57,19 @@ class ConfigGameplay:
         return self.time
 
     def new_value_time(self, new_value):
-        self.time = new_value
+        self.time = self.time + new_value
 
-    def get_shop_tipe(self):
-        return self.shop_tipe
+    def get_shop_type(self):
+        return self.shop_type
 
-    def new_value_shop_tipe(self, new_value):
-        self.shop_tipe = new_value
+    def new_value_shop_type(self, new_value):
+        self.shop_type = new_value
 
     def get_money(self):
         return self.money
 
     def new_value_money(self, new_value):
-        self.money = new_value
+        self.money = self.money + new_value
 
     def get_trajectory(self):
         return self.trajectory
@@ -78,7 +78,7 @@ class ConfigGameplay:
         self.trajectory = new_value
 
     def get_enemy_array(self):
-        return self.current_enemy
+        return self.enemy_array
 
     def new_value_enemy_array(self, new_value):
-        self.current_enemy = new_value
+        self.enemy_array = new_value

@@ -32,28 +32,16 @@ config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
 config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 config_shop = ConfigShopClass.ConfigShop(100)
-context = ContextClass.Context(config_button_screen, config_map, config_modifier, config_parameter_screen, config_shop)
+context = ContextClass.Context(config_button_screen, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
 
 use_additional_parameters = False
-is_move = False
-ti = 0
 screen = pygame.display.set_mode((config_parameter_screen.get_width(), config_parameter_screen.get_height()))  # задает размер экрана и создает его
 trajectory = ()
-money = 3
-current_tile = None
 mouse_pose = [0, 0]
-highlight_tile = None
-amount_of_money = 'x 0'
-amount_of_money_pos = (600, 70)
 money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (100, 100))
-enemy_array = []
 waves = []
 current_wave = 0
-current_enemy = None
-current_tower = None
 is_started = False
-attacked_enemies = []
-shop_tipe = 0
 information_table = Information(config_parameter_screen.get_height(), config_parameter_screen.get_width())
 
 always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
@@ -84,7 +72,7 @@ while True:  # основной цикл
             sys.exit()
         elif event.type == pygame.KEYDOWN:  # если кнопка была нажата
             if scene == 'lvl1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
-                is_move = True  # переменная isMove нужна, чтобы определять, закончено движение или нет
+                context.get_config_gameplay().new_value_is_move(True)  # переменная isMove нужна, чтобы определять, закончено движение или нет
         if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
             use_additional_parameters = True
         else:
@@ -94,9 +82,9 @@ while True:  # основной цикл
         match scene:
             case 'mainMenu':
                 is_started = MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
-                if waves != [] or enemy_array != []:  # обнуляет массив врагов и их количество на каждой волне в меню
+                if waves != [] or context.get_config_gameplay().get_enemy_array() != []:  # обнуляет массив врагов и их количество на каждой волне в меню
                     waves = []
-                    enemy_array = []
+                    context.get_config_gameplay().new_value_enemy_array([])
                     Shop.towers_object_array = []
                     Shop.button_update_array = []
                 if button_setting.is_pressed(event):
@@ -105,43 +93,45 @@ while True:  # основной цикл
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
                     waves = create_waves(100, 3) #  создает волны
                     current_wave = 1  # текущая волна 1
-                    EnemyClass.create_enemy_on_lvl1(waves, 0, enemy_array, context)  # создает врагов на 1 клетке
+                    EnemyClass.create_enemy_on_lvl1(waves, 0, context)  # создает врагов на 1 клетке
                     is_started = False  # переменная отвечает за то, началась ли игра или нет
-                    money = 300
+                    context.get_config_gameplay().new_value_money(-context.get_config_gameplay().get_money() + 1000)
                     for i in range(len(config_map.get_map_array()[0].build_array)):  # обнуляет все тайлы
                         config_map.get_map_array()[0].build_array[i]['is_filled'] = False
                 if towers_array:
-                    current_tower = Function.define_current_tower(current_tile, towers_array)
+                    Function.define_current_tower(context)
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
-                    current_enemy = DefinitionCurrentTile.highlight_enemy(enemy_array)  # определяет, какой враг выделен
-                    if current_enemy is not None and towers_array:  # если выделенный враг существует и существует хотя бы одна башня
+                    enemy_array = context.get_config_gameplay().get_enemy_array()
+                    DefinitionCurrentTile.highlight_enemy(context)  # определяет, какой враг выделен
+                    if context.get_config_gameplay().get_current_enemy() is not None and towers_array:  # если выделенный враг существует и существует хотя бы одна башня
                         for i in range(len(towers_array)):  # проходится по всему массиву башен
-                            if towers_array[i].index == current_tile and towers_array[i].is_in_radius(enemy_array[current_enemy].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
-                                enemy_array[current_enemy].remove_health(towers_array[i].damage, towers_array[i].armor_piercing, towers_array[i].poison)  # отнимает у врага здоровье, равное урону башни
+                            if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].is_in_radius(enemy_array[context.get_config_gameplay().get_current_enemy()].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
+                                enemy_array[context.get_config_gameplay().get_current_enemy()].remove_health(towers_array[i].damage, towers_array[i].armor_piercing, towers_array[i].poison)  # отнимает у врага здоровье, равное урону башни
                                 towers_array[i].is_used = True  # переменная отвечает за то, что башня была использована
-                                if enemy_array[current_enemy].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
-                                    enemy_array.pop(current_enemy)  # если да, то удаляет его и прибавляет деньги
-                                    current_enemy = None
-                                    money  = Function.bugs(enemy_array, money, context)
-                                    money += 2
+                                if enemy_array[context.get_config_gameplay().get_current_enemy()].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
+                                    enemy_array.pop(context.get_config_gameplay().get_current_enemy())  # если да, то удаляет его и прибавляет деньги
+                                    context.get_config_gameplay().new_value_current_enemy(None)
+                                    Function.bugs(context)
+                                    context.get_config_gameplay().new_value_money(2)
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
-                if current_tile is not None and not config_map.get_map_array()[0].build_array[current_tile]['is_filled']:
-                    shop_tipe = 1
-                elif current_tile is not None and config_map.get_map_array()[0].build_array[current_tile]['is_filled']:
-                    shop_tipe = 2
+                                context.get_config_gameplay().new_value_enemy_array(enemy_array)
+                DefinitionCurrentTile.definition(event, config_map.get_map_array()[0].build_array, 100, context)  # определяет текущий тайл
+                if context.get_config_gameplay().get_current_tile() is not None and not config_map.get_map_array()[0].build_array[context.get_config_gameplay().get_current_tile()]['is_filled']:
+                    context.get_config_gameplay().new_value_shop_type(1)
+                elif context.get_config_gameplay().get_current_tile() is not None and config_map.get_map_array()[0].build_array[context.get_config_gameplay().get_current_tile()]['is_filled']:
+                    context.get_config_gameplay().new_value_shop_type(2)
                 else:
-                    shop_tipe = 0
-                if shop_tipe == 1:
-                    money, config_map.get_map_array()[0].build_array = Shop.build_tower(event, money, 100, current_tile, config_map.get_map_array()[0].build_array, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
-                current_tile, highlight_tile = DefinitionCurrentTile.definition(event, config_map.get_map_array()[0].build_array, 100, current_tile, context)  # определяет текущий тайл
+                    context.get_config_gameplay().new_value_shop_type(0)
+                if context.get_config_gameplay().get_shop_type() == 1:
+                    config_map.get_map_array()[0].build_array = Shop.build_tower(event,100, config_map.get_map_array()[0].build_array, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 if towers_array:
                     for i in range(len(towers_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
-                        if towers_array[i].index == current_tile and towers_array[i].image_gun is not None:
+                        if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].image_gun is not None:
                             towers_array[i].rotate_gun()
                             towers_array[i].draw_radius(screen)
-                if current_tower is not None and context.get_config_shop().get_button_update_array()[current_tower].is_pressed(event):
-                    money = context.get_config_shop().get_button_update_array()[current_tower].handle_event_parameter({'number':current_tower, 'money':money, 'context': context})
-                amount_of_money = 'x' + str(money) #  рисует количество денег
+                if context.get_config_gameplay().get_current_tower() is not None and context.get_config_shop().get_button_update_array()[context.get_config_gameplay().get_current_tower()].is_pressed(event):
+                    context.get_config_shop().get_button_update_array()[context.get_config_gameplay().get_current_tower()].handle_event_parameter(context)
+                context.get_config_gameplay().new_value_amount_of_money('x' + str(context.get_config_gameplay().get_money())) #  рисует количество денег
                 if button_setting.is_pressed(event):
                     button_setting.handle_event_parameter('setting')
                 if button_main_manu.is_pressed(event):
@@ -167,19 +157,20 @@ while True:  # основной цикл
                 if button_main_manu.is_pressed(event):
                     button_main_manu.handle_event_parameter('mainMenu')
         button_exit.handle_event(event)
-    if is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
-        is_fail = EnemyClass.move_all_enemies(enemy_array, trajectory, config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale)
+    if context.get_config_gameplay().get_is_move():  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
+        is_fail = EnemyClass.move_all_enemies(trajectory, config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale, context)
         if is_fail:
             scene = 'mainMenu'
-        ti += 1
+        context.get_config_gameplay().new_value_time(1)
         towers_array = context.get_config_shop().get_towers_object_array()
         for i in range(len(towers_array)):
             towers_array[i].is_used = True
         context.get_config_shop().new_value_towers_object_array(towers_array)
-        if ti % 60 == 0:
-            ti = 0
-            is_move = False
+        if context.get_config_gameplay().get_time() % 60 == 0:
+            context.get_config_gameplay().new_value_time(-context.get_config_gameplay().get_time())
+            context.get_config_gameplay().new_value_is_move(False)
             remove_array = []
+            enemy_array = context.get_config_gameplay().get_enemy_array()
             for i in range(len(enemy_array)):
                 enemy_array[i].treat()
                 if enemy_array[i].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
@@ -187,13 +178,14 @@ while True:  # основной цикл
             for i in range(len(remove_array)):
                 enemy_array.pop(i)  # если да, то удаляет его и прибавляет деньги
                 current_enemy = None
-                money = Function.bugs(enemy_array, money, context)
-                money += 2
+                Function.bugs(context)
+                context.get_config_gameplay().new_value_money(2)
+            context.get_config_gameplay().new_value_enemy_array(enemy_array)
 
             for i in range(len(config_shop.get_towers_object_array())):
                 config_shop.get_towers_object_array()[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
-                EnemyClass.create_enemy_on_lvl1(waves, current_wave, enemy_array, context)
+                EnemyClass.create_enemy_on_lvl1(waves, current_wave, context)
                 current_wave  += 1
     screen.fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     trajectory = config_map.get_map_array()[0].get_trajectory()
@@ -202,7 +194,7 @@ while True:  # основной цикл
             MainManu.draw_buttons(screen, context)
             button_setting.draw(screen)
         case 'lvl1':
-            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, enemy_array, current_enemy, highlight_tile_images, highlight_tile, current_tile, amount_of_money, amount_of_money_pos, use_additional_parameters, always_use_additional_parameters, shop_tipe, information_table, context)
+            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, highlight_tile_images, use_additional_parameters, always_use_additional_parameters, information_table, context)
         case 'lvl2':
             config_map.get_map_array()[1].draw(screen)
             button_main_manu.draw(screen)

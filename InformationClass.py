@@ -17,16 +17,16 @@ class Information:
         self.__current_modifier = []
 
 
-    def __draw_characteristic(self, screen, enemy_array, current_enemy, height):  # рисует характеристики врага
-        if current_enemy is not None:
-            health_line = 'health ' + str(enemy_array[current_enemy].health)
+    def __draw_characteristic(self, screen, height, context):  # рисует характеристики врага
+        if context.get_config_gameplay().get_current_enemy() is not None:
+            health_line = 'health ' + str(context.get_config_gameplay().get_enemy_array()[context.get_config_gameplay().get_current_enemy()].health)
             screen.blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
             Function.draw_text(screen, health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15))
 
-    def draw(self, screen, height, width, enemy_array, current_enemy, context):  # рисует панель информации
+    def draw(self, screen, height, width, context):  # рисует панель информации
         screen.blit(self.__image, self.__coordinate)
         screen.blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.2))
-        self.__draw_characteristic(screen, enemy_array, current_enemy, height)
+        self.__draw_characteristic(screen, height, context)
         self.draw_bugs(screen, height, width, context)
 
     def __change_modifier_array(self, text):  # меняет массив модификаторов

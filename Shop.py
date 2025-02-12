@@ -5,20 +5,21 @@ pygame.init()
 
 
 
-def draw(state, screen, moneyPicture, context, current_tile = None): #  рисует магазин
-    if state == 1:
+def draw(screen, moneyPicture, context): #  рисует магазин
+    if context.get_config_gameplay().get_shop_type() == 1:
         draw_store(screen, moneyPicture, context)
         for i in context.get_config_shop().get_products():
             i.draw(screen)
-    elif state == 2:
-        draw_up(screen, current_tile, context)
+    elif context.get_config_gameplay().get_shop_type() == 2:
+        draw_up(screen, context)
 
 
-def draw_up(screen, current_tile, context):  # рисует кнопку улучшения
+def draw_up(screen, context):  # рисует кнопку улучшения
     height = context.get_config_parameter_scene().get_height()
     towers_object_array = context.get_config_shop().get_towers_object_array()
     screen.blit(context.get_config_shop().get_imageShop(), (0, 0))
-    current_tower = Function.define_current_tower(current_tile, towers_object_array)
+    Function.define_current_tower(context)
+    current_tower = context.get_config_gameplay().get_current_tower()
     if current_tower is not None:
         damage_count = towers_object_array[current_tower].damage
         radius_value = round((towers_object_array[current_tower].radius - 50) / 120, 2)
@@ -39,10 +40,11 @@ def draw_tower_parameter(screen, parameter_image, number_this_parameter, value, 
     Function.draw_text(screen, str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120))
 
 
-def build_tower(event, coins, scale_tower, current_tile, build_array, context):  # проверяет, нажата ли кнопка продуктов и покупает башню
+def build_tower(event, scale_tower, build_array, context):  # проверяет, нажата ли кнопка продуктов и покупает башню
     mouse_pose = pygame.mouse.get_pos()
+    current_tile = context.get_config_gameplay().get_current_tile()
     if current_tile is not None:
         for i in context.get_config_shop().get_products():
             if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
-                coins, build_array = i.buy(event, coins, build_array[current_tile]['type'], scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile, context)
-    return coins, build_array #  меняет значение денег
+                build_array = i.buy(event, build_array[current_tile]['type'], scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile, context)
+    return build_array #  меняет значение денег

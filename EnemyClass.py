@@ -93,7 +93,7 @@ def create_waves(number_of_waves, lvl):  # Функция создает мас�
     return waves_mas
 
 
-def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas, context):  # Добавляет в массив врагов новые элементы. В зависимости от количества врагов у каждого врага разные координаты
+def create_enemy_on_lvl1(waves_mas, current_wave, context):  # Добавляет в массив врагов новые элементы. В зависимости от количества врагов у каждого врага разные координаты
     if (current_wave + 1) % 4 == 0:
         additional_health = ((current_wave + 1) // 4 - 1) * 2 + 1
     else:
@@ -115,20 +115,26 @@ def create_enemy_on_lvl1(waves_mas, current_wave, enemy_mas, context):  # Доб
             health = 4
             treatment = 2
     level1 = context.get_config_map().get_map_array()[0]
+    enemy_array = context.get_config_gameplay().get_enemy_array()
     if waves_mas[current_wave][0] == 1:
-        enemy_mas.append(Enemy(image_enemy, level1.get_started_position(0), level1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
+        enemy_array.append(Enemy(image_enemy, level1.get_started_position(0), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
+        context.get_config_gameplay().new_value_enemy_array(enemy_array)
     elif waves_mas[current_wave][0] == 2:
-        enemy_mas.append(Enemy(image_enemy, level1.get_started_position(1), level1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
-        enemy_mas.append(Enemy(image_enemy, level1.get_started_position(2), level1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
+        enemy_array.append(Enemy(image_enemy, level1.get_started_position(1), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
+        enemy_array.append(Enemy(image_enemy, level1.get_started_position(2), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
+        context.get_config_gameplay().new_value_enemy_array(enemy_array)
     elif waves_mas[current_wave][0] == 3:
-        enemy_mas.append(Enemy(image_enemy, level1.get_started_position(3), level1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
-        enemy_mas.append(Enemy(image_enemy, level1.get_started_position(4), level1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
-        enemy_mas.append(Enemy(image_enemy, level1.get_started_position(2), level1.tile_scale / 2, health + additional_health, armor = armor, treatment = treatment))
+        enemy_array.append(Enemy(image_enemy, level1.get_started_position(2), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
+        enemy_array.append(Enemy(image_enemy, level1.get_started_position(3), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
+        enemy_array.append(Enemy(image_enemy, level1.get_started_position(4), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
+        context.get_config_gameplay().new_value_enemy_array(enemy_array)
 
-def move_all_enemies(enemy_mas, trajectory, gaps, tile_scale, speed = 60):  # двигает всех врагов
+def move_all_enemies(trajectory, gaps, tile_scale, context, speed = 60):  # двигает всех врагов
     is_fail = False
-    for i in range(len(enemy_mas)):
-        is_fail = enemy_mas[i].move(trajectory, gaps, tile_scale, speed)
+    enemy_array = context.get_config_gameplay().get_enemy_array()
+    for i in range(len(enemy_array)):
+        is_fail = enemy_array[i].move(trajectory, gaps, tile_scale, speed)
         if is_fail:
             break
+    context.get_config_gameplay().new_value_enemy_array(enemy_array)
     return is_fail
