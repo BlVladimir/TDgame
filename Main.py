@@ -40,11 +40,9 @@ context = ContextClass.Context(config_constant_object, config_enemy, config_game
 
 use_additional_parameters = False
 mouse_pose = [0, 0]
-money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (100, 100))
 waves = []
 current_wave = 0
 is_started = False
-information_table = Information(config_parameter_screen.get_height(), config_parameter_screen.get_width())
 
 always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
 

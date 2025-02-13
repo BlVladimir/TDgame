@@ -1,3 +1,5 @@
+from Function import find_in_file
+
 class ConfigGameplay:
 
     def __init__(self, amount_of_money_position):
@@ -13,7 +15,7 @@ class ConfigGameplay:
         self.waves = []
         self.current_wave = 0
         self.is_started = False
-        # self.always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
+        self.always_use_additional_parameters = find_in_file('alwaysUseAdditionalParameter')
 
 
     def get_current_tower(self):
@@ -54,3 +56,38 @@ class ConfigGameplay:
 
     def new_value_money(self, new_value):
         self.money = self.money + new_value
+
+    def get_use_additional_parameters(self):
+        return self.use_additional_parameters
+
+    def new_value_use_additional_parameters(self, new_value):
+        self.use_additional_parameters = new_value
+    def get_mouse_pose(self):
+        return self.mouse_pose
+
+    def new_value_mouse_pose(self, new_value):
+        self.mouse_pose = new_value
+
+    def get_waves(self):
+        return self.waves
+
+    def new_value_waves(self, new_value):
+        self.waves = new_value
+
+    def get_current_wave(self):
+        return self.current_wave
+
+    def new_value_current_wave(self, new_value):
+        self.current_wave = self.current_wave + new_value
+
+    def get_is_started(self):
+        return self.is_started
+
+    def new_value_is_started(self):
+        self.is_started = not self.is_started
+
+    def get_always_use_additional_parameters(self):
+        return self.always_use_additional_parameters
+
+    def new_value_always_use_additional_parameters(self, new_value):
+        self.always_use_additional_parameters = new_value
