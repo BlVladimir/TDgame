@@ -7,12 +7,12 @@ import random
 pygame.font.init()
 
 
-def draw_text(screen, words, size, coordinate_center): #  рисует текст
+def draw_text(words, size, coordinate_center, context): #  рисует текст
     f = pygame.font.Font(None, size)
     text = f.render(words, False, (255, 255, 255))
     rect_text = text.get_rect(center = coordinate_center)
 
-    screen.blit(text, rect_text)
+    context.get_config_parameter_scene().get_screen().blit(text, rect_text)
 
 def bugs(context): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)

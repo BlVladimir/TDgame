@@ -55,15 +55,15 @@ class Map:
         trajectory = self.road_array[1]
         return trajectory
 
-    def draw(self, screen):
+    def draw(self, context):
         p = 0
         for y in range(len(self.tile_array)):
             for x in range(len(self.tile_array[y])):
                 if self.tile_array[y][x] != 0:
-                    screen.blit(self.__image_tile_mass[self.tile_array[y][x]], self.coordinates[p])
+                    context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[self.tile_array[y][x]], self.coordinates[p])
                     p += 1
         for i in range(len(self.road_array[0])):
-            screen.blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
+            context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
 
     def get_started_position(self, tipeOnTile):
         rectEnemy = [0, 0]

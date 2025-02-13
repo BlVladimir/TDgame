@@ -65,8 +65,8 @@ class Product:  # класс продуктов
             self.__additional_image = None
             self.button_product = ButtonClass.Button(coordinate[0], coordinate[1], image, scale, scale, buy_tower)
 
-    def draw(self, screen):  # рисует продукт
-        self.button_product.draw(screen)
+    def draw(self, context):  # рисует продукт
+        self.button_product.draw(context)
 
     def __create_tower(self, type_tile, scale_tower, coordinate_tower, index, build_array, current_tile, price_coefficient, height, context):  # создает башню с характеристиками, зависящими от текущего тайла
         button_array = context.get_config_shop().get_button_update_array()

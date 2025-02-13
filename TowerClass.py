@@ -42,27 +42,27 @@ class Tower:
         else:
             return False
 
-    def draw_tower(self, screen, additional_characteristic, always_additional_characteristic):
-        screen.blit(self.__image_foundation, self.__coordinate)
+    def draw_tower(self, additional_characteristic, always_additional_characteristic, context):
+        context.get_config_parameter_scene().get_screen().blit(self.__image_foundation, self.__coordinate)
         if self.__rotated_image is not None:
-            screen.blit(self.__rotated_image, self.__rotated_image_rect)
+            context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.__rotated_image_rect)
         if additional_characteristic or always_additional_characteristic:
-            screen.blit(self.level_image_tuple[self.level - 1], (self.__coordinate[0] + self.scale / 8, self.__coordinate[1] + self.scale/14))
+            context.get_config_parameter_scene().get_screen().blit(self.level_image_tuple[self.level - 1], (self.__coordinate[0] + self.scale / 8, self.__coordinate[1] + self.scale/14))
             if self.is_used:
-                screen.blit(self.__is_charged[1], (self.__coordinate[0], self.__coordinate[1] + self.scale / 8))
+                context.get_config_parameter_scene().get_screen().blit(self.__is_charged[1], (self.__coordinate[0], self.__coordinate[1] + self.scale / 8))
             else:
-                screen.blit(self.__is_charged[0], (self.__coordinate[0], self.__coordinate[1] + self.scale / 8))
+                context.get_config_parameter_scene().get_screen().blit(self.__is_charged[0], (self.__coordinate[0], self.__coordinate[1] + self.scale / 8))
 
-    def draw_picture_tower(self, screen, scale, coordinate_center):
-        screen.blit(pygame.transform.scale(self.__image_foundation, (scale, scale)), (coordinate_center[0] - scale / 2, coordinate_center[1] - scale / 2))
+    def draw_picture_tower(self, scale, coordinate_center, context):
+        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(self.__image_foundation, (scale, scale)), (coordinate_center[0] - scale / 2, coordinate_center[1] - scale / 2))
         if self.__rotated_image is not None:
             __rotated_image = pygame.transform.scale(self.image_gun, (scale, scale))
             __rotated_image = pygame.transform.rotate(__rotated_image, self.angle)
-            screen.blit(__rotated_image, __rotated_image.get_rect(center = coordinate_center))
+            context.get_config_parameter_scene().get_screen().blit(__rotated_image, __rotated_image.get_rect(center = coordinate_center))
 
 
-    def draw_radius(self, screen):
-        screen.blit(self.__radius_image, (self.__coordinate[0] + self.scale / 2 - self.radius, self.__coordinate[1] + self.scale / 2 - self.radius))
+    def draw_radius(self, context):
+        context.get_config_parameter_scene().get_screen().blit(self.__radius_image, (self.__coordinate[0] + self.scale / 2 - self.radius, self.__coordinate[1] + self.scale / 2 - self.radius))
 
 
     def rotate_gun(self):

@@ -24,11 +24,11 @@ class Enemy:
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
         return self.center
 
-    def draw(self, screen, always_use, use_additional_parameters):  # функция, рисующая врага
-        screen.blit(self.image, self.rect)
+    def draw(self, always_use, use_additional_parameters, context):  # функция, рисующая врага
+        context.get_config_parameter_scene().get_screen().blit(self.image, self.rect)
         if always_use or use_additional_parameters:
             scale = int(self.scale * 0.6)
-            Function.draw_text(screen, str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2))  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
+            Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
     def move(self, trajectory, gaps, tile_scale, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
         if self.pos//speed != len(trajectory):  # Проверяет, что существует следующая позиция

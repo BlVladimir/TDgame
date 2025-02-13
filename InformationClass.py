@@ -17,17 +17,17 @@ class Information:
         self.__current_modifier = []
 
 
-    def __draw_characteristic(self, screen, height, context):  # рисует характеристики врага
+    def __draw_characteristic(self, height, context):  # рисует характеристики врага
         if context.get_config_gameplay().get_current_enemy() is not None:
             health_line = 'health ' + str(context.get_config_gameplay().get_enemy_array()[context.get_config_gameplay().get_current_enemy()].health)
-            screen.blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
-            Function.draw_text(screen, health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15))
+            context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
+            Function.draw_text(health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15), context)
 
-    def draw(self, screen, height, width, context):  # рисует панель информации
-        screen.blit(self.__image, self.__coordinate)
-        screen.blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.2))
-        self.__draw_characteristic(screen, height, context)
-        self.draw_bugs(screen, height, width, context)
+    def draw(self, height, width, context):  # рисует панель информации
+        context.get_config_parameter_scene().get_screen().blit(self.__image, self.__coordinate)
+        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.2))
+        self.__draw_characteristic(height, context)
+        self.draw_bugs(height, width, context)
 
     def __change_modifier_array(self, text):  # меняет массив модификаторов
         if self.__current_modifier:
@@ -43,7 +43,7 @@ class Information:
         else:
             self.__current_modifier.append(text)
 
-    def draw_bugs(self, screen, height, width, context):  # рисует массив модификаторов
+    def draw_bugs(self, height, width, context):  # рисует массив модификаторов
         is_free = context.get_config_modifier().get_is_free()
         price_up = context.get_config_modifier().get_price_up()
         type_modifier = context.get_config_modifier().get_type_new_modifier()
@@ -87,6 +87,6 @@ class Information:
         if len(self.__current_modifier) != 0:
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.58, len(self.__current_modifier), (width - height * 0.39, height * 0.41))
             for i in range(len(self.__current_modifier)):
-                Function.draw_text(screen, self.__current_modifier[i], 50, coordinate_array[i])
+                Function.draw_text(self.__current_modifier[i], 50, coordinate_array[i], context)
 
 

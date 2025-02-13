@@ -13,11 +13,11 @@ def definition(event, build_array, scale_tile, context):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 context.get_config_gameplay().new_value_current_tile(None)
 
-def draw_highlighting(highlighting_tile_image, build_array, screen, context):  # функция, рисующая выделение тайлов
+def draw_highlighting(highlighting_tile_image, build_array, context):  # функция, рисующая выделение тайлов
     if context.get_config_gameplay().get_current_tile() is not None:
-        screen.blit(highlighting_tile_image, build_array[context.get_config_gameplay().get_current_tile()]['coordinate'])  # выделяет # текущий тайл, на котором находится мышка
+        context.get_config_parameter_scene().get_screen().blit(highlighting_tile_image, build_array[context.get_config_gameplay().get_current_tile()]['coordinate'])  # выделяет # текущий тайл, на котором находится мышка
     if context.get_config_gameplay().get_highlight_tile() is not None:
-        screen.blit(highlighting_tile_image, build_array[context.get_config_gameplay().get_highlight_tile()]['coordinate'])  # выделяет текущий тайл, на который в последний раз нажимала мышка
+        context.get_config_parameter_scene().get_screen().blit(highlighting_tile_image, build_array[context.get_config_gameplay().get_highlight_tile()]['coordinate'])  # выделяет текущий тайл, на который в последний раз нажимала мышка
 
 def highlight_enemy(context):  # определяет врага, на которого наведена мышка
     current_enemy = None

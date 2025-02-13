@@ -1,4 +1,3 @@
-
 import pygame
 import sys
 
@@ -19,12 +18,9 @@ pygame.init()  # импорт библиотеки pygame и sys, и импор�
 
 clock = pygame.time.Clock()
 
-scene = 'mainMenu'
 
-
-def actionScene(lvl):  # функция, меняющая переменную сцены
-    global scene
-    scene = lvl
+def actionScene(parameter_dict):  # функция, меняющая переменную сцены
+    parameter_dict['context'].get_config_parameter_scene().new_value_scene(parameter_dict['lvl'])
 
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
 config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
@@ -35,7 +31,6 @@ config_shop = ConfigShopClass.ConfigShop(100)
 context = ContextClass.Context(config_button_screen, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
 
 use_additional_parameters = False
-screen = pygame.display.set_mode((config_parameter_screen.get_width(), config_parameter_screen.get_height()))  # задает размер экрана и создает его
 trajectory = ()
 mouse_pose = [0, 0]
 money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (100, 100))
@@ -71,7 +66,7 @@ while True:  # основной цикл
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:  # если кнопка была нажата
-            if scene == 'lvl1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
+            if context.get_config_parameter_scene().get_scene() == 'lvl1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
                 context.get_config_gameplay().new_value_is_move(True)  # переменная isMove нужна, чтобы определять, закончено движение или нет
         if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
             use_additional_parameters = True
@@ -79,7 +74,7 @@ while True:  # основной цикл
             use_additional_parameters = False
         towers_array = config_shop.get_towers_object_array()
         buttons_update_array = config_shop.get_button_update_array()
-        match scene:
+        match context.get_config_parameter_scene().get_scene():
             case 'mainMenu':
                 is_started = MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
                 if waves != [] or context.get_config_gameplay().get_enemy_array() != []:  # обнуляет массив врагов и их количество на каждой волне в меню
@@ -88,7 +83,7 @@ while True:  # основной цикл
                     Shop.towers_object_array = []
                     Shop.button_update_array = []
                 if button_setting.is_pressed(event):
-                    button_setting.handle_event_parameter('setting')
+                    button_setting.handle_event_parameter({'context':context, 'lvl':'setting'})
             case 'lvl1':
                 if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
                     waves = create_waves(100, 3) #  создает волны
@@ -128,34 +123,34 @@ while True:  # основной цикл
                     for i in range(len(towers_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                         if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].image_gun is not None:
                             towers_array[i].rotate_gun()
-                            towers_array[i].draw_radius(screen)
+                            towers_array[i].draw_radius(context)
                 if context.get_config_gameplay().get_current_tower() is not None and context.get_config_shop().get_button_update_array()[context.get_config_gameplay().get_current_tower()].is_pressed(event):
                     context.get_config_shop().get_button_update_array()[context.get_config_gameplay().get_current_tower()].handle_event_parameter(context)
                 context.get_config_gameplay().new_value_amount_of_money('x' + str(context.get_config_gameplay().get_money())) #  рисует количество денег
                 if button_setting.is_pressed(event):
-                    button_setting.handle_event_parameter('setting')
+                    button_setting.handle_event_parameter({'context':context, 'lvl':'setting'})
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')  # кнопка перехода в главное меню нажата
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})  # кнопка перехода в главное меню нажата
             case 'lvl2':
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
             case 'lvl3':
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
             case 'lvl4':
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
             case 'lvl5':
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
             case 'lvl6':
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
             case 'setting':
                 if button_additional_parameter.is_pressed(event):
                     always_use_additional_parameters = Function.file_change('alwaysUseAdditionalParameter')
                 if button_main_manu.is_pressed(event):
-                    button_main_manu.handle_event_parameter('mainMenu')
+                    button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
         button_exit.handle_event(event)
     if context.get_config_gameplay().get_is_move():  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
         is_fail = EnemyClass.move_all_enemies(trajectory, config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale, context)
@@ -187,38 +182,38 @@ while True:  # основной цикл
             if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
                 EnemyClass.create_enemy_on_lvl1(waves, current_wave, context)
                 current_wave  += 1
-    screen.fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
+    context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     trajectory = config_map.get_map_array()[0].get_trajectory()
-    match scene:  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
+    match context.get_config_parameter_scene().get_scene():  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
         case 'mainMenu':
-            MainManu.draw_buttons(screen, context)
-            button_setting.draw(screen)
+            MainManu.draw_buttons(context)
+            button_setting.draw(context)
         case 'lvl1':
-            LVL1.draw_lvl1(screen, button_main_manu, button_setting, money_picture, highlight_tile_images, use_additional_parameters, always_use_additional_parameters, information_table, context)
+            LVL1.draw_lvl1(button_main_manu, button_setting, money_picture, highlight_tile_images, use_additional_parameters, always_use_additional_parameters, information_table, context)
         case 'lvl2':
-            config_map.get_map_array()[1].draw(screen)
-            button_main_manu.draw(screen)
-            button_setting.draw(screen)
+            config_map.get_map_array()[1].draw(context)
+            button_main_manu.draw(context)
+            button_setting.draw(context)
         case 'lvl3':
-            config_map.get_map_array()[2].draw(screen)
-            button_main_manu.draw(screen)
-            button_setting.draw(screen)
+            config_map.get_map_array()[2].draw(context)
+            button_main_manu.draw(context)
+            button_setting.draw(context)
         case 'lvl4':
-            config_map.get_map_array()[3].draw(screen)
-            button_main_manu.draw(screen)
-            button_setting.draw(screen)
+            config_map.get_map_array()[3].draw(context)
+            button_main_manu.draw(context)
+            button_setting.draw(context)
         case 'lvl5':
-            config_map.get_map_array()[4].draw(screen)
-            button_main_manu.draw(screen)
-            button_setting.draw(screen)
+            config_map.get_map_array()[4].draw(context)
+            button_main_manu.draw(context)
+            button_setting.draw(context)
         case 'lvl6':
-            config_map.get_map_array()[5].draw(screen)
-            button_main_manu.draw(screen)
-            button_setting.draw(screen)
+            config_map.get_map_array()[5].draw(context)
+            button_main_manu.draw(context)
+            button_setting.draw(context)
         case 'setting':
-            button_additional_parameter.draw(screen)
-            button_main_manu.draw(screen)
-            button_exit.draw(screen)
-    button_exit.draw(screen)  # вне switch, что бы всегда было видно
+            button_additional_parameter.draw(context)
+            button_main_manu.draw(context)
+            button_exit.draw(context)
+    button_exit.draw(context)  # вне switch, что бы всегда было видно
     pygame.display.flip()  # обновляет экран по завершению цикла
     clock.tick(60)  # ограничивает число кадров в секунду

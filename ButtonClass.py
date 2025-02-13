@@ -18,13 +18,13 @@ class Button:
         else:
             self.__additional_image = None
 
-    def draw(self, screen):  # функция, рисующая кнопку
-        screen.blit(self.__image, (self.__x, self.__y))
+    def draw(self, context):  # функция, рисующая кнопку
+        context.get_config_parameter_scene().get_screen().blit(self.__image, (self.__x, self.__y))
         mouse_position = pygame.mouse.get_pos()
         if self.__x + self.__width >= mouse_position[0] >= self.__x and self.__y + self.__height >= mouse_position[1] >= self.__y:
-            screen.blit(self.__highlight, (self.__x, self.__y))
+            context.get_config_parameter_scene().get_screen().blit(self.__highlight, (self.__x, self.__y))
         if self.__additional_image is not None:
-            screen.blit(self.__additional_image, (self.__x, self.__y))
+            context.get_config_parameter_scene().get_screen().blit(self.__additional_image, (self.__x, self.__y))
 
     def is_pressed(self, event): # функция, считывающая нажатие кнопки
         if event.type == pygame.MOUSEBUTTONDOWN and self.__x + self.__width >= event.pos[0] >= self.__x and self.__y + self.__height >= event.pos[1] >= self.__y:
