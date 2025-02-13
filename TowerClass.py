@@ -42,11 +42,11 @@ class Tower:
         else:
             return False
 
-    def draw_tower(self, additional_characteristic, always_additional_characteristic, context):
+    def draw_tower(self, context):
         context.get_config_parameter_scene().get_screen().blit(self.__image_foundation, self.__coordinate)
         if self.__rotated_image is not None:
             context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.__rotated_image_rect)
-        if additional_characteristic or always_additional_characteristic:
+        if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             context.get_config_parameter_scene().get_screen().blit(self.level_image_tuple[self.level - 1], (self.__coordinate[0] + self.scale / 8, self.__coordinate[1] + self.scale/14))
             if self.is_used:
                 context.get_config_parameter_scene().get_screen().blit(self.__is_charged[1], (self.__coordinate[0], self.__coordinate[1] + self.scale / 8))

@@ -10,8 +10,7 @@ import Function
 from Configs import ConfigParameterScreenClass, ConfigConstantObjectClass, ConfigEnemyClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
 import ContextClass
 
-from EnemyClass import create_waves  # импорт классов из других файлов(чтобы уменьшить основной код)
-from InformationClass import Information
+from EnemyClass import create_waves
 
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
@@ -38,15 +37,6 @@ config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 config_shop = ConfigShopClass.ConfigShop(100)
 context = ContextClass.Context(config_constant_object, config_enemy, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
 
-use_additional_parameters = False
-mouse_pose = [0, 0]
-waves = []
-current_wave = 0
-is_started = False
-
-always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
-
-
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно
@@ -63,20 +53,20 @@ while True:  # основной цикл
         buttons_update_array = config_shop.get_button_update_array()
         match context.get_config_parameter_scene().get_scene():
             case 'mainMenu':
-                is_started = MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
-                if waves != [] or context.get_config_enemy().get_enemy_array() != []:  # обнуляет массив врагов и их количество на каждой волне в меню
-                    waves = []
+                MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
+                if context.get_config_gameplay().get_waves() != [] or context.get_config_enemy().get_enemy_array() != []:  # обнуляет массив врагов и их количество на каждой волне в меню
+                    context.get_config_gameplay().new_value_waves([])
                     context.get_config_enemy().new_value_enemy_array([])
                     context.get_config_shop().new_value_towers_object_array([])
                     context.get_config_shop().new_value_button_update_array([])
                 if context.get_config_constant_object().get_button_setting().is_pressed(event):
                     context.get_config_constant_object().get_button_setting().handle_event_parameter({'context':context, 'lvl':'setting'})
             case 'lvl1':
-                if is_started:  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
-                    waves = create_waves(100, 3) #  создает волны
-                    current_wave = 1  # текущая волна 1
-                    EnemyClass.create_enemy_on_lvl1(waves, 0, context)  # создает врагов на 1 клетке
-                    is_started = False  # переменная отвечает за то, началась ли игра или нет
+                if context.get_config_gameplay().get_is_started():  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
+                    create_waves(100, 3, context) #  создает волны
+                    context.get_config_gameplay().new_value_current_wave(1 - context.get_config_gameplay().get_current_wave())  # текущая волна 1
+                    EnemyClass.create_enemy_on_lvl1(context)  # создает врагов на 1 клетке
+                    context.get_config_gameplay().new_value_is_started(False)  # переменная отвечает за то, началась ли игра или нет
                     context.get_config_gameplay().new_value_money(-context.get_config_gameplay().get_money() + 1000)
                     for i in range(len(config_map.get_map_array()[0].build_array)):  # обнуляет все тайлы
                         config_map.get_map_array()[0].build_array[i]['is_filled'] = False
@@ -135,7 +125,7 @@ while True:  # основной цикл
                     context.get_config_constant_object().get_button_main_manu().handle_event_parameter({'context':context, 'lvl':'mainMenu'})
             case 'setting':
                 if button_additional_parameter.is_pressed(event):
-                    always_use_additional_parameters = Function.file_change('alwaysUseAdditionalParameter')
+                    context.get_config_gameplay().new_value_always_use_additional_parameters(Function.file_change('alwaysUseAdditionalParameter'))
                 if context.get_config_constant_object().get_button_main_manu().is_pressed(event):
                     context.get_config_constant_object().get_button_main_manu().handle_event_parameter({'context':context, 'lvl':'mainMenu'})
         context.get_config_constant_object().get_button_exit().handle_event(event)
@@ -159,16 +149,16 @@ while True:  # основной цикл
                     remove_array.append(i)
             for i in range(len(remove_array)):
                 enemy_array.pop(i)  # если да, то удаляет его и прибавляет деньги
-                current_enemy = None
+                context.get_config_enemy().new_value_current_enemy(None)
                 Function.bugs(context)
                 context.get_config_gameplay().new_value_money(2)
             context.get_config_enemy().new_value_enemy_array(enemy_array)
 
             for i in range(len(config_shop.get_towers_object_array())):
                 config_shop.get_towers_object_array()[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
-            if current_wave != len(waves) and waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
-                EnemyClass.create_enemy_on_lvl1(waves, current_wave, context)
-                current_wave  += 1
+            if context.get_config_gameplay().get_current_wave() != len(context.get_config_gameplay().get_waves()) and context.get_config_gameplay().get_waves() != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
+                EnemyClass.create_enemy_on_lvl1(context)
+                context.get_config_gameplay().new_value_current_wave(1)
     context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     context.get_config_map().get_map_array()[0].get_trajectory_array(context)
     match context.get_config_parameter_scene().get_scene():  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
@@ -176,7 +166,7 @@ while True:  # основной цикл
             MainManu.draw_buttons(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'lvl1':
-            LVL1.draw_lvl1(use_additional_parameters, always_use_additional_parameters, context)
+            LVL1.draw_lvl1(context)
         case 'lvl2':
             config_map.get_map_array()[1].draw(context)
             context.get_config_constant_object().get_button_main_manu().draw(context)

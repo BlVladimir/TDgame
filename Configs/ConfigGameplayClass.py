@@ -11,7 +11,6 @@ class ConfigGameplay:
         self.shop_type = 0
         self.money = 0
         self.use_additional_parameters = False
-        self.mouse_pose = [0, 0]
         self.waves = []
         self.current_wave = 0
         self.is_started = False
@@ -62,11 +61,6 @@ class ConfigGameplay:
 
     def new_value_use_additional_parameters(self, new_value):
         self.use_additional_parameters = new_value
-    def get_mouse_pose(self):
-        return self.mouse_pose
-
-    def new_value_mouse_pose(self, new_value):
-        self.mouse_pose = new_value
 
     def get_waves(self):
         return self.waves
@@ -83,8 +77,8 @@ class ConfigGameplay:
     def get_is_started(self):
         return self.is_started
 
-    def new_value_is_started(self):
-        self.is_started = not self.is_started
+    def new_value_is_started(self, new_value):
+        self.is_started = new_value
 
     def get_always_use_additional_parameters(self):
         return self.always_use_additional_parameters
