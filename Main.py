@@ -7,7 +7,7 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigEnemyClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
+from Configs import ConfigParameterScreenClass, ConfigConstantObjectClass, ConfigEnemyClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
 import ContextClass
 
 from ButtonClass import Button
@@ -19,28 +19,8 @@ pygame.init()  # импорт библиотеки pygame и sys, и импор�
 clock = pygame.time.Clock()
 
 
-def actionScene(parameter_dict):  # функция, меняющая переменную сцены
+def action_scene(parameter_dict):  # функция, меняющая переменную сцены
     parameter_dict['context'].get_config_parameter_scene().new_value_scene(parameter_dict['lvl'])
-
-config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
-config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
-config_enemy = ConfigEnemyClass.ConfigEnemy()
-config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
-config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
-config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
-config_shop = ConfigShopClass.ConfigShop(100)
-context = ContextClass.Context(config_button_screen, config_enemy, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
-
-use_additional_parameters = False
-mouse_pose = [0, 0]
-money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (100, 100))
-waves = []
-current_wave = 0
-is_started = False
-information_table = Information(config_parameter_screen.get_height(), config_parameter_screen.get_width())
-
-always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
-
 
 def action_exit():  # функция, закрывающая окно
     pygame.quit()
@@ -52,6 +32,26 @@ def change_using_additional_parameter(additionalParameters):
     else:
         additionalParameters = True
     return additionalParameters
+
+config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
+config_constant_object = ConfigConstantObjectClass.ConfigConstantObject((100, 100), config_parameter_screen.get_width(), config_parameter_screen.get_height(), action_exit, action_scene, change_using_additional_parameter)
+config_enemy = ConfigEnemyClass.ConfigEnemy()
+config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
+config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
+config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
+config_shop = ConfigShopClass.ConfigShop(100)
+context = ContextClass.Context(config_constant_object, config_enemy, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
+
+use_additional_parameters = False
+mouse_pose = [0, 0]
+money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (100, 100))
+waves = []
+current_wave = 0
+is_started = False
+information_table = Information(config_parameter_screen.get_height(), config_parameter_screen.get_width())
+
+always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
+
 
 button_exit = Button(config_parameter_screen.get_width() - 170 - config_parameter_screen.get_height() * 0.4, 20, "images/UI/exit.png", 150, 75, action_exit)
 button_main_manu = Button(150, 20, "images/UI/exitInMainManu.png", 100, 100, actionScene)
