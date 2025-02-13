@@ -8,12 +8,12 @@ class ConfigGameplay:
         self.current_tile = None
         self.shop_type = 0
         self.money = 0
-        use_additional_parameters = False
-        mouse_pose = [0, 0]
-        waves = []
-        current_wave = 0
-        is_started = False
-        always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
+        self.use_additional_parameters = False
+        self.mouse_pose = [0, 0]
+        self.waves = []
+        self.current_wave = 0
+        self.is_started = False
+        # self.always_use_additional_parameters = Function.find_in_file('alwaysUseAdditionalParameter')
 
 
     def get_current_tower(self):
