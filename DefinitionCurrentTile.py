@@ -21,15 +21,15 @@ def draw_highlighting(highlighting_tile_image, build_array, context):  # фун�
 
 def highlight_enemy(context):  # определяет врага, на которого наведена мышка
     current_enemy = None
-    if context.get_config_gameplay().get_enemy_array():
-        scale = context.get_config_gameplay().get_enemy_array()[0].scale
+    if context.get_config_enemy().get_enemy_array():
+        scale = context.get_config_enemy().get_enemy_array()[0].scale
         mousePose = pygame.mouse.get_pos()
-        enemy_array = context.get_config_gameplay().get_enemy_array()
+        enemy_array = context.get_config_enemy().get_enemy_array()
         for i in range(len(enemy_array)):
             if enemy_array[i].rect[0] + scale * 0.9 >= mousePose[0] >= enemy_array[i].rect[0] + scale * 0.1 and enemy_array[i].rect[1]  + scale * 0.9 >= mousePose[1] >= enemy_array[i].rect[1]+ scale * 0.1:
                 current_enemy = i
                 break
-    context.get_config_gameplay().new_value_current_enemy(current_enemy)
+    context.get_config_enemy().new_value_current_enemy(current_enemy)
 
 
 

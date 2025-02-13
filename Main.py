@@ -7,7 +7,7 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
+from Configs import ConfigParameterScreenClass, ConfigButtonClass, ConfigEnemyClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass, ConfigShopClass
 import ContextClass
 
 from ButtonClass import Button
@@ -24,14 +24,14 @@ def actionScene(parameter_dict):  # функция, меняющая перем�
 
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
 config_button_screen = ConfigButtonClass.ConfigButton(config_parameter_screen.get_width(), config_parameter_screen.get_height(), actionScene)
+config_enemy = ConfigEnemyClass.ConfigEnemy()
 config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
 config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 config_shop = ConfigShopClass.ConfigShop(100)
-context = ContextClass.Context(config_button_screen, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
+context = ContextClass.Context(config_button_screen, config_enemy, config_gameplay, config_map, config_modifier, config_parameter_screen, config_shop)
 
 use_additional_parameters = False
-trajectory = ()
 mouse_pose = [0, 0]
 money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (100, 100))
 waves = []
@@ -67,7 +67,7 @@ while True:  # основной цикл
             sys.exit()
         elif event.type == pygame.KEYDOWN:  # если кнопка была нажата
             if context.get_config_parameter_scene().get_scene() == 'lvl1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
-                context.get_config_gameplay().new_value_is_move(True)  # переменная isMove нужна, чтобы определять, закончено движение или нет
+                context.get_config_enemy().new_value_is_move(True)  # переменная isMove нужна, чтобы определять, закончено движение или нет
         if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
             use_additional_parameters = True
         else:
@@ -77,9 +77,9 @@ while True:  # основной цикл
         match context.get_config_parameter_scene().get_scene():
             case 'mainMenu':
                 is_started = MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
-                if waves != [] or context.get_config_gameplay().get_enemy_array() != []:  # обнуляет массив врагов и их количество на каждой волне в меню
+                if waves != [] or context.get_config_enemy().get_enemy_array() != []:  # обнуляет массив врагов и их количество на каждой волне в меню
                     waves = []
-                    context.get_config_gameplay().new_value_enemy_array([])
+                    context.get_config_enemy().new_value_enemy_array([])
                     Shop.towers_object_array = []
                     Shop.button_update_array = []
                 if button_setting.is_pressed(event):
@@ -96,20 +96,20 @@ while True:  # основной цикл
                 if towers_array:
                     Function.define_current_tower(context)
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
-                    enemy_array = context.get_config_gameplay().get_enemy_array()
+                    enemy_array = context.get_config_enemy().get_enemy_array()
                     DefinitionCurrentTile.highlight_enemy(context)  # определяет, какой враг выделен
-                    if context.get_config_gameplay().get_current_enemy() is not None and towers_array:  # если выделенный враг существует и существует хотя бы одна башня
+                    if context.get_config_enemy().get_current_enemy() is not None and towers_array:  # если выделенный враг существует и существует хотя бы одна башня
                         for i in range(len(towers_array)):  # проходится по всему массиву башен
-                            if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].is_in_radius(enemy_array[context.get_config_gameplay().get_current_enemy()].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
-                                enemy_array[context.get_config_gameplay().get_current_enemy()].remove_health(towers_array[i].damage, towers_array[i].armor_piercing, towers_array[i].poison)  # отнимает у врага здоровье, равное урону башни
+                            if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].is_in_radius(enemy_array[context.get_config_enemy().get_current_enemy()].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
+                                enemy_array[context.get_config_enemy().get_current_enemy()].remove_health(towers_array[i].damage, towers_array[i].armor_piercing, towers_array[i].poison)  # отнимает у врага здоровье, равное урону башни
                                 towers_array[i].is_used = True  # переменная отвечает за то, что башня была использована
-                                if enemy_array[context.get_config_gameplay().get_current_enemy()].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
-                                    enemy_array.pop(context.get_config_gameplay().get_current_enemy())  # если да, то удаляет его и прибавляет деньги
-                                    context.get_config_gameplay().new_value_current_enemy(None)
+                                if enemy_array[context.get_config_enemy().get_current_enemy()].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
+                                    enemy_array.pop(context.get_config_enemy().get_current_enemy())  # если да, то удаляет его и прибавляет деньги
+                                    context.get_config_enemy().new_value_current_enemy(None)
                                     Function.bugs(context)
                                     context.get_config_gameplay().new_value_money(2)
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
-                                context.get_config_gameplay().new_value_enemy_array(enemy_array)
+                                context.get_config_enemy().new_value_enemy_array(enemy_array)
                 DefinitionCurrentTile.definition(event, config_map.get_map_array()[0].build_array, 100, context)  # определяет текущий тайл
                 if context.get_config_gameplay().get_current_tile() is not None and not config_map.get_map_array()[0].build_array[context.get_config_gameplay().get_current_tile()]['is_filled']:
                     context.get_config_gameplay().new_value_shop_type(1)
@@ -152,20 +152,20 @@ while True:  # основной цикл
                 if button_main_manu.is_pressed(event):
                     button_main_manu.handle_event_parameter({'context':context, 'lvl':'mainMenu'})
         button_exit.handle_event(event)
-    if context.get_config_gameplay().get_is_move():  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
-        is_fail = EnemyClass.move_all_enemies(trajectory, config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale, context)
+    if context.get_config_enemy().get_is_move():  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
+        is_fail = EnemyClass.move_all_enemies(config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale, context)
         if is_fail:
             scene = 'mainMenu'
-        context.get_config_gameplay().new_value_time(1)
+        context.get_config_enemy().new_value_time(1)
         towers_array = context.get_config_shop().get_towers_object_array()
         for i in range(len(towers_array)):
             towers_array[i].is_used = True
         context.get_config_shop().new_value_towers_object_array(towers_array)
-        if context.get_config_gameplay().get_time() % 60 == 0:
-            context.get_config_gameplay().new_value_time(-context.get_config_gameplay().get_time())
-            context.get_config_gameplay().new_value_is_move(False)
+        if context.get_config_enemy().get_time() % 60 == 0:
+            context.get_config_enemy().new_value_time(-context.get_config_enemy().get_time())
+            context.get_config_enemy().new_value_is_move(False)
             remove_array = []
-            enemy_array = context.get_config_gameplay().get_enemy_array()
+            enemy_array = context.get_config_enemy().get_enemy_array()
             for i in range(len(enemy_array)):
                 enemy_array[i].treat()
                 if enemy_array[i].health <= 0:  # проверяет, упало ли здоровье врага ниже 0
@@ -175,7 +175,7 @@ while True:  # основной цикл
                 current_enemy = None
                 Function.bugs(context)
                 context.get_config_gameplay().new_value_money(2)
-            context.get_config_gameplay().new_value_enemy_array(enemy_array)
+            context.get_config_enemy().new_value_enemy_array(enemy_array)
 
             for i in range(len(config_shop.get_towers_object_array())):
                 config_shop.get_towers_object_array()[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
@@ -183,7 +183,7 @@ while True:  # основной цикл
                 EnemyClass.create_enemy_on_lvl1(waves, current_wave, context)
                 current_wave  += 1
     context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
-    trajectory = config_map.get_map_array()[0].get_trajectory()
+    context.get_config_map().get_map_array()[0].get_trajectory_array(context)
     match context.get_config_parameter_scene().get_scene():  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
         case 'mainMenu':
             MainManu.draw_buttons(context)

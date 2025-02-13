@@ -30,9 +30,9 @@ class Enemy:
             scale = int(self.scale * 0.6)
             Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
-    def move(self, trajectory, gaps, tile_scale, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
-        if self.pos//speed != len(trajectory):  # Проверяет, что существует следующая позиция
-            match trajectory[self.pos//speed]:  # сравнивает текущую траекторию
+    def move(self, gaps, tile_scale, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
+        if self.pos//speed != len(context.get_config_enemy().get_trajectory()):  # Проверяет, что существует следующая позиция
+            match context.get_config_enemy().get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
                 case 0:
                     self.rect[1] -= (gaps + tile_scale) / speed
                     self.pos += 1
@@ -115,26 +115,26 @@ def create_enemy_on_lvl1(waves_mas, current_wave, context):  # Добавляе�
             health = 4
             treatment = 2
     level1 = context.get_config_map().get_map_array()[0]
-    enemy_array = context.get_config_gameplay().get_enemy_array()
+    enemy_array = context.get_config_enemy().get_enemy_array()
     if waves_mas[current_wave][0] == 1:
         enemy_array.append(Enemy(image_enemy, level1.get_started_position(0), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        context.get_config_gameplay().new_value_enemy_array(enemy_array)
+        context.get_config_enemy().new_value_enemy_array(enemy_array)
     elif waves_mas[current_wave][0] == 2:
         enemy_array.append(Enemy(image_enemy, level1.get_started_position(1), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
         enemy_array.append(Enemy(image_enemy, level1.get_started_position(2), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        context.get_config_gameplay().new_value_enemy_array(enemy_array)
+        context.get_config_enemy().new_value_enemy_array(enemy_array)
     elif waves_mas[current_wave][0] == 3:
         enemy_array.append(Enemy(image_enemy, level1.get_started_position(2), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
         enemy_array.append(Enemy(image_enemy, level1.get_started_position(3), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
         enemy_array.append(Enemy(image_enemy, level1.get_started_position(4), level1.tile_scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        context.get_config_gameplay().new_value_enemy_array(enemy_array)
+        context.get_config_enemy().new_value_enemy_array(enemy_array)
 
-def move_all_enemies(trajectory, gaps, tile_scale, context, speed = 60):  # двигает всех врагов
+def move_all_enemies(gaps, tile_scale, context, speed = 60):  # двигает всех врагов
     is_fail = False
-    enemy_array = context.get_config_gameplay().get_enemy_array()
+    enemy_array = context.get_config_enemy().get_enemy_array()
     for i in range(len(enemy_array)):
-        is_fail = enemy_array[i].move(trajectory, gaps, tile_scale, speed)
+        is_fail = enemy_array[i].move(gaps, tile_scale, speed, context)
         if is_fail:
             break
-    context.get_config_gameplay().new_value_enemy_array(enemy_array)
+    context.get_config_enemy().new_value_enemy_array(enemy_array)
     return is_fail

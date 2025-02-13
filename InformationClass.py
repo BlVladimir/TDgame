@@ -18,8 +18,8 @@ class Information:
 
 
     def __draw_characteristic(self, height, context):  # рисует характеристики врага
-        if context.get_config_gameplay().get_current_enemy() is not None:
-            health_line = 'health ' + str(context.get_config_gameplay().get_enemy_array()[context.get_config_gameplay().get_current_enemy()].health)
+        if context.get_config_enemy().get_current_enemy() is not None:
+            health_line = 'health ' + str(context.get_config_enemy().get_enemy_array()[context.get_config_enemy().get_current_enemy()].health)
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
             Function.draw_text(health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15), context)
 

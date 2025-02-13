@@ -46,5 +46,5 @@ def build_tower(event, scale_tower, build_array, context):  # проверяет
     if current_tile is not None:
         for i in context.get_config_shop().get_products():
             if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
-                build_array = i.buy(event, build_array[current_tile]['type'], scale_tower, build_array[current_tile]['coordinate'], current_tile, build_array, current_tile, context)
+                build_array = i.buy(event, build_array[current_tile]['type'], scale_tower, build_array[current_tile]['coordinate'], build_array, context)
     return build_array #  меняет значение денег

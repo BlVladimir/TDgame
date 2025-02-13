@@ -17,7 +17,7 @@ def draw_lvl1(button_main_manu, button_setting, money_picture, highlight_tile_im
                 if i.index == context.get_config_gameplay().get_current_tile():
                     i.draw_radius(context)
                     break
-        enemy_array = context.get_config_gameplay().get_enemy_array()
+        enemy_array = context.get_config_enemy().get_enemy_array()
         for i in range(len(enemy_array)):  # рисует каждого врага
             enemy_array[i].draw(always_use, is_used_additional_parameters, context)
         Shop.draw(pygame.image.load('images/UI/money.png'), context)  # рисует магазин(так называется, потому что в будущем будет возможность его закрывать)

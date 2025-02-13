@@ -27,7 +27,7 @@ def bugs(context): #  модификаторы при убийстве враг�
                 for i in range(len(context.get_config_shop().get_towers_object_array())):
                     context.get_config_shop().get_towers_object_array()[i].damage += 1
         case 2:
-            enemy_array = context.get_config_gameplay().get_enemy_array()
+            enemy_array = context.get_config_enemy().get_enemy_array()
             if current_influence == 1:
                 for i in range(len(enemy_array)):
                     if enemy_array[i].health > 1:
@@ -35,7 +35,7 @@ def bugs(context): #  модификаторы при убийстве враг�
             else:
                 for i in range(len(enemy_array)):
                     enemy_array[i].health += 1
-            context.get_config_gameplay().new_value_enemy_array(enemy_array)
+            context.get_config_enemy().new_value_enemy_array(enemy_array)
         case 3:
             if current_influence == 0:
                 if context.get_config_gameplay().get_money() > 0:
