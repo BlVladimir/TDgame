@@ -3,7 +3,7 @@ import ButtonClass
 
 
 def buy_tower(parameter_dict):  # добавляет в массив башен новую
-    tower_array = parameter_dict['context'].get_config_shop().get_towers_object_array()
+    tower_array = parameter_dict['context'].get_config_gameplay().get_towers_object_array()
     if 'additional_image' in parameter_dict.keys():
         tower_array.append(TowerClass.Tower(parameter_dict['image'], parameter_dict['scale'], parameter_dict['damage'],
                                                                 parameter_dict['coordinate'], parameter_dict['context'].get_config_gameplay().get_current_tile(),
@@ -12,11 +12,11 @@ def buy_tower(parameter_dict):  # добавляет в массив башен 
         tower_array.append(TowerClass.Tower(parameter_dict['image'], parameter_dict['scale'], parameter_dict['damage'],
                                                                 parameter_dict['coordinate'], parameter_dict['context'].get_config_gameplay().get_current_tile(),
                                                                 parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], parameter_dict['radius']))
-    parameter_dict['context'].get_config_shop().new_value_towers_object_array(tower_array)
+    parameter_dict['context'].get_config_gameplay().new_value_towers_object_array(tower_array)
 
 def upgrade_tower(context):  # улучшение башни по номеру
-    tower_array = context.get_config_shop().get_towers_object_array()
-    button_array = context.get_config_shop().get_button_update_array()
+    tower_array = context.get_config_gameplay().get_towers_object_array()
+    button_array = context.get_config_gameplay().get_button_update_array()
     current_tower = context.get_config_gameplay().get_current_tower()
     if tower_array[current_tower].level != 3:
         cost = tower_array[current_tower].improve_cost_array[tower_array[current_tower].level - 1]
@@ -42,8 +42,8 @@ def upgrade_tower(context):  # улучшение башни по номеру
             button_array[current_tower].change_image('images/upgrade/2lvl.png') if tower_array[current_tower].level == 2 \
                 else button_array[current_tower].change_image('images/upgrade/3lvl.png')
             context.get_config_gameplay().new_value_money(-cost)
-    context.get_config_shop().new_value_towers_object_array(tower_array)
-    context.get_config_shop().new_value_button_update_array(button_array)
+    context.get_config_gameplay().new_value_towers_object_array(tower_array)
+    context.get_config_gameplay().new_value_button_update_array(button_array)
 
 
 class Product:  # класс продуктов
@@ -69,9 +69,9 @@ class Product:  # класс продуктов
         self.button_product.draw(context)
 
     def __create_tower(self, type_tile, scale_tower, coordinate_tower, build_array, current_tile, price_coefficient, height, context):  # создает башню с характеристиками, зависящими от текущего тайла
-        button_array = context.get_config_shop().get_button_update_array()
+        button_array = context.get_config_gameplay().get_button_update_array()
         button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
-        context.get_config_shop().new_value_button_update_array(button_array)
+        context.get_config_gameplay().new_value_button_update_array(button_array)
         match type_tile:
             case 1:
                 self.button_product.handle_event_parameter(

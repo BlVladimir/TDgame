@@ -7,6 +7,7 @@ class ConfigParameterScreen:
         self.screen = pygame.display.set_mode((width, height))
         self.width = width
         self.height = height
+        self.tile_scale = height * 0.1
 
     def get_width(self):
         return self.width
@@ -16,6 +17,9 @@ class ConfigParameterScreen:
 
     def get_screen(self):
         return self.screen
+
+    def get_tile_scale(self):
+        return self.tile_scale
 
     def get_scene(self):
         return self.scene

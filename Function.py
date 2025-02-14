@@ -20,12 +20,12 @@ def bugs(context): #  модификаторы при убийстве враг�
     match type_of_bugs:
         case 1:
             if current_influence == 0:
-                for i in range(len(context.get_config_shop().get_towers_object_array())):
-                    if context.get_config_shop().get_towers_object_array()[i].damage > 1:
-                        context.get_config_shop().get_towers_object_array()[i].damage -= 1
+                for i in range(len(context.get_config_gameplay().get_towers_object_array())):
+                    if context.get_config_gameplay().get_towers_object_array()[i].damage > 1:
+                        context.get_config_gameplay().get_towers_object_array()[i].damage -= 1
             else:
-                for i in range(len(context.get_config_shop().get_towers_object_array())):
-                    context.get_config_shop().get_towers_object_array()[i].damage += 1
+                for i in range(len(context.get_config_gameplay().get_towers_object_array())):
+                    context.get_config_gameplay().get_towers_object_array()[i].damage += 1
         case 2:
             enemy_array = context.get_config_enemy().get_enemy_array()
             if current_influence == 1:
@@ -85,7 +85,7 @@ def find_in_file(changed_parameter):  # находит значение в фа�
                 return False
 
 def define_current_tower(context):  # определяет текущую башню по индексу
-    tower_array = context.get_config_shop().get_towers_object_array()
+    tower_array = context.get_config_gameplay().get_towers_object_array()
     if tower_array:
         for i in range(len(tower_array)):
             if tower_array[i].index == context.get_config_gameplay().get_current_tile():

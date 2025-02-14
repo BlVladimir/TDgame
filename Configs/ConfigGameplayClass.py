@@ -15,7 +15,20 @@ class ConfigGameplay:
         self.current_wave = 0
         self.is_started = False
         self.always_use_additional_parameters = find_in_file('alwaysUseAdditionalParameter')
+        self.towers_object_array = []
+        self.button_update_array = []
 
+    def get_towers_object_array(self):
+        return self.towers_object_array
+
+    def get_button_update_array(self):
+        return self.button_update_array
+
+    def new_value_towers_object_array(self, new_value):
+        self.towers_object_array = new_value
+
+    def new_value_button_update_array(self, new_value):
+        self.button_update_array = new_value
 
     def get_current_tower(self):
         return self.current_tower

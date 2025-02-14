@@ -102,7 +102,6 @@ def create_enemy_on_lvl1(context):  # Добавляет в массив вра�
     health = 3
     armor = 0
     treatment = 0
-    print(context.get_config_gameplay().get_waves())
     match context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave() - 1][1]:
         case 1:
             image_enemy = 'images/enemy/armoredEnemy.png'
