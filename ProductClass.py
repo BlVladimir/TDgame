@@ -68,7 +68,7 @@ class Product:  # класс продуктов
     def draw(self, context):  # рисует продукт
         self.button_product.draw(context)
 
-    def __create_tower(self, type_tile, scale_tower, coordinate_tower, build_array, current_tile, price_coefficient, height, context):  # создает башню с характеристиками, зависящими от текущего тайла
+    def __create_tower(self, type_tile, scale_tower, coordinate_tower, price_coefficient, height, context):  # создает башню с характеристиками, зависящими от текущего тайла
         button_array = context.get_config_gameplay().get_button_update_array()
         button_array.append(ButtonClass.Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
         context.get_config_gameplay().new_value_button_update_array(button_array)
@@ -77,31 +77,32 @@ class Product:  # класс продуктов
                 self.button_product.handle_event_parameter(
                     {'additional_image': self.__additional_image, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
                      'coordinate': coordinate_tower, 'improve_array': self.__improve_cost_array, 'armor_piercing': self.armor_piercing, 'poison': self.poison, 'radius': self.__radius_tower, 'context': context})
-                build_array[current_tile]['is_filled'] = True
             case 2:
                 self.__damage_tower += 1
                 self.button_product.handle_event_parameter(
                     {'additional_image': self.__additional_image, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
                      'coordinate': coordinate_tower, 'improve_array': self.__improve_cost_array, 'armor_piercing': self.armor_piercing, 'poison': self.poison, 'radius': self.__radius_tower, 'context': context})
-                build_array[current_tile]['is_filled'] = True
             case 3:
                 self.__radius_tower = self.__radius_tower * 1.2
                 self.button_product.handle_event_parameter(
                     {'additional_image': self.__additional_image, 'image': self.__image, 'scale': scale_tower, 'damage': self.__damage_tower,
                      'coordinate': coordinate_tower, 'improve_array': self.__improve_cost_array, 'armor_piercing': self.armor_piercing, 'poison': self.poison, 'radius': self.__radius_tower, 'context': context})
-                build_array[current_tile]['is_filled'] = True
         context.get_config_gameplay().new_value_money(-self.cost * price_coefficient)
 
-    def buy(self, event, type_tile, scale_tower, coordinate_tower, build_array, context):  # покупка башни
+    def buy(self, event, type_tile, scale_tower, coordinate_tower, context):  # покупка башни
         is_free = context.get_config_modifier().get_is_free()
         price_up = context.get_config_modifier().get_price_up()
+        is_filled = False
         if not price_up and not is_free and self.button_product.is_pressed(event) and context.get_config_gameplay().get_money() >= self.cost:
-            self.__create_tower(type_tile, scale_tower, coordinate_tower, build_array, context.get_config_gameplay().get_current_tile(), 1, context.get_config_parameter_scene().get_height(), context)
+            self.__create_tower(type_tile, scale_tower, coordinate_tower, 1, context.get_config_parameter_scene().get_height(), context)
+            is_filled = True
         elif price_up and not is_free and self.button_product.is_pressed(event) and context.get_config_gameplay().get_money() >= self.cost * 2:
-            self.__create_tower(type_tile, scale_tower, coordinate_tower, build_array, context.get_config_gameplay().get_current_tile(), 2, context.get_config_parameter_scene().get_height(), context)
+            self.__create_tower(type_tile, scale_tower, coordinate_tower, 2, context.get_config_parameter_scene().get_height(), context)
             context.get_config_modifier().get_new_value_price_up(False)
+            is_filled = True
         elif is_free and self.button_product.is_pressed(event) and context.get_config_gameplay().get_money() >= self.cost * 2:
-            self.__create_tower(type_tile, scale_tower, coordinate_tower, build_array, context.get_config_gameplay().get_current_tile(), 0, context.get_config_parameter_scene().get_height(), context)
+            self.__create_tower(type_tile, scale_tower, coordinate_tower, 0, context.get_config_parameter_scene().get_height(), context)
             context.get_config_modifier().get_new_value_price_up(False)
             context.get_config_modifier().get_new_value_is_free(False)
-        return build_array
+            is_filled = True
+        return is_filled

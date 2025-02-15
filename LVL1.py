@@ -3,9 +3,9 @@ import Function
 
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
 
-def draw_lvl1(context, shop, highlighting):
-        context.get_config_map().get_map_array()[0].draw(context)
-        highlighting.draw_highlighting(context.get_config_map().get_map_array()[0].build_array, context)
+def draw_lvl1(context, shop, highlighting, maps_controller, level):
+        maps_controller.draw_map(level, context)
+        highlighting.draw_highlighting(maps_controller.get_build_array(level), context)
         tower_array = context.get_config_gameplay().get_towers_object_array()
         if tower_array:
             for i in tower_array:  # проходится по массиву объектов башен и рисует их
@@ -17,7 +17,7 @@ def draw_lvl1(context, shop, highlighting):
         enemy_array = context.get_config_enemy().get_enemy_array()
         for i in range(len(enemy_array)):  # рисует каждого врага
             enemy_array[i].draw(context)
-        shop.draw(context)  # рисует магазин(так называется, потому что в будущем будет возможность его закрывать)
+        shop.draw(context)  # рисует магазин
         context.get_config_constant_object().get_button_main_manu().draw(context)
         context.get_config_constant_object().get_button_setting().draw(context)
         context.get_config_parameter_scene().get_screen().blit(shop.money_picture, (420, 20))

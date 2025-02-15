@@ -7,7 +7,8 @@ import Shop
 import DefinitionCurrentTile
 import LVL1
 import Function
-from Configs import ConfigParameterScreenClass, ConfigConstantObjectClass, ConfigEnemyClass, ConfigGameplayClass, ConfigMapClass, ConfigModifierClass
+from Configs import ConfigParameterScreenClass, ConfigConstantObjectClass, ConfigEnemyClass, ConfigGameplayClass, ConfigModifierClass
+import MapsControllerClass
 import ContextClass
 
 from EnemyClass import create_waves
@@ -32,12 +33,39 @@ config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500,
 config_constant_object = ConfigConstantObjectClass.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), action_exit, action_scene, change_using_additional_parameter)
 config_enemy = ConfigEnemyClass.ConfigEnemy()
 config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
-config_map = ConfigMapClass.ConfigMap(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
-context = ContextClass.Context(config_constant_object, config_enemy, config_gameplay, config_map, config_modifier, config_parameter_screen)
+context = ContextClass.Context(config_constant_object, config_enemy, config_gameplay, config_modifier, config_parameter_screen)
 
+maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 shop = Shop.Shop(config_parameter_screen.get_height())
 highlighting = DefinitionCurrentTile.Highlighting(config_parameter_screen.get_height())
+
+def definition(event, build_array, context):
+    mouse_pose = pygame.mouse.get_pos()  # получает позицию мышки
+    context.get_config_gameplay().new_value_highlight_tile(None)
+    if context.get_config_parameter_scene().get_width() - context.get_config_parameter_scene().get_height() * 0.4 > mouse_pose[0] > context.get_config_parameter_scene().get_height() * 0.4:
+        tile_scale = context.get_config_parameter_scene().get_tile_scale()
+        for i in range(len(build_array)):  # Проходит по координатам всех тайлов, и если они совпадут с координатой мышки, то этот тайл сохранится как текущий тайл. Если мышка была нажата, та как действующий тайл
+            if build_array[i]['coordinate'][0] <= mouse_pose[0] <= build_array[i]['coordinate'][0] + tile_scale and build_array[i]['coordinate'][1] <= mouse_pose[1] <= build_array[i]['coordinate'][1] + tile_scale:
+                context.get_config_gameplay().new_value_highlight_tile(i)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    context.get_config_gameplay().new_value_current_tile(i)
+                break
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                context.get_config_gameplay().new_value_current_tile(None)
+
+
+def highlight_enemy(context):  # определяет врага, на которого наведена мышка
+    current_enemy = None
+    if context.get_config_enemy().get_enemy_array():
+        scale = context.get_config_enemy().get_enemy_array()[0].scale
+        mousePose = pygame.mouse.get_pos()
+        enemy_array = context.get_config_enemy().get_enemy_array()
+        for i in range(len(enemy_array)):
+            if enemy_array[i].rect[0] + scale * 0.9 >= mousePose[0] >= enemy_array[i].rect[0] + scale * 0.1 and enemy_array[i].rect[1]  + scale * 0.9 >= mousePose[1] >= enemy_array[i].rect[1]+ scale * 0.1:
+                current_enemy = i
+                break
+    context.get_config_enemy().new_value_current_enemy(current_enemy)
 
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
@@ -67,16 +95,16 @@ while True:  # основной цикл
                 if context.get_config_gameplay().get_is_started():  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
                     create_waves(100, 3, context) #  создает волны
                     context.get_config_gameplay().new_value_current_wave(1 - context.get_config_gameplay().get_current_wave())  # текущая волна 1
-                    EnemyClass.create_enemy_on_lvl1(context)  # создает врагов на 1 клетке
+                    EnemyClass.create_enemy_on_lvl1(context, maps_controller, 1)  # создает врагов на 1 клетке
                     context.get_config_gameplay().new_value_is_started(False)  # переменная отвечает за то, началась ли игра или нет
                     context.get_config_gameplay().new_value_money(-context.get_config_gameplay().get_money() + 1000)
-                    for i in range(len(config_map.get_map_array()[0].build_array)):  # обнуляет все тайлы
-                        config_map.get_map_array()[0].build_array[i]['is_filled'] = False
+                    for i in range(len(maps_controller.get_build_array(1))):  # обнуляет все тайлы
+                        maps_controller.get_build_array(1)[i]['is_filled'] = False
                 if towers_array:
                     Function.define_current_tower(context)
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
                     enemy_array = context.get_config_enemy().get_enemy_array()
-                    highlighting.highlight_enemy(context)  # определяет, какой враг выделен
+                    highlight_enemy(context)  # определяет, какой враг выделен
                     if context.get_config_enemy().get_current_enemy() is not None and towers_array:  # если выделенный враг существует и существует хотя бы одна башня
                         for i in range(len(towers_array)):  # проходится по всему массиву башен
                             if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].is_in_radius(enemy_array[context.get_config_enemy().get_current_enemy()].get_center()):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
@@ -89,15 +117,15 @@ while True:  # основной цикл
                                     context.get_config_gameplay().new_value_money(2)
                                 break  # такая башня только одна, поэтому если такое случилось, то прерывает цикл
                                 context.get_config_enemy().new_value_enemy_array(enemy_array)
-                highlighting.definition(event, config_map.get_map_array()[0].build_array, context)  # определяет текущий тайл
-                if context.get_config_gameplay().get_current_tile() is not None and not config_map.get_map_array()[0].build_array[context.get_config_gameplay().get_current_tile()]['is_filled']:
+                definition(event, maps_controller.get_build_array(1), context)  # определяет текущий тайл
+                if context.get_config_gameplay().get_current_tile() is not None and not maps_controller.get_build_array(1)[context.get_config_gameplay().get_current_tile()]['is_filled']:
                     context.get_config_gameplay().new_value_shop_type(1)
-                elif context.get_config_gameplay().get_current_tile() is not None and config_map.get_map_array()[0].build_array[context.get_config_gameplay().get_current_tile()]['is_filled']:
+                elif context.get_config_gameplay().get_current_tile() is not None and maps_controller.get_build_array(1)[context.get_config_gameplay().get_current_tile()]['is_filled']:
                     context.get_config_gameplay().new_value_shop_type(2)
                 else:
                     context.get_config_gameplay().new_value_shop_type(0)
                 if context.get_config_gameplay().get_shop_type() == 1:
-                    config_map.get_map_array()[0].build_array = shop.build_tower(event,100, config_map.get_map_array()[0].build_array, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+                    shop.build_tower(event,100, 1, maps_controller, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 if towers_array:
                     for i in range(len(towers_array)):  # проходит по всему массиву башен, и если индекс башни совпадает с текущим тайлом, то вращает башню
                         if towers_array[i].index == context.get_config_gameplay().get_current_tile() and towers_array[i].image_gun is not None:
@@ -132,7 +160,7 @@ while True:  # основной цикл
                     context.get_config_constant_object().get_button_main_manu().handle_event_parameter({'context':context, 'lvl':'mainMenu'})
         context.get_config_constant_object().get_button_exit().handle_event(event)
     if context.get_config_enemy().get_is_move():  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
-        is_fail = EnemyClass.move_all_enemies(config_map.get_map_array()[0].gaps, config_map.get_map_array()[0].tile_scale, context)
+        is_fail = EnemyClass.move_all_enemies(maps_controller.get_scale(), context)
         if is_fail:
             scene = 'mainMenu'
         context.get_config_enemy().new_value_time(1)
@@ -156,37 +184,37 @@ while True:  # основной цикл
                 context.get_config_gameplay().new_value_money(2)
             context.get_config_enemy().new_value_enemy_array(enemy_array)
 
-            for i in range(len(context.get_config_gameplay().get_config_gameplay.get_towers_object_array())):
+            for i in range(len(context.get_config_gameplay().get_towers_object_array())):
                 context.get_config_gameplay().get_config_gameplay.get_towers_object_array()[i].is_used = False  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
             if context.get_config_gameplay().get_current_wave() != len(context.get_config_gameplay().get_waves()) and context.get_config_gameplay().get_waves() != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
-                EnemyClass.create_enemy_on_lvl1(context)
+                EnemyClass.create_enemy_on_lvl1(context, maps_controller, 1)
                 context.get_config_gameplay().new_value_current_wave(1)
     context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
-    context.get_config_map().get_map_array()[0].get_trajectory_array(context)
+    maps_controller.get_trajectory_array(1, context)
     match context.get_config_parameter_scene().get_scene():  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
         case 'mainMenu':
             MainManu.draw_buttons(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'lvl1':
-            LVL1.draw_lvl1(context, shop, highlighting)
+            LVL1.draw_lvl1(context, shop, highlighting, maps_controller, 1)
         case 'lvl2':
-            config_map.get_map_array()[1].draw(context)
+            maps_controller.draw_map(2, context)
             context.get_config_constant_object().get_button_main_manu().draw(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'lvl3':
-            config_map.get_map_array()[2].draw(context)
+            maps_controller.draw_map(3, context)
             context.get_config_constant_object().get_button_main_manu().draw(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'lvl4':
-            config_map.get_map_array()[3].draw(context)
+            maps_controller.draw_map(4, context)
             context.get_config_constant_object().get_button_main_manu().draw(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'lvl5':
-            config_map.get_map_array()[4].draw(context)
+            maps_controller.draw_map(5, context)
             context.get_config_constant_object().get_button_main_manu().draw(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'lvl6':
-            config_map.get_map_array()[5].draw(context)
+            maps_controller.draw_map(6, context)
             context.get_config_constant_object().get_button_main_manu().draw(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case 'setting':

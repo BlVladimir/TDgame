@@ -53,11 +53,10 @@ class Shop:
         Function.draw_text(str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120), context)
 
 
-    def build_tower(self, event, scale_tower, build_array, context):  # проверяет, нажата ли кнопка продуктов и покупает башню
+    def build_tower(self, event, scale_tower, level, maps_controller, context):  # проверяет, нажата ли кнопка продуктов и покупает башню
         mouse_pose = pygame.mouse.get_pos()
         current_tile = context.get_config_gameplay().get_current_tile()
         if current_tile is not None:
             for i in self.products:
                 if i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale and i.coordinate[0] < mouse_pose[0] < i.coordinate[0] + i.scale:
-                    build_array = i.buy(event, build_array[current_tile]['type'], scale_tower, build_array[current_tile]['coordinate'], build_array, context)
-        return build_array #  меняет значение денег
+                    maps_controller.get_build_array(level)[current_tile]['is_filled'] = i.buy(event, maps_controller.get_build_array(level)[current_tile]['type'], scale_tower, maps_controller.get_build_array(level)[current_tile]['coordinate'], context)

@@ -12,10 +12,10 @@ def get_coordinates(coordinates, tileValueX, tileValueY, xBais, yBais, widthScre
 
 class Map:
     # инициализация класса
-    def __init__(self, tile_array, road_array, width_screen, height_screen, gaps, tile_scale):
+    def __init__(self, tile_array, road_array, width_screen, height_screen, tile_scale):
         self.tile_array = tile_array  # Двумерный массив, каждый массив которого строчка. Состоит из цифр, каждой из которых соответствует определенный тип тайла
         self.road_array = road_array  # массив кортежей, с координатами дорог
-        self.gaps = gaps  # размер промежутков
+        self.gaps = 0.2 * tile_scale  # размер промежутков
         self.tile_scale = tile_scale  # размер тайлов
         self.__image_tile_mass = [pygame.image.load("images/tile/forEnemies.png"),
                                   pygame.image.load("images/tile/commonBuilding.png"),
@@ -64,7 +64,7 @@ class Map:
         for i in range(len(self.road_array[0])):
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
 
-    def get_started_position(self, tipeOnTile):
+    def get_started_position(self, position_enemy_on_tile):
         rectEnemy = [0, 0]
         if self.road_array[1][len(self.road_array[1]) - 1] == 0:
             rectEnemy[0], rectEnemy[1] = self.road_array[0][len(self.road_array[0]) - 1][0], self.road_array[0][len(self.road_array[0]) - 1][1] + self.gaps
@@ -73,13 +73,13 @@ class Map:
         else:
             rectEnemy[0], rectEnemy[1] = self.road_array[0][len(self.road_array[0]) - 1][0], self.road_array[0][len(self.road_array[0]) - 1][1]
         rectEnemy[0], rectEnemy[1] = rectEnemy[0] + self.tile_scale / 4, rectEnemy[1] + self.tile_scale / 4
-        if tipeOnTile == 1:
+        if position_enemy_on_tile == 1:
             rectEnemy[0], rectEnemy[1] = rectEnemy[0] - self.tile_scale / 4, rectEnemy[1] - self.tile_scale / 4
-        elif tipeOnTile == 2:
+        elif position_enemy_on_tile == 2:
             rectEnemy[0], rectEnemy[1] = rectEnemy[0] + self.tile_scale / 4, rectEnemy[1] + self.tile_scale / 4
-        elif tipeOnTile == 3:
+        elif position_enemy_on_tile == 3:
             rectEnemy[1] = rectEnemy[1] - self.tile_scale / 4
-        elif tipeOnTile == 4:
+        elif position_enemy_on_tile == 4:
             rectEnemy[0], rectEnemy[1] = rectEnemy[0] - self.tile_scale / 4, rectEnemy[1] + self.tile_scale / 4
         return rectEnemy
 
