@@ -14,18 +14,12 @@ def draw_text(words, size, coordinate_center, context): #  рисует текс
 
     context.get_config_parameter_scene().get_screen().blit(text, rect_text)
 
-def bugs(context): #  модификаторы при убийстве врагов
+def bugs(context, towers_controller): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
     current_influence = random.getrandbits(1)
     match type_of_bugs:
         case 1:
-            if current_influence == 0:
-                for i in range(len(context.get_config_gameplay().get_towers_object_array())):
-                    if context.get_config_gameplay().get_towers_object_array()[i].damage > 1:
-                        context.get_config_gameplay().get_towers_object_array()[i].damage -= 1
-            else:
-                for i in range(len(context.get_config_gameplay().get_towers_object_array())):
-                    context.get_config_gameplay().get_towers_object_array()[i].damage += 1
+            towers_controller.change_damage(current_influence)
         case 2:
             enemy_array = context.get_config_enemy().get_enemy_array()
             if current_influence == 1:
@@ -84,13 +78,7 @@ def find_in_file(changed_parameter):  # находит значение в фа�
             else:
                 return False
 
-def define_current_tower(context):  # определяет текущую башню по индексу
-    tower_array = context.get_config_gameplay().get_towers_object_array()
-    if tower_array:
-        for i in range(len(tower_array)):
-            if tower_array[i].index == context.get_config_gameplay().get_current_tile():
-                context.get_config_gameplay().new_value_current_tower(i)
-                break
+
 
 
 
