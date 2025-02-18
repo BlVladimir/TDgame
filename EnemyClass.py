@@ -29,9 +29,9 @@ class Enemy:
             scale = int(self.scale * 0.6)
             Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
-    def move(self, tile_scale, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
-        if self.pos//speed != len(context.get_config_enemy().get_trajectory()):  # Проверяет, что существует следующая позиция
-            match context.get_config_enemy().get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
+    def move(self, tile_scale, maps_controller, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
+        if self.pos//speed != len(maps_controller.get_trajectory()):  # Проверяет, что существует следующая позиция
+            match maps_controller.get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
                 case 0:
                     self.rect[1] -= (1.2 * tile_scale) / speed
                     self.pos += 1
@@ -44,9 +44,8 @@ class Enemy:
                 case 3:
                     self.rect[0] -= (1.2 * tile_scale) / speed
                     self.pos += 1
-            return False
         else:
-            return True
+            context.get_config_gameplay().new_value_is_fail(True)
 
     def remove_health(self, damage, armor_piercing, poison): #  убрать хп
         if armor_piercing:
@@ -91,49 +90,3 @@ def create_waves(number_of_waves, lvl, context):  # Функция создае�
     waves_array[0][1] = 0
     context.get_config_gameplay().new_value_waves(waves_array)
 
-
-def create_enemy_on_lvl1(context, maps_controller, level):  # Добавляет в массив врагов новые элементы. В зависимости от количества врагов у каждого врага разные координаты
-    if (context.get_config_gameplay().get_current_wave() + 1) % 4 == 0:
-        additional_health = ((context.get_config_gameplay().get_current_wave() + 1) // 4 - 1) * 2 + 1
-    else:
-        additional_health = ((context.get_config_gameplay().get_current_wave() + 1) // 4) * 2 + (context.get_config_gameplay().get_current_wave() + 1) % 4 - 1
-    additional_health += randrange(-1, 2)
-    image_enemy = 'images/enemy/common.png'
-    health = 3
-    armor = 0
-    treatment = 0
-    match context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave() - 1][1]:
-        case 1:
-            image_enemy = 'images/enemy/armoredEnemy.png'
-            health = 6
-        case 2:
-            image_enemy = 'images/enemy/ShieldEnemy.png'
-            armor = 3
-        case 3:
-            image_enemy = 'images/enemy/regen.png'
-            health = 4
-            treatment = 2
-    enemy_array = context.get_config_enemy().get_enemy_array()
-    scale = maps_controller.get_scale()
-    if context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave()][0] == 1:
-        enemy_array.append(Enemy(image_enemy, maps_controller.get_started_position(level, 0), scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        context.get_config_enemy().new_value_enemy_array(enemy_array)
-    elif context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave()][0] == 2:
-        enemy_array.append(Enemy(image_enemy, maps_controller.get_started_position(level, 1), scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        enemy_array.append(Enemy(image_enemy, maps_controller.get_started_position(level, 2), scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        context.get_config_enemy().new_value_enemy_array(enemy_array)
-    elif context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave()][0] == 3:
-        enemy_array.append(Enemy(image_enemy, maps_controller.get_started_position(level, 2), scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        enemy_array.append(Enemy(image_enemy, maps_controller.get_started_position(level, 3), scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        enemy_array.append(Enemy(image_enemy, maps_controller.get_started_position(level, 4), scale / 2, health + additional_health, armor=armor, treatment=treatment))
-        context.get_config_enemy().new_value_enemy_array(enemy_array)
-
-def move_all_enemies(tile_scale, context, speed = 60):  # двигает всех врагов
-    is_fail = False
-    enemy_array = context.get_config_enemy().get_enemy_array()
-    for i in range(len(enemy_array)):
-        is_fail = enemy_array[i].move(tile_scale, context, speed)
-        if is_fail:
-            break
-    context.get_config_enemy().new_value_enemy_array(enemy_array)
-    return is_fail

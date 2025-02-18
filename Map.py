@@ -51,8 +51,8 @@ class Map:
                     self.build_array.append({'coordinate': self.coordinates[number], 'type': j, 'is_filled': False})
                     number += 1
 
-    def get_trajectory_array(self, context):
-        context.get_config_enemy().new_value_trajectory(self.road_array[1])
+    def get_trajectory_array(self):
+        return self.road_array[1]
 
     def draw(self, context):
         p = 0

@@ -15,6 +15,7 @@ class ConfigGameplay:
         self.current_wave = 0
         self.is_started = False
         self.always_use_additional_parameters = find_in_file('alwaysUseAdditionalParameter')
+        self.is_fail = False
 
     def get_highlight_tile(self):
         return self.highlight_tile
@@ -78,3 +79,9 @@ class ConfigGameplay:
 
     def new_value_always_use_additional_parameters(self, new_value):
         self.always_use_additional_parameters = new_value
+
+    def get_is_fail(self):
+        return self.is_fail
+
+    def new_value_is_fail(self, new_value):
+        self.is_fail = self.is_fail + new_value

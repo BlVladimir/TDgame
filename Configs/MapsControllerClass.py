@@ -4,6 +4,7 @@ class MapsController:
     def __init__(self, width, height):
         self.tile_scale = height * 0.1
         self.gasps_scale = self.tile_scale * 0.2
+        self.trajectory = ()
         self.map_array = [Map([[0, 1, 1, 1, 1],
                     [1, 0, 0, 0, 0],
                     [2, 0, 3, 0, 3],
@@ -59,5 +60,8 @@ class MapsController:
     def get_started_position(self, level, position_enemy_on_tile):
         return self.map_array[level - 1].get_started_position(position_enemy_on_tile)
 
-    def get_trajectory_array(self, level, context):
-        return self.map_array[level - 1].get_trajectory_array(context)
+    def update_trajectory_array(self, level):
+        self.trajectory =  self.map_array[level - 1].get_trajectory_array()
+
+    def get_trajectory(self):
+        return self.trajectory
