@@ -15,8 +15,8 @@ class TowerController:
         self.__button_update_array.append(new_button_object)
 
     def clear_towers_arrays(self):
-        self.__towers_object_array = []
-        self.__button_update_array = []
+        self.__towers_object_array.clear()
+        self.__button_update_array.clear()
 
     def turn_off_or_on_all_towers(self, state):
         for i in range(len(self.__towers_object_array)):

@@ -1,32 +1,32 @@
 class AnimationController:
     def __init__(self):
-        self.is_move = False
-        self.time = 0
-        self.is_fail = False
+        self.__is_move = False
+        self.__time = 0
+        self.__is_fail = False
 
     def get_is_move(self):
-        return self.is_move
+        return self.__is_move
 
     def new_value_is_move(self, new_value):
-        self.is_move = new_value
+        self.__is_move = new_value
 
     def get_time(self):
-        return self.time
+        return self.__time
 
     def new_value_time(self, new_value):
-        self.time = self.time + new_value
+        self.__time = self.__time + new_value
 
     def start_move(self):
-        self.is_move = True
+        self.__is_move = True
 
     def move_enemies(self, enemies_controller, towers_controller, maps_controller, context):
-        if self.is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
-            self.time += 1
+        if self.__is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
+            self.__time += 1
             towers_controller.turn_off_or_on_all_towers(True)
             enemies_controller.move_all_enemies(100, maps_controller, context)
-            if self.time % 60 == 0:
-                self.time = 0
-                self.is_move = False
+            if self.__time % 60 == 0:
+                self.__time = 0
+                self.__is_move = False
                 enemies_controller.treat_enemies(enemies_controller, towers_controller, context)
                 towers_controller.turn_off_or_on_all_towers(False)  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
                 if context.get_config_gameplay().get_current_wave() != len(context.get_config_gameplay().get_waves()) and context.get_config_gameplay().get_waves() != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
