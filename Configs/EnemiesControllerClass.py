@@ -36,8 +36,8 @@ class EnemiesController:
             if self.__enemy_array[i].health <= 0:
                 __kill_array.append(i)
         self.__current_enemy = None
-        for i in __kill_array:
-            self.__enemy_array.pop(i)
+        for i in range(len(__kill_array)):
+            self.__enemy_array.pop(__kill_array[len(__kill_array)-1-i])
             bugs(enemies_controller, context, towers_controller)
             context.get_config_gameplay().new_value_money(2)
 
