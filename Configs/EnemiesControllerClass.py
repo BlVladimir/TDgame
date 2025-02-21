@@ -46,9 +46,9 @@ class EnemiesController:
             self.__enemy_array[i].treat()
         self.kill_enemies(enemies_controller, towers_controller, context)
 
-    def move_all_enemies(self, tile_scale, maps_controller, context, speed=60):  # двигает всех врагов
+    def move_all_enemies(self, tile_scale, time, maps_controller, context, speed=60):  # двигает всех врагов
         for i in range(len(self.__enemy_array)):
-            self.__enemy_array[i].move(tile_scale, maps_controller, context, speed)
+            self.__enemy_array[i].move(tile_scale, time, maps_controller, context, speed)
             if context.get_config_gameplay().get_is_fail():
                 break
 

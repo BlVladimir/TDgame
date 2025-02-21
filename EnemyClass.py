@@ -1,15 +1,16 @@
 from random import randrange
 
 import pygame  # импорт библиотеки pygame
+import os
 import Function
 
 
 class Enemy:
     # инициализация класса
     def __init__(self, image, rect, scale, health, armor =0, treatment = 0,pos = 0):
-        self.image = pygame.image.load(image)
+        self.__image = pygame.image.load(image)
         self.scale = scale
-        self.image = pygame.transform.scale(self.image, (self.scale, self.scale))
+        self.__image = pygame.transform.scale(self.__image, (self.scale, self.scale))
         self.rect = rect
         self.pos = pos
         self.__armor = armor
@@ -18,19 +19,29 @@ class Enemy:
         self.health = health
         self.__poison_dict = []
         self.__current_damage_poison = 0
+        self.__animation = []
+        for i in range(1, 31):
+            if i < 10:
+                self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/animation00'+str(i)+'.png'), (self.scale, self.scale)))
+            else:
+                self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/animation0' + str(i) + '.png'), (self.scale, self.scale)))
+        self.__legs_image = self.__animation[0]
 
     def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
         return self.center
 
     def draw(self, context):  # функция, рисующая врага
-        context.get_config_parameter_scene().get_screen().blit(self.image, self.rect)
+        context.get_config_parameter_scene().get_screen().blit(self.__image, self.rect)
+        context.get_config_parameter_scene().get_screen().blit(self.__legs_image, self.rect)
         if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             scale = int(self.scale * 0.6)
             Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
-    def move(self, tile_scale, maps_controller, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
+    def move(self, tile_scale, time, maps_controller, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
         if self.pos//speed != len(maps_controller.get_trajectory()):  # Проверяет, что существует следующая позиция
+            print(time % 30)
+            self.__legs_image = self.__animation[time % 30]
             match maps_controller.get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
                 case 0:
                     self.rect[1] -= (1.2 * tile_scale) / speed

@@ -23,7 +23,7 @@ class AnimationController:
         if self.__is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
             self.__time += 1
             towers_controller.turn_off_or_on_all_towers(True)
-            enemies_controller.move_all_enemies(100, maps_controller, context)
+            enemies_controller.move_all_enemies(100, self.__time, maps_controller, context)
             if self.__time % 60 == 0:
                 self.__time = 0
                 self.__is_move = False
