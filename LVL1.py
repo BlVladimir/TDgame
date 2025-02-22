@@ -3,9 +3,9 @@ import Function
 
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
 
-def draw_lvl1(context, shop, highlighting, maps_controller, level, towers_controller, enemies_controller):
-        maps_controller.draw_map(level, context)
-        highlighting.draw_highlighting(maps_controller.get_build_array(level), context)
+def draw_lvl1(context, shop, highlighting, maps_controller, towers_controller, enemies_controller):
+        maps_controller.draw_map(context)
+        highlighting.draw_highlighting(maps_controller.get_build_array(), context)
         towers_controller.draw_towers(context)
         enemies_controller.draw_enemies(context)
         shop.draw(towers_controller, context)  # рисует магазин

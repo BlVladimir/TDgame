@@ -15,14 +15,14 @@ def draw_text(words, size, coordinate_center, context): #  рисует текс
     context.get_config_parameter_scene().get_screen().blit(text, rect_text)
 
 
-def bugs(enemies_controller, context, towers_controller): #  модификаторы при убийстве врагов
+def bugs(context): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
     current_influence = random.getrandbits(1)
     match type_of_bugs:
         case 1:
-            towers_controller.change_damage(current_influence)
+            context.get_towers_controller().change_damage(current_influence)
         case 2:
-            enemies_controller.change_health_enemy(current_influence)
+            context.get_towers_enemies_controller().change_health_enemy(current_influence)
         case 3:
             if current_influence == 0:
                 if context.get_config_gameplay().get_money() > 0:

@@ -37,8 +37,8 @@ class Tower:
 
 
 
-    def is_in_radius(self, coordinate):
-        if ((self.__coordinate[0] + self.scale / 2 - coordinate[0]) ** 2 + (self.__coordinate[1] + self.scale / 2 - coordinate[1]) ** 2) <= self.radius**2 and self.is_used == False:  # если башня не использованная и координаты центра врага в радиусе башни
+    def is_in_radius(self, context):
+        if ((self.__coordinate[0] + self.scale / 2 - context.get_enemies_controller().get_current_enemy().get_center()[0]) ** 2 + (self.__coordinate[1] + self.scale / 2 - context.get_enemies_controller().get_current_enemy().get_center()[1]) ** 2) <= self.radius**2 and self.is_used == False:  # если башня не использованная и координаты центра врага в радиусе башни
             return True
         else:
             return False

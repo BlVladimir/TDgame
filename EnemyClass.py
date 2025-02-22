@@ -39,12 +39,12 @@ class Enemy:
             scale = int(self.scale * 0.6)
             Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
-    def move(self, tile_scale, time, maps_controller, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
-        if self.pos // speed != len(maps_controller.get_trajectory()) - 1:
-            difference_position = maps_controller.get_trajectory()[self.pos // speed + 1] - maps_controller.get_trajectory()[self.pos // speed]
+    def move(self, tile_scale, time, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
+        if self.pos // speed != len(context.get_maps_controller().get_trajectory()) - 1:
+            difference_position = context.get_maps_controller().get_trajectory()[self.pos // speed + 1] - context.get_maps_controller().get_trajectory()[self.pos // speed]
         else:
             difference_position = 0
-        match maps_controller.get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
+        match context.get_maps_controller().get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
             case 0:
                 self.rect[1] -= (1.2 * tile_scale) / speed
                 self.pos += 1
@@ -63,20 +63,20 @@ class Enemy:
             self.__angle += 90 / speed
         self.__legs_image = pygame.transform.rotate(self.__animation[time % 30], self.__angle)
         self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
-        if self.pos // speed == len(maps_controller.get_trajectory()):
+        if self.pos // speed == len(context.get_maps_controller().get_trajectory()):
             context.get_config_gameplay().new_value_is_fail(True)
 
-    def remove_health(self, damage, armor_piercing, poison): #  убрать хп
-        if armor_piercing:
-            self.health -= damage
+    def remove_health(self, context): #  убрать хп
+        if context.get_towers_controller().get_current_tower().armor_piercing:
+            self.health -= context.get_towers_controller().get_current_tower().damage
         else:
-            if damage - self.__armor > 0:
-                self.health -= damage - self.__armor
-        if poison != 0:
-            if self.__current_damage_poison < poison:
-                self.__treatment -= poison - self.__current_damage_poison
-                self.__current_damage_poison = poison
-            self.__poison_dict.append({'damage': poison, 'time': 2})
+            if context.get_towers_controller().get_current_tower().damage - self.__armor > 0:
+                self.health -= context.get_towers_controller().get_current_tower().damage - self.__armor
+        if context.get_towers_controller().get_current_tower().poison != 0:
+            if self.__current_damage_poison < context.get_towers_controller().get_current_tower().poison:
+                self.__treatment -= context.get_towers_controller().get_current_tower().poison - self.__current_damage_poison
+                self.__current_damage_poison = context.get_towers_controller().get_current_tower().poison
+            self.__poison_dict.append({'damage': context.get_towers_controller().get_current_tower().poison, 'time': 2})
 
     def treat(self):  # отравление/лечение
         if self.__treatment > 0:

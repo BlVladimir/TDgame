@@ -3,14 +3,14 @@ import pygame
 
 class TowerController:
 
-    def __init__(self, context):
+    def __init__(self, scale):
         self.__towers_object_array = []
         self.__button_update_array = []
         self.__animation_upgrade = []
         self.__upgrade_array = []
         files_animation = os.listdir('images/upgrade/animationUpgrade')
         for i in files_animation:
-            self.__animation_upgrade.append(pygame.transform.scale(pygame.image.load('images/upgrade/animationUpgrade/' + i), (context.get_config_parameter_scene().get_tile_scale(), context.get_config_parameter_scene().get_tile_scale())))
+            self.__animation_upgrade.append(pygame.transform.scale(pygame.image.load('images/upgrade/animationUpgrade/' + i), (scale, scale)))
         self.__current_tower = None
 
 
@@ -51,8 +51,8 @@ class TowerController:
             for i in range(len(self.__towers_object_array)):
                 self.__towers_object_array[i].damage += 1
 
-    def append_upgrade(self, context, maps_controller):
-        self.__upgrade_array.append([maps_controller.get_build_array(1)[context.get_config_gameplay().get_current_tile()]['coordinate'], 0])
+    def append_upgrade(self, context):
+        self.__upgrade_array.append([context.get_maps_controller().get_build_array()[context.get_config_gameplay().get_current_tile()]['coordinate'], 0])
 
     def draw_animation_upgrade(self, context):
         if self.__upgrade_array:
