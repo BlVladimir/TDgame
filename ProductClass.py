@@ -27,6 +27,7 @@ def upgrade_tower(parameter_dict):  # улучшение башни по ном�
                 else  parameter_dict['towers_controller'].get_current_button_update().change_image('images/upgrade/3lvl.png')
             parameter_dict['context'].get_config_modifier().get_new_value_is_free(False)
             parameter_dict['context'].get_config_modifier().get_new_value_price_up(False)
+            parameter_dict['towers_controller'].append_upgrade(parameter_dict['context'], parameter_dict['maps_controller'])
         elif price_up and parameter_dict['context'].get_config_gameplay().get_money() >= cost * 2:
             parameter_dict['towers_controller'].get_current_tower().upgrade(1, 60)
             parameter_dict['towers_controller'].get_current_tower().level += 1
@@ -34,12 +35,14 @@ def upgrade_tower(parameter_dict):  # улучшение башни по ном�
                 else  parameter_dict['towers_controller'].get_current_button_update().change_image('images/upgrade/3lvl.png')
             parameter_dict['context'].get_config_gameplay().new_value_money(-cost * 2)
             parameter_dict['context'].get_config_modifier().get_new_value_price_up(False)
+            parameter_dict['towers_controller'].append_upgrade(parameter_dict['context'], parameter_dict['maps_controller'])
         elif not price_up and parameter_dict['context'].get_config_gameplay().get_money() >= cost:
             parameter_dict['towers_controller'].get_current_tower().upgrade(1, 60)
             parameter_dict['towers_controller'].get_current_tower().level += 1
             parameter_dict['towers_controller'].get_current_button_update().change_image('images/upgrade/2lvl.png') if  parameter_dict['towers_controller'].get_current_tower().level == 2 \
                 else  parameter_dict['towers_controller'].get_current_button_update().change_image('images/upgrade/3lvl.png')
             parameter_dict['context'].get_config_gameplay().new_value_money(-cost)
+            parameter_dict['towers_controller'].append_upgrade(parameter_dict['context'], parameter_dict['maps_controller'])
 
 
 class Product:  # класс продуктов

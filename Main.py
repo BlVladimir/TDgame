@@ -35,7 +35,7 @@ config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen)
 
 maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get_width(), config_parameter_screen.get_height())
-towers_controller = TowersControllerClass.TowerController()
+towers_controller = TowersControllerClass.TowerController(context)
 enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController()
 
@@ -109,7 +109,7 @@ while True:  # основной цикл
                         towers_controller.get_current_tower().rotate_gun()
                         towers_controller.get_current_tower().draw_radius(context)
                     if towers_controller.get_current_button_update().is_pressed(event):
-                        towers_controller.get_current_button_update().handle_event_parameter({'towers_controller': towers_controller, 'context': context})
+                        towers_controller.get_current_button_update().handle_event_parameter({'towers_controller': towers_controller, 'context': context, 'maps_controller': maps_controller})
                 context.get_config_gameplay().new_value_amount_of_money('x' + str(context.get_config_gameplay().get_money())) #  рисует количество денег
                 if context.get_config_constant_object().get_button_setting().is_pressed(event):
                     context.get_config_constant_object().get_button_setting().handle_event_parameter({'context':context, 'lvl':'setting'})

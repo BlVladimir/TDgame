@@ -1,5 +1,6 @@
 import pygame  # импорт библиотеки pygame
 import math
+import os
 
 
 class Tower:

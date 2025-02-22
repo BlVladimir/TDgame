@@ -14,6 +14,7 @@ def draw_text(words, size, coordinate_center, context): #  рисует текс
 
     context.get_config_parameter_scene().get_screen().blit(text, rect_text)
 
+
 def bugs(enemies_controller, context, towers_controller): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
     current_influence = random.getrandbits(1)

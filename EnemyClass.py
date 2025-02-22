@@ -19,43 +19,51 @@ class Enemy:
         self.health = health
         self.__poison_dict = []
         self.__current_damage_poison = 0
+        self.__angle = 0
         self.__animation = []
-        for i in range(1, 31):
-            if i < 10:
-                self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/animation00'+str(i)+'.png'), (self.scale, self.scale)))
-            else:
-                self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/animation0' + str(i) + '.png'), (self.scale, self.scale)))
+        files_animation = os.listdir('images/enemy/animationWalking')
+        for i in files_animation:
+            self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/' + i), (self.scale, self.scale)))
+        self.__rotated_image = self.__image
         self.__legs_image = self.__animation[0]
+
 
     def get_center(self):  # получает центр врага
         self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
         return self.center
 
     def draw(self, context):  # функция, рисующая врага
-        context.get_config_parameter_scene().get_screen().blit(self.__image, self.rect)
+        context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.rect)
         context.get_config_parameter_scene().get_screen().blit(self.__legs_image, self.rect)
         if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             scale = int(self.scale * 0.6)
             Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
     def move(self, tile_scale, time, maps_controller, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
-        if self.pos//speed != len(maps_controller.get_trajectory()):  # Проверяет, что существует следующая позиция
-            print(time % 30)
-            self.__legs_image = self.__animation[time % 30]
-            match maps_controller.get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
-                case 0:
-                    self.rect[1] -= (1.2 * tile_scale) / speed
-                    self.pos += 1
-                case 1:
-                    self.rect[0] += (1.2 * tile_scale) / speed
-                    self.pos += 1
-                case 2:
-                    self.rect[1] += (1.2 * tile_scale) / speed
-                    self.pos += 1
-                case 3:
-                    self.rect[0] -= (1.2 * tile_scale) / speed
-                    self.pos += 1
+        if self.pos // speed != len(maps_controller.get_trajectory()) - 1:
+            difference_position = maps_controller.get_trajectory()[self.pos // speed + 1] - maps_controller.get_trajectory()[self.pos // speed]
         else:
+            difference_position = 0
+        match maps_controller.get_trajectory()[self.pos//speed]:  # сравнивает текущую траекторию
+            case 0:
+                self.rect[1] -= (1.2 * tile_scale) / speed
+                self.pos += 1
+            case 1:
+                self.rect[0] += (1.2 * tile_scale) / speed
+                self.pos += 1
+            case 2:
+                self.rect[1] += (1.2 * tile_scale) / speed
+                self.pos += 1
+            case 3:
+                self.rect[0] -= (1.2 * tile_scale) / speed
+                self.pos += 1
+        if difference_position > 0:
+            self.__angle -= 90 / speed
+        elif difference_position < 0:
+            self.__angle += 90 / speed
+        self.__legs_image = pygame.transform.rotate(self.__animation[time % 30], self.__angle)
+        self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
+        if self.pos // speed == len(maps_controller.get_trajectory()):
             context.get_config_gameplay().new_value_is_fail(True)
 
     def remove_health(self, damage, armor_piercing, poison): #  убрать хп
