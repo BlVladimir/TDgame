@@ -7,12 +7,13 @@ import Function
 
 class Enemy:
     # инициализация класса
-    def __init__(self, image, rect, scale, health, armor =0, treatment = 0,pos = 0):
+    def __init__(self, image, rect, scale, health, additional_price, armor =0, treatment = 0,pos = 0):
         self.__image = pygame.image.load(image)
         self.scale = scale
         self.__image = pygame.transform.scale(self.__image, (self.scale, self.scale))
         self.rect = rect
         self.pos = pos
+        self.__additional_price = additional_price
         self.__armor = armor
         self.__treatment = treatment
         self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
@@ -97,6 +98,9 @@ class Enemy:
                     max_damage = self.__poison_dict[i]['damage']
             self.__treatment -= max_damage - self.__current_damage_poison
             self.__current_damage_poison = max_damage
+
+    def get_additional_money(self):
+        return self.__additional_price
 
 
 def create_waves(number_of_waves, lvl, context):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне

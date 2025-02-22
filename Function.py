@@ -22,7 +22,7 @@ def bugs(context): #  модификаторы при убийстве враг�
         case 1:
             context.get_towers_controller().change_damage(current_influence)
         case 2:
-            context.get_towers_enemies_controller().change_health_enemy(current_influence)
+            context.get_enemies_controller().change_health_enemy(current_influence)
         case 3:
             if current_influence == 0:
                 if context.get_config_gameplay().get_money() > 0:
