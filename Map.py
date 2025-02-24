@@ -23,8 +23,8 @@ class Map:
                                   pygame.image.load("images/tile/radiusUp.png"),  # 3 - радиус
                                   pygame.image.load("images/tile/antyShield.png"),
                                   pygame.image.load("images/tile/poisonUp.png"),
-                                  pygame.image.load("images/tile/antyInvisibility.png"),
-                                  pygame.image.load("images/tile/moneyUp.png")]  # массив картинок тайлов
+                                  pygame.image.load("images/tile/moneyUp.png"),
+                                  pygame.image.load("images/tile/base.png")]  # массив картинок тайлов
         self.__image_tile_mass[0] = pygame.transform.scale(self.__image_tile_mass[0], (self.tile_scale, self.tile_scale + self.gaps))  # Меняет размер дороги(так как она прямоугольная)
         for i in range(len(self.__image_tile_mass) - 1):
             self.__image_tile_mass[i + 1] = pygame.transform.scale(self.__image_tile_mass[i + 1], (self.tile_scale, self.tile_scale))  # меняет остальные размеры
@@ -48,7 +48,8 @@ class Map:
         for i in range(len(self.tile_array)):
             for j in self.tile_array[i]:
                 if j != 0:
-                    self.build_array.append({'coordinate': self.coordinates[number], 'type': j, 'is_filled': False})
+                    if j != 8:
+                        self.build_array.append({'coordinate': self.coordinates[number], 'type': j, 'is_filled': False})
                     number += 1
 
     def get_trajectory_array(self):
@@ -58,8 +59,12 @@ class Map:
         p = 0
         for y in range(len(self.tile_array)):
             for x in range(len(self.tile_array[y])):
-                if self.tile_array[y][x] != 0:
+                if self.tile_array[y][x] != 0 and self.tile_array[y][x] != 8:
                     context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[self.tile_array[y][x]], self.coordinates[p])
+                    p += 1
+                elif self.tile_array[y][x] == 8:
+                    context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.coordinates[p])
+                    context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[7], self.coordinates[p])
                     p += 1
         for i in range(len(self.road_array[0])):
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных

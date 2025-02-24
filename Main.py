@@ -15,7 +15,8 @@ pygame.init()  # импорт библиотеки pygame и sys, и импор�
 
 def action_scene(parameter_dict):  # функция, меняющая переменную сцены
     parameter_dict['context'].get_config_parameter_scene().new_value_scene(parameter_dict['lvl'])
-    parameter_dict['context'].get_maps_controller(). change_level(int(parameter_dict['lvl']))
+    if parameter_dict['lvl'].isdigit():
+        parameter_dict['context'].get_maps_controller().change_level(parameter_dict['lvl'])
 
 def action_exit():  # функция, закрывающая окно
     pygame.quit()
@@ -36,7 +37,7 @@ config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get_width(), config_parameter_screen.get_height())
 towers_controller = TowersControllerClass.TowerController(config_parameter_screen.get_tile_scale())
 enemies_controller = EnemiesControllerClass.EnemiesController()
-animation_controller = AnimationControllerClass.AnimationController()
+animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
 
 context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller)
 shop = Shop.Shop(config_parameter_screen.get_height())
@@ -142,7 +143,7 @@ while True:  # основной цикл
         scene = 'mainMenu'
     context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     context.get_maps_controller().update_trajectory_array()
-    match context.get_config_parameter_scene().get_scene():  # То же, что и switch в других языках программирования. В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
+    match context.get_config_parameter_scene().get_scene():  # В зависимости от значения scene выполняет определенные действия. В данном случае используется для отрисовки определенных объектов
         case 'mainMenu':
             MainManu.draw_buttons(context)
             context.get_config_constant_object().get_button_setting().draw(context)

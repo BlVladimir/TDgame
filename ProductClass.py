@@ -7,12 +7,12 @@ def buy_tower(parameter_dict):  # добавляет в массив башен 
     if 'additional_image' in parameter_dict.keys():
         parameter_dict['context'].get_towers_controller().append_tower_object(TowerClass.Tower(parameter_dict['image'], parameter_dict['context'].get_maps_controller().get_tile_scale(), parameter_dict['damage'],
                                                                 parameter_dict['context'].get_maps_controller().get_build_array()[parameter_dict['context'].get_config_gameplay().get_current_tile()]['coordinate'], parameter_dict['context'].get_config_gameplay().get_current_tile(),
-                                                                parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], parameter_dict['additional_image'], parameter_dict['radius']),
+                                                                parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], image_gun=parameter_dict['additional_image'], radius=parameter_dict['radius']),
                                                                 Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
     else:
         parameter_dict['context'].get_towers_controller().append_tower_object(TowerClass.Tower(parameter_dict['image'], parameter_dict['context'].get_maps_controller().get_tile_scale(), parameter_dict['damage'],
                                                                 parameter_dict['context'].get_maps_controller().get_build_array()[parameter_dict['context'].get_config_gameplay().get_current_tile()]['coordinate'], parameter_dict['context'].get_config_gameplay().get_current_tile(),
-                                                                parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], parameter_dict['radius']),
+                                                                parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], radius=parameter_dict['radius']),
                                                                 Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
 
 def upgrade_tower(context):  # улучшение башни по номеру

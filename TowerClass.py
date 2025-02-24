@@ -5,7 +5,7 @@ import os
 
 class Tower:
     # инициализация класса
-    def __init__(self, image_foundation, scale, damage, coordinate, index, improve_cost_array, armor_piercing, poison, image_gun = None, radius = None):
+    def __init__(self, image_foundation, scale, damage, coordinate, index, improve_cost_array, armor_piercing, poison, additional_money = 0, image_gun = None, radius = None):
         self.is_used = False
         self.index = index
         self.__image_foundation = pygame.image.load(image_foundation)
@@ -18,6 +18,8 @@ class Tower:
         self.poison = poison
         self.level = 1
         self.improve_cost_array = improve_cost_array
+        self.__additional_money = additional_money
+        print(image_gun)
         if image_gun is not None:
             self.image_gun = pygame.image.load(image_gun)
             self.image_gun = pygame.transform.scale(self.image_gun, (scale, scale))
@@ -82,6 +84,9 @@ class Tower:
         self.damage += increase_damage
         self.radius += increase_radius
         self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), (self.radius * 2, self.radius * 2))
+
+    def get_additional_money(self):
+        return self.__additional_money
 
 
 
