@@ -1,15 +1,12 @@
 import pygame
 import sys
 
-import MainManu
-import Shop
-import DefinitionCurrentTile
-import LVL1
-import Function
-from Configs import AnimationControllerClass, ConfigParameterScreenClass, ConfigConstantObjectClass, ConfigGameplayClass, ConfigModifierClass, MapsControllerClass, TowersControllerClass, EnemiesControllerClass
-import ContextClass
-
-from EnemyClass import create_waves
+from Scripts.MainScripts import Function, LVL1, MainManu
+from Scripts.Configs import MapsControllerClass, ConfigConstantObjectClass, AnimationControllerClass, ConfigGameplayClass, TowersControllerClass, EnemiesControllerClass, ConfigModifierClass, \
+    ConfigParameterScreenClass
+from Scripts import ContextClass
+from Scripts.ClassesObjects import ShopClass, DefinitionCurrentTile
+from Scripts.ClassesObjects.EnemyClass import create_waves
 
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
@@ -40,7 +37,7 @@ enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
 
 context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller)
-shop = Shop.Shop(config_parameter_screen.get_height())
+shop = ShopClass.Shop(config_parameter_screen.get_height())
 highlighting = DefinitionCurrentTile.Highlighting(config_parameter_screen.get_height())
 
 def definition(event, context):
@@ -63,13 +60,6 @@ while True:  # основной цикл
         if event.type == pygame.QUIT:  # закрывает окно
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.KEYDOWN:  # если кнопка была нажата
-            if context.get_config_parameter_scene().get_scene() == '1' and event.key == pygame.K_RETURN:  # эта кнопка Enter
-                animation_controller.start_move()  # переменная isMove нужна, чтобы определять, закончено движение или нет
-        if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
-            use_additional_parameters = True
-        else:
-            use_additional_parameters = False
         match context.get_config_parameter_scene().get_scene():
             case 'mainMenu':
                 MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
@@ -89,6 +79,12 @@ while True:  # основной цикл
                     context.get_config_gameplay().new_value_money(-context.get_config_gameplay().get_money() + 1000)
                     for i in range(len(context.get_maps_controller().get_build_array())):  # обнуляет все тайлы
                         context.get_maps_controller().get_build_array()[i]['is_filled'] = False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # если кнопка была нажата
+                        animation_controller.start_move()  # переменная isMove нужна, чтобы определять, закончено движение или нет
+                if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
+                    use_additional_parameters = True
+                else:
+                    use_additional_parameters = False
                 context.get_towers_controller().define_current_tower(context)
                 context.get_enemies_controller().define_current_enemy()
                 if event.type == pygame.MOUSEBUTTONDOWN:  # если кнопка мыши нажата
@@ -98,12 +94,12 @@ while True:  # основной цикл
                             context.get_towers_controller().get_current_tower().is_used = True  # переменная отвечает за то, что башня была использована
                             context.get_enemies_controller().kill_enemies(context)
                 definition(event, context)  # определяет текущий тайл
-                if context.get_config_gameplay().get_current_tile() is not None and not context.get_maps_controller().get_build_array()[context.get_config_gameplay().get_current_tile()]['is_filled']:
-                    context.get_config_gameplay().new_value_shop_type(1)
-                elif context.get_config_gameplay().get_current_tile() is not None and context.get_maps_controller().get_build_array()[context.get_config_gameplay().get_current_tile()]['is_filled']:
+                if context.get_config_gameplay().get_current_tile() is None:
+                    context.get_config_gameplay().new_value_shop_type(0)
+                elif context.get_maps_controller().get_build_array()[context.get_config_gameplay().get_current_tile()]['is_filled']:
                     context.get_config_gameplay().new_value_shop_type(2)
                 else:
-                    context.get_config_gameplay().new_value_shop_type(0)
+                    context.get_config_gameplay().new_value_shop_type(1)
                 if context.get_config_gameplay().get_shop_type() == 1:
                     shop.build_tower(event,context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
                 if context.get_towers_controller().get_current_tower():
@@ -113,6 +109,8 @@ while True:  # основной цикл
                     if context.get_towers_controller().get_current_button_update().is_pressed(event):
                         context.get_towers_controller().get_current_button_update().handle_event_parameter(context)
                 context.get_config_gameplay().new_value_amount_of_money('x' + str(context.get_config_gameplay().get_money())) #  рисует количество денег
+                # if context.get_config_gameplay().get_is_fail:
+                #     context.get_animation_controller().fail_animation(context)
                 if context.get_config_constant_object().get_button_setting().is_pressed(event):
                     context.get_config_constant_object().get_button_setting().handle_event_parameter({'context':context, 'lvl':'setting'})
                 if context.get_config_constant_object().get_button_main_manu().is_pressed(event):

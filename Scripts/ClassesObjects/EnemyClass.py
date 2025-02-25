@@ -3,7 +3,7 @@ from math import sqrt, atan, pi
 
 import pygame  # импорт библиотеки pygame
 import os
-import Function
+from Scripts.MainScripts import Function
 
 
 class Enemy:
@@ -113,7 +113,7 @@ class Enemy:
                         self.rect[0] += deltaY
                         self.rect[1] += deltaX
                         self.pos += 1
-                        self.__angle = self.__angle + 180
+                        self.__angle = 270 - self.__angle
                     case 2:
                         self.rect[0] -= deltaX
                         self.rect[1] += deltaY

@@ -1,5 +1,6 @@
 import pygame
-import Function
+from Scripts.MainScripts import Function
+
 
 def get_coordinate_list(interval_x, interval_y, value_lines, coordinate):  # получает список координат из интервала x и y и количества строк
     height_one_line = interval_y / value_lines

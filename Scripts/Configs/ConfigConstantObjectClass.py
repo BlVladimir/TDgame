@@ -1,7 +1,7 @@
 import pygame
 
-from InformationClass import Information
-from ButtonClass import Button
+from Scripts.ClassesObjects.InformationClass import Information
+from Scripts.ClassesObjects.ButtonClass import Button
 
 
 class ConfigConstantObject:

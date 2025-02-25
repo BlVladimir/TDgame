@@ -27,3 +27,6 @@ class AnimationController:
                 if context.get_config_gameplay().get_current_wave() != len(context.get_config_gameplay().get_waves()) and context.get_config_gameplay().get_waves() != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
                     context.get_enemies_controller().create_enemy(context)
                     context.get_config_gameplay().new_value_current_wave(1)
+
+    def fail_animation(self, context):
+        context.get_maps_controller().fail_map(self.__time_move)

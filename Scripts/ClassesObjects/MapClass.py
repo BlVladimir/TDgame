@@ -1,5 +1,6 @@
 import pygame  # импорт библиотеки pygame
 
+from os import listdir
 
 def get_coordinates(coordinates, tileValueX, tileValueY, xBais, yBais, widthScreen, heightScreen, gaps, tileScale):
     coordinates = (
@@ -25,6 +26,10 @@ class Map:
                                   pygame.image.load("images/tile/poisonUp.png"),
                                   pygame.image.load("images/tile/moneyUp.png"),
                                   pygame.image.load("images/tile/base.png")]  # массив картинок тайлов
+        files_animation = listdir('images/tile/destructionBaseAnimation')
+        self.__animation_destruction = []
+        for i in files_animation:
+            self.__animation_destruction.append(pygame.transform.scale(pygame.image.load('images/tile/destructionBaseAnimation/' + i), (tile_scale, tile_scale)))
         self.__image_tile_mass[0] = pygame.transform.scale(self.__image_tile_mass[0], (self.tile_scale, self.tile_scale + self.gaps))  # Меняет размер дороги(так как она прямоугольная)
         for i in range(len(self.__image_tile_mass) - 1):
             self.__image_tile_mass[i + 1] = pygame.transform.scale(self.__image_tile_mass[i + 1], (self.tile_scale, self.tile_scale))  # меняет остальные размеры
@@ -68,6 +73,9 @@ class Map:
                     p += 1
         for i in range(len(self.road_array[0])):
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
+
+    def destruct_base(self, time):
+        self.__image_tile_mass[7] = self.__animation_destruction[time//4]
 
     def get_started_position(self, position_enemy_on_tile):
         rectEnemy = [0, 0]

@@ -1,4 +1,4 @@
-from Map import Map
+from Scripts.ClassesObjects.MapClass import Map
 
 class MapsController:
     def __init__(self, width, height):
@@ -48,6 +48,9 @@ class MapsController:
                     [0, 1, 0, 5, 0, 0, 2],
                     [1, 0, 0, 0, 0, 0, 1],
                     [0, 1, 0, 0, 7, 0, 0]],[[(2, 6), (2, 5), (3, 5), (4, 5), (5, 5), (5, 4), (5, 3), (5, 2), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1)], [0, 3, 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 2]], width, height, self.tile_scale)]
+
+    def fail_map(self, time):
+        self.map_array[int(self.level) - 1].destruct_base(time)
 
     def change_level(self, new_value):
         self.level = new_value

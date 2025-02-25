@@ -11,6 +11,8 @@ class TowerController:
         files_animation = os.listdir('images/upgrade/animationUpgrade')
         for i in files_animation:
             self.__animation_upgrade.append(pygame.transform.scale(pygame.image.load('images/upgrade/animationUpgrade/' + i), (scale, scale)))
+        for i in range(len(self.__animation_upgrade)):
+            self.__animation_upgrade[i].set_alpha(150)
         self.__current_tower = None
 
 

@@ -1,6 +1,6 @@
 import pygame
-import Function
-from ProductClass import Product
+from Scripts.MainScripts import Function
+from Scripts.ClassesObjects.ProductClass import Product
 
 pygame.init()
 

@@ -1,4 +1,4 @@
-from Function import find_in_file
+from Scripts.MainScripts.Function import find_in_file
 
 class ConfigGameplay:
 

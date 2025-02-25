@@ -1,4 +1,4 @@
-import Function
+from Scripts.MainScripts import Function
 
 
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
