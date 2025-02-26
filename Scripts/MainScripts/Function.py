@@ -26,9 +26,9 @@ def bugs(context): #  модификаторы при убийстве враг�
         case 3:
             if current_influence == 0:
                 if context.get_config_gameplay().get_money() > 0:
-                    context.get_config_gameplay().new_value_money(-1)
+                    context.get_config_gameplay().set_money(-1)
             else:
-                context.get_config_gameplay().new_value_money(1)
+                context.get_config_gameplay().set_money(1)
         case 4:
             if current_influence == 1:
                 context.get_config_modifier().get_new_value_is_free(True)

@@ -37,7 +37,7 @@ class EnemiesController:
                 __kill_array.append(i)
         self.__current_enemy = None
         for i in range(len(__kill_array)):
-            context.get_config_gameplay().new_value_money(2 + self.__enemy_array[__kill_array[len(__kill_array)-1-i]].get_additional_money())
+            context.get_config_gameplay().set_money(2 + self.__enemy_array[__kill_array[len(__kill_array) - 1 - i]].get_additional_money())
             self.__enemy_array.pop(__kill_array[len(__kill_array)-1-i])
             bugs(context)
 

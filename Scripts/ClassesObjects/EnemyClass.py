@@ -126,7 +126,7 @@ class Enemy:
         self.__legs_image = pygame.transform.rotate(self.__animation[time % 30], self.__angle)
         self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
         if self.pos // speed == len(context.get_maps_controller().get_trajectory()):
-            context.get_config_gameplay().new_value_is_fail(True)
+            context.get_config_gameplay().set_is_fail(True)
 
     def end_walk(self):
         self.__x = -1
@@ -181,5 +181,5 @@ def create_waves(number_of_waves, lvl, context):  # Функция создае�
         if i != number_of_waves - 1:
             waves_array.append([])
     waves_array[0][1] = 0
-    context.get_config_gameplay().new_value_waves(waves_array)
+    context.get_config_gameplay().set_waves(waves_array)
 
