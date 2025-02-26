@@ -1,9 +1,12 @@
 import os
 import pygame
+from Scripts.MainScripts.Function import draw_text
+
 class AnimationController:
     def __init__(self, config_parameter_screen):
         self.__is_move = False
         self.__time_move = 0
+        self.__time_game_over = 0
         self.__is_fail = False
         self.__animation_game_over = []
         files_animation_game_over = os.listdir('images/UI/gameOverAnimation')
@@ -29,4 +32,22 @@ class AnimationController:
                     context.get_config_gameplay().set_current_wave(1)
 
     def fail_animation(self, context):
-        context.get_maps_controller().fail_map(self.__time_move)
+        if self.__time_game_over < 30:
+            self.__time_game_over += 1
+        elif 30 <= self.__time_game_over < 60:
+            context.get_config_parameter_scene().get_screen().blit(self.__animation_game_over[(self.__time_game_over - 30)//2], (0, 0))
+            self.__time_game_over += 1
+        elif 60 <= self.__time_game_over < 180:
+            context.get_config_parameter_scene().get_screen().blit(self.__animation_game_over[14], (0, 0))
+            if (self.__time_game_over // 20) % 2 == 0:
+                draw_text('game over', 100, (200, 30), context)
+            else:
+                draw_text('game over_', 100, (200, 30), context)
+            self.__time_game_over += 1
+        else:
+            self.__time_game_over = 0
+            context.get_config_gameplay().set_is_fail(False)
+            context.get_config_parameter_scene().set_scene('mainMenu')
+
+    def get_time_game_over(self):
+        return self.__time_game_over

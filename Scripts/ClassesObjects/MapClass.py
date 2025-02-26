@@ -67,15 +67,21 @@ class Map:
                 if self.tile_array[y][x] != 0 and self.tile_array[y][x] != 8:
                     context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[self.tile_array[y][x]], self.coordinates[p])
                     p += 1
-                elif self.tile_array[y][x] == 8:
+                elif self.tile_array[y][x] == 8 and not context.get_config_gameplay().get_is_fail():
                     context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.coordinates[p])
                     context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[7], self.coordinates[p])
                     p += 1
+                elif self.tile_array[y][x] == 8 and context.get_config_gameplay().get_is_fail():
+                    time = context.get_animation_controller().get_time_game_over()
+                    if time < 30:
+                        context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.coordinates[p])
+                        context.get_config_parameter_scene().get_screen().blit(self.__animation_destruction[time // 2], self.coordinates[p])
+                    else:
+                        context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.coordinates[p])
+                        context.get_config_parameter_scene().get_screen().blit(self.__animation_destruction[14], self.coordinates[p])
+                    p += 1
         for i in range(len(self.road_array[0])):
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
-
-    def destruct_base(self, time):
-        self.__image_tile_mass[7] = self.__animation_destruction[time//4]
 
     def get_started_position(self, position_enemy_on_tile):
         rectEnemy = [0, 0]

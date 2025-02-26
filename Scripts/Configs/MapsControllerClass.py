@@ -50,9 +50,6 @@ class MapsController:
                     [1, 0, 0, 0, 0, 0, 1],
                     [0, 1, 0, 0, 7, 0, 0]], [[(2, 6), (2, 5), (3, 5), (4, 5), (5, 5), (5, 4), (5, 3), (5, 2), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1)], [0, 3, 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 2]], width, height, self.__tile_scale)]
 
-    def fail_map(self, time):
-        self.__map_array[int(self.__level) - 1].destruct_base(time)
-
     def change_level(self, new_value):
         self.__level = new_value
 

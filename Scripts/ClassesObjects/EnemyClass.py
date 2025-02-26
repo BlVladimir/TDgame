@@ -44,9 +44,12 @@ class Enemy:
         if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             scale = int(self.scale * 0.6)
             Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
-        # if len(self.test_array) > 1:
-        #     for i in range(len(self.test_array) - 1):
-        #         pygame.draw.line(context.get_config_parameter_scene().get_screen(), (64, 128, 255), self.test_array[i], self.test_array[i + 1])
+
+    def __set_coordinate_and_angle(self, deltaX, deltaY):
+        self.rect[0] += deltaX
+        self.rect[1] += deltaY
+        self.__angle = atan(deltaX/deltaY) * 180 / pi
+        self.pos += 1
 
     def move(self, tile_scale, time, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
         if self.pos // speed != len(context.get_maps_controller().get_trajectory()) - 1:
@@ -73,55 +76,34 @@ class Enemy:
             if self.__x < 0:
                 y = ((n + 1) * x - 1) ** 3 - (n * x - 1) ** 3
                 deltaX = x * (1.2 * tile_scale) / 8
-                self.__angle = atan(x / y) * 180 / pi
             elif self.__x < 2:
                 y = ((1 + n) * x - 1)**2 - (n * x - 1)** 2
                 deltaX = x * (1.2 * tile_scale) / 8
-                self.__angle = atan(x / y) * 180 / pi
             else:
                 y = - sqrt(9 - (n * x - 6) ** 2) + sqrt(9 - ((n + 1) * x - 6) ** 2)
                 deltaX = (-x) * (1.2 * tile_scale) / 8
-                self.__angle = atan(- x / y) * 180 / pi
             deltaY = y * (1.2 * tile_scale) / 8
             self.__x += x
-            if difference_position > 0:
+            if difference_position == 1 or difference_position == -3:
                 match context.get_maps_controller().get_trajectory()[self.pos // speed]:  # сравнивает текущую траекторию
                     case 0:
-                        self.rect[0] -= deltaX
-                        self.rect[1] -= deltaY
-                        self.pos += 1
+                        self.__set_coordinate_and_angle(-deltaX, -deltaY)
                     case 1:
-                        self.rect[0] += deltaY
-                        self.rect[1] -= deltaX
-                        self.pos += 1
+                        self.__set_coordinate_and_angle(deltaY, -deltaX)
                     case 2:
-                        self.rect[0] += deltaX
-                        self.rect[1] += deltaY
-                        self.pos += 1
+                        self.__set_coordinate_and_angle(deltaX, deltaY)
                     case 3:
-                        self.rect[0] -= deltaY
-                        self.rect[1] += deltaX
-                        self.pos += 1
+                        self.__set_coordinate_and_angle(-deltaY, deltaX)
             else:
                 match context.get_maps_controller().get_trajectory()[self.pos // speed]:  # сравнивает текущую траекторию
                     case 0:
-                        self.rect[0] += deltaX
-                        self.rect[1] -= deltaY
-                        self.pos += 1
-                        self.__angle = 180 - self.__angle
+                        self.__set_coordinate_and_angle(deltaX, -deltaY)
                     case 1:
-                        self.rect[0] += deltaY
-                        self.rect[1] += deltaX
-                        self.pos += 1
-                        self.__angle = 270 - self.__angle
+                        self.__set_coordinate_and_angle(deltaY, deltaX)
                     case 2:
-                        self.rect[0] -= deltaX
-                        self.rect[1] += deltaY
-                        self.pos += 1
+                        self.__set_coordinate_and_angle(-deltaX, deltaY)
                     case 3:
-                        self.rect[0] -= deltaY
-                        self.rect[1] -= deltaX
-                        self.pos += 1
+                        self.__set_coordinate_and_angle(-deltaY, -deltaX)
             # self.test_array.append([self.rect[0], self.rect[1]])
         self.__legs_image = pygame.transform.rotate(self.__animation[time % 30], self.__angle)
         self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)

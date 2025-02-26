@@ -84,4 +84,4 @@ class ConfigGameplay:
         return self.__is_fail
 
     def set_is_fail(self, new_value):
-        self.__is_fail = self.__is_fail + new_value
+        self.__is_fail = new_value
