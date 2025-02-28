@@ -20,13 +20,15 @@ class Information:
 
     def __draw_characteristic(self, height, context):  # рисует характеристики врага
         if context.get_enemies_controller().get_current_enemy() is not None:
-            health_line = 'health ' + str(context.get_enemies_controller().get_current_enemy().health)
-            context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
-            Function.draw_text_from_center(health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15), context)
+            characteristic_array = context.get_enemies_controller().get_current_enemy().get_characteristic()
+            coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_array), (context.get_config_parameter_scene().get_width() - height * 0.39, height * 0.01))
+            for i in range(len(characteristic_array)):
+                Function.draw_text_from_center(characteristic_array[i], int(height * 0.06), coordinate_array[i], context)
+            # context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
 
     def draw(self, height, width, context):  # рисует панель информации
         context.get_config_parameter_scene().get_screen().blit(self.__image, self.__coordinate)
-        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.2))
+        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.4))
         self.__draw_characteristic(height, context)
         self.draw_bugs(height, width, context)
 
@@ -86,8 +88,8 @@ class Information:
                     context.get_config_modifier().get_new_value_influence(None)
 
         if len(self.__current_modifier) != 0:
-            coordinate_array = get_coordinate_list(height * 0.38, height * 0.58, len(self.__current_modifier), (width - height * 0.39, height * 0.41))
+            coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(self.__current_modifier), (width - height * 0.39, height * 0.61))
             for i in range(len(self.__current_modifier)):
-                Function.draw_text_from_center(self.__current_modifier[i], 50, coordinate_array[i], context)
+                Function.draw_text_from_center(self.__current_modifier[i], int(height * 0.06), coordinate_array[i], context)
 
 

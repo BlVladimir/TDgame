@@ -153,5 +153,14 @@ class Enemy:
     def get_additional_money(self):
         return self.__additional_original_price + self.__additional_tower_price
 
+    def get_characteristic(self):
+        characteristic_array = ['health ' + str(self.health), 'price ' + str(2 + self.__additional_original_price)]
+        if self.__armor != 0:
+            characteristic_array.append('armor ' + str(self.__armor))
+        if self.__treatment > 0:
+            characteristic_array.append('healing ' + str(self.__treatment))
+        if self.__treatment < 0:
+            characteristic_array.append('poisoning ' + str(self.__treatment))
+        return characteristic_array
 
 
