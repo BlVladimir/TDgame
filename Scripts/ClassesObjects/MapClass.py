@@ -22,9 +22,9 @@ class Map:
                                   pygame.image.load("images/tile/commonBuilding.png"),
                                   pygame.image.load("images/tile/damageUp.png"),  # 2 - урон
                                   pygame.image.load("images/tile/radiusUp.png"),  # 3 - радиус
-                                  pygame.image.load("images/tile/antyShield.png"),
-                                  pygame.image.load("images/tile/poisonUp.png"),
-                                  pygame.image.load("images/tile/moneyUp.png"),
+                                  pygame.image.load("images/tile/antyShield.png"),  # 4 - бронебойный
+                                  pygame.image.load("images/tile/poisonUp.png"),  # 5 - ядовитая
+                                  pygame.image.load("images/tile/moneyUp.png"),  # 6 - больше денег
                                   pygame.image.load("images/tile/base.png")]  # массив картинок тайлов
         files_animation = listdir('images/tile/destructionBaseAnimation')
         self.__animation_destruction = []
@@ -43,7 +43,7 @@ class Map:
         for i in range(len(self.road_array[1])):
             if self.road_array[1][i] == 0:
                 self.road_array[0][i] = get_coordinates(self.road_array[0][i], len(tile_array), len(tile_array), 0, self.gaps, width_screen, height_screen, self.gaps, self.tile_scale)
-            elif road_array[1][i] == 1:
+            elif road_array[1][i] == 3:
                 self.road_array[0][i] = get_coordinates(self.road_array[0][i], len(tile_array), len(tile_array), self.gaps, 0, width_screen, height_screen, self.gaps, self.tile_scale)
             else:
                 self.road_array[0][i] = get_coordinates(self.road_array[0][i], len(tile_array), len(tile_array), 0, 0, width_screen,
@@ -81,16 +81,16 @@ class Map:
                         context.get_config_parameter_scene().get_screen().blit(self.__animation_destruction[14], self.coordinates[p])
                     p += 1
         for i in range(len(self.road_array[0])):
-            context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * 90), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
+            context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.road_array[1][i] * (-90)), self.road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
 
     def get_started_position(self, position_enemy_on_tile):
         rectEnemy = [0, 0]
-        if self.road_array[1][len(self.road_array[1]) - 1] == 0:
-            rectEnemy[0], rectEnemy[1] = self.road_array[0][len(self.road_array[0]) - 1][0], self.road_array[0][len(self.road_array[0]) - 1][1] + self.gaps
-        elif self.road_array[1][len(self.road_array[1]) - 1] == 1:
-            rectEnemy[0], rectEnemy[1] = self.road_array[0][len(self.road_array[0]) - 1][0] + self.gaps, self.road_array[0][len(self.road_array[0]) - 1][1]
+        if self.road_array[1][0] == 0:
+            rectEnemy[0], rectEnemy[1] = self.road_array[0][0][0], self.road_array[0][0][1] + self.gaps
+        elif self.road_array[1][0] == 1:
+            rectEnemy[0], rectEnemy[1] = self.road_array[0][0][0] + self.gaps, self.road_array[0][0][1]
         else:
-            rectEnemy[0], rectEnemy[1] = self.road_array[0][len(self.road_array[0]) - 1][0], self.road_array[0][len(self.road_array[0]) - 1][1]
+            rectEnemy[0], rectEnemy[1] = self.road_array[0][0][0], self.road_array[0][0][1]
         rectEnemy[0], rectEnemy[1] = rectEnemy[0] + self.tile_scale / 4, rectEnemy[1] + self.tile_scale / 4
         if position_enemy_on_tile == 1:
             rectEnemy[0], rectEnemy[1] = rectEnemy[0] - self.tile_scale / 4, rectEnemy[1] - self.tile_scale / 4

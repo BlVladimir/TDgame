@@ -3,7 +3,7 @@ from Scripts.MainScripts import Level, Function, MainManu
 def level_controller(shop, event, context):
     match context.get_config_parameter_scene().get_scene():
         case 'mainMenu':
-            MainManu.handle_event(event, context)  # переменная, равняющаяся True только если кнопка перехода ан 1 уровень нажата
+            MainManu.handle_event(event, context)
             if context.get_config_gameplay().get_waves():  # обнуляет массив врагов и их количество на каждой волне в меню
                 context.get_config_gameplay().set_waves([])
                 context.get_enemies_controller().clear_enemies_array()
