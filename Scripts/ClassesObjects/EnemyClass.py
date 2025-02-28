@@ -8,7 +8,7 @@ from Scripts.MainScripts import Function
 
 class Enemy:
     # инициализация класса
-    def __init__(self, image, rect, scale, health, additional_price, position_on_tile, armor =0, treatment = 0,pos = 0):
+    def __init__(self, image, rect, scale, angle, health, additional_price, position_on_tile, armor = 0, treatment = 0,pos = 0):
         self.__image = pygame.image.load(image)
         self.scale = scale
         self.__image = pygame.transform.scale(self.__image, (self.scale, self.scale))
@@ -24,14 +24,14 @@ class Enemy:
         self.__poison_dict = []
         self.__current_damage_poison = 0
         self.__position_on_tile = position_on_tile
-        self.__angle = 0
+        self.__angle = angle
         self.__animation = []
         self.__x = -1
         files_animation = os.listdir('images/enemy/animationWalking')
         for i in files_animation:
             self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/' + i), (self.scale, self.scale)))
         self.__rotated_image = self.__image
-        self.__legs_image = self.__animation[0]
+        self.__current_legs_image = self.__animation[0]
 
 
     def get_center(self):  # получает центр врага
@@ -39,11 +39,12 @@ class Enemy:
         return self.center
 
     def draw(self, context):  # функция, рисующая врага
+        self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
         context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.rect)
-        context.get_config_parameter_scene().get_screen().blit(self.__legs_image, self.rect)
+        context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.rect)
         if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             scale = int(self.scale * 0.6)
-            Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
+            Function.draw_text_from_center(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
     def __set_coordinate_and_angle(self, deltaX, deltaY):
         self.rect[0] += deltaX
@@ -104,9 +105,7 @@ class Enemy:
                         self.__set_coordinate_and_angle(-deltaX, deltaY)
                     case 3:
                         self.__set_coordinate_and_angle(-deltaY, -deltaX)
-            # self.test_array.append([self.rect[0], self.rect[1]])
-        self.__legs_image = pygame.transform.rotate(self.__animation[time % 30], self.__angle)
-        self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
+        self.__current_legs_image = self.__animation[time % 30]
         if self.pos // speed == len(context.get_maps_controller().get_trajectory()):
             context.get_config_gameplay().set_is_fail(True)
 
@@ -155,13 +154,4 @@ class Enemy:
         return self.__additional_original_price + self.__additional_tower_price
 
 
-def create_waves(number_of_waves, lvl, context):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне
-    waves_array = [[]]
-    for i in range(number_of_waves):
-        waves_array[i].append(randrange(1, 4))
-        waves_array[i].append(randrange(0, lvl + 1))
-        if i != number_of_waves - 1:
-            waves_array.append([])
-    waves_array[0][1] = 0
-    context.get_config_gameplay().set_waves(waves_array)
 

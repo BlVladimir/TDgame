@@ -87,7 +87,7 @@ class Map:
         rectEnemy = [0, 0]
         if self.road_array[1][0] == 0:
             rectEnemy[0], rectEnemy[1] = self.road_array[0][0][0], self.road_array[0][0][1] + self.gaps
-        elif self.road_array[1][0] == 1:
+        elif self.road_array[1][0] == 3:
             rectEnemy[0], rectEnemy[1] = self.road_array[0][0][0] + self.gaps, self.road_array[0][0][1]
         else:
             rectEnemy[0], rectEnemy[1] = self.road_array[0][0][0], self.road_array[0][0][1]
@@ -101,5 +101,9 @@ class Map:
         elif position_enemy_on_tile == 4:
             rectEnemy[0], rectEnemy[1] = rectEnemy[0] - self.tile_scale / 4, rectEnemy[1] + self.tile_scale / 4
         return rectEnemy
+
+    def get_started_angel(self):
+        return (-90) * self.road_array[1][0]
+
 
 

@@ -1,5 +1,8 @@
+from random import randrange
+
 import pygame
 from Scripts.ClassesObjects.MapClass import Map
+
 
 class MapsController:
     def __init__(self, width, height):
@@ -74,6 +77,26 @@ class MapsController:
 
     def get_trajectory(self):
         return self.__trajectory
+
+    def get_started_angle(self):
+        return self.__map_array[int(self.__level) - 1].get_started_angel()
+
+    def __get_level_of_enemies(self):
+        if int(self.__level) <= 3:
+            return int(self.__level) + 1
+        else:
+            return 4
+
+    def create_waves(self, number_of_waves, context):  # Функция создает массив заданной длины, состоящий из 1, 2 и 3. Нужен для определения количества врагов на каждой волне
+        waves_array = [[]]
+        level_of_enemies = self.__get_level_of_enemies()
+        for i in range(number_of_waves):
+            waves_array[i].append(randrange(1, 4))
+            waves_array[i].append(randrange(0, level_of_enemies))
+            if i != number_of_waves - 1:
+                waves_array.append([])
+        waves_array[0][1] = 0
+        context.get_config_gameplay().set_waves(waves_array)
 
     def definition_current_tile(self, event, context):
         mouse_pose = pygame.mouse.get_pos()  # получает позицию мышки

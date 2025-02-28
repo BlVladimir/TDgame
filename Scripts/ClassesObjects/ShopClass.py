@@ -42,12 +42,12 @@ class Shop:
     def __draw_store(self, context): #  проходится по массиву возможных покупок и рисует магазин
         context.get_config_parameter_scene().get_screen().blit(self.image_shop, (0, 0))
         for i in self.products:
-            Function.draw_text('x' + str(i.cost), 100, (i.coordinate[0] + self.scale_products * 1.5, i.coordinate[1] + self.scale_products * 0.5), context)
+            Function.draw_text_from_center('x' + str(i.cost), 100, (i.coordinate[0] + self.scale_products * 1.5, i.coordinate[1] + self.scale_products * 0.5), context)
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(self.money_picture, (self.scale_products * 0.9, self.scale_products * 0.9)), (i.coordinate[0] + self.scale_products * 2.1, i.coordinate[1] + self.scale_products * 0.1))
 
     def __draw_tower_parameter(self, parameter_image, number_this_parameter, value, height, context, additional_text =''):  # рисует параметры башни в магазине
         context.get_config_parameter_scene().get_screen().blit(parameter_image, (height * 0.05, height * 0.16 + 170 + number_this_parameter * 120))
-        Function.draw_text(str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120), context)
+        Function.draw_text_from_center(str(value) + additional_text, 100, (height * 0.25, height * 0.16 + 220 + number_this_parameter * 120), context)
 
 
     def build_tower(self, event, context):  # проверяет, нажата ли кнопка продуктов и покупает башню

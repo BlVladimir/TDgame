@@ -22,7 +22,7 @@ class Information:
         if context.get_enemies_controller().get_current_enemy() is not None:
             health_line = 'health ' + str(context.get_enemies_controller().get_current_enemy().health)
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
-            Function.draw_text(health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15), context)
+            Function.draw_text_from_center(health_line, int(height * 0.08), (self.__coordinate[0] + height * 0.4 * 0.7, height * 0.15), context)
 
     def draw(self, height, width, context):  # рисует панель информации
         context.get_config_parameter_scene().get_screen().blit(self.__image, self.__coordinate)
@@ -88,6 +88,6 @@ class Information:
         if len(self.__current_modifier) != 0:
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.58, len(self.__current_modifier), (width - height * 0.39, height * 0.41))
             for i in range(len(self.__current_modifier)):
-                Function.draw_text(self.__current_modifier[i], 50, coordinate_array[i], context)
+                Function.draw_text_from_center(self.__current_modifier[i], 50, coordinate_array[i], context)
 
 
