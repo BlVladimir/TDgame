@@ -7,19 +7,14 @@ import random
 pygame.font.init()
 
 
-def draw_text_from_center(words, size, coordinate_center, context): #  рисует текст
+def draw_text(words, size, coordinate, context, t = 0): #  рисует текст
     f = pygame.font.Font(None, size)
     text = f.render(words, False, (255, 255, 255))
-    rect_text = text.get_rect(center = coordinate_center)
-
+    if t == 0:
+        rect_text = text.get_rect(center = coordinate)
+    else:
+        rect_text = coordinate
     context.get_config_parameter_scene().get_screen().blit(text, rect_text)
-
-def draw_text_from_left_top(words, size, left_top, context): #  рисует текст
-    f = pygame.font.Font(None, size)
-    text = f.render(words, False, (255, 255, 255))
-
-    context.get_config_parameter_scene().get_screen().blit(text, left_top)
-
 
 def bugs(context): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)

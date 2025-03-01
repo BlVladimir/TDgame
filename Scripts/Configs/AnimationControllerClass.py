@@ -1,6 +1,6 @@
 import os
 import pygame
-from Scripts.MainScripts.Function import draw_text_from_left_top
+from Scripts.MainScripts.Function import draw_text
 
 class AnimationController:
     def __init__(self, config_parameter_screen):
@@ -40,9 +40,9 @@ class AnimationController:
         elif 60 <= self.__time_game_over < 180:
             context.get_config_parameter_scene().get_screen().blit(self.__animation_game_over[14], (0, 0))
             if (self.__time_game_over // 20) % 2 == 0:
-                draw_text_from_left_top('game over', 70, (30, 30), context)
+                draw_text('game over', 70, (30, 30), context, 1)
             else:
-                draw_text_from_left_top('game over_', 70, (30, 30), context)
+                draw_text('game over_', 70, (30, 30), context, 1)
             self.__time_game_over += 1
         else:
             self.__time_game_over = 0

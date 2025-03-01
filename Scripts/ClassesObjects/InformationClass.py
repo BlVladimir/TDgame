@@ -27,7 +27,7 @@ class Information:
                                            'poison': pygame.image.load('images/UI/enemyСharacteristic/poison.png')}
         self.__current_modifier = []
         for i in self.__image_characteristic_dict.keys():
-            self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.06, height * 0.06))
+            self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.05, height * 0.05))
 
     def __draw_characteristic(self, height, context):  # рисует характеристики врага
         if context.get_enemies_controller().get_current_enemy() is not None:
@@ -35,8 +35,8 @@ class Information:
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_dict), (context.get_config_parameter_scene().get_width() - height * 0.39, height * 0.01), 1)
             i = 0
             for j in characteristic_dict.keys():
-                context.get_config_parameter_scene().get_screen().blit(self.__image_characteristic_dict[j], coordinate_array[i])
-                Function.draw_text_from_left_top(characteristic_dict[j], int(context.get_config_parameter_scene().get_height() * 0.06), (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.07, coordinate_array[i][1]), context)
+                context.get_config_parameter_scene().get_screen().blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.08, coordinate_array[i][1]))
+                Function.draw_text(characteristic_dict[j], int(context.get_config_parameter_scene().get_height() * 0.06), (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.15, coordinate_array[i][1]), context, 1)
                 i += 1
 
 
@@ -104,6 +104,6 @@ class Information:
         if len(self.__current_modifier) != 0:
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(self.__current_modifier), (width - height * 0.39, height * 0.61))
             for i in range(len(self.__current_modifier)):
-                Function.draw_text_from_center(self.__current_modifier[i], int(height * 0.06), coordinate_array[i], context)
+                Function.draw_text(self.__current_modifier[i], int(height * 0.06), coordinate_array[i], context)
 
 
