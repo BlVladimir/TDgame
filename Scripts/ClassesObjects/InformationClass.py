@@ -2,12 +2,17 @@ import pygame
 from Scripts.MainScripts import Function
 
 
-def get_coordinate_list(interval_x, interval_y, value_lines, coordinate):  # получает список координат из интервала x и y и количества строк
+def get_coordinate_list(interval_x, interval_y, value_lines, coordinate, t = 0):  # получает список координат из интервала x и y и количества строк
     height_one_line = interval_y / value_lines
     coordinate_list = []
-    for i in range(value_lines):
-        coordinate_list.append((coordinate[0] + interval_x/2, int(height_one_line * (i + 0.5) + coordinate[1])))
+    if t == 0:  # по умолчанию центральная координата, иначе координата верхнего левого угла
+        for i in range(value_lines):
+            coordinate_list.append((coordinate[0] + interval_x/2, int(height_one_line * (i + 0.5) + coordinate[1])))
+    else:
+        for i in range(value_lines):
+            coordinate_list.append((coordinate[0], int(height_one_line * (i + 0.5) + coordinate[1])))
     return coordinate_list
+
 
 
 class Information:
@@ -15,16 +20,25 @@ class Information:
         self.__coordinate = (width - 0.4 * height, 0)
         self.__image = pygame.transform.scale(pygame.image.load('images/UI/shopBackground.png'), (height * 0.4, height))
         self.__modifier_array = ('free purchase', 'price up', 'health', 'money', 'damage')
+        self.__image_characteristic_dict = {'health': pygame.image.load('images/UI/enemyСharacteristic/health.png'),
+                                           'price': pygame.image.load('images/UI/money.png'),
+                                           'healing': pygame.image.load('images/UI/enemyСharacteristic/healing.png'),
+                                           'armor': pygame.image.load('images/UI/enemyСharacteristic/shield.png'),
+                                           'poison': pygame.image.load('images/UI/enemyСharacteristic/poison.png')}
         self.__current_modifier = []
-
+        for i in self.__image_characteristic_dict.keys():
+            self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.06, height * 0.06))
 
     def __draw_characteristic(self, height, context):  # рисует характеристики врага
         if context.get_enemies_controller().get_current_enemy() is not None:
-            characteristic_array = context.get_enemies_controller().get_current_enemy().get_characteristic()
-            coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_array), (context.get_config_parameter_scene().get_width() - height * 0.39, height * 0.01))
-            for i in range(len(characteristic_array)):
-                Function.draw_text_from_center(characteristic_array[i], int(height * 0.06), coordinate_array[i], context)
-            # context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/health.png'), (int(height * 0.08), int(height * 0.08))), (self.__coordinate[0] + height * 0.4 * 0.1, height * 0.04))
+            characteristic_dict = context.get_enemies_controller().get_current_enemy().get_characteristic()
+            coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_dict), (context.get_config_parameter_scene().get_width() - height * 0.39, height * 0.01), 1)
+            i = 0
+            for j in characteristic_dict.keys():
+                context.get_config_parameter_scene().get_screen().blit(self.__image_characteristic_dict[j], coordinate_array[i])
+                Function.draw_text_from_left_top(characteristic_dict[j], int(context.get_config_parameter_scene().get_height() * 0.06), (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.07, coordinate_array[i][1]), context)
+                i += 1
+
 
     def draw(self, height, width, context):  # рисует панель информации
         context.get_config_parameter_scene().get_screen().blit(self.__image, self.__coordinate)
