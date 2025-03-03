@@ -20,7 +20,7 @@ class AnimationController:
         if self.__is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
             self.__time_move += 1
             context.get_towers_controller().turn_off_or_on_all_towers(True)
-            context.get_enemies_controller().move_all_enemies(100, self.__time_move, context, 120)
+            context.get_enemies_controller().move_all_enemies(self.__time_move, context, 120)
             if self.__time_move % 120 == 0:
                 context.get_enemies_controller().stop_walk()
                 self.__time_move = 0
@@ -31,7 +31,7 @@ class AnimationController:
                     context.get_enemies_controller().create_enemy(context)
                     context.get_config_gameplay().set_current_wave(1)
 
-    def fail_animation(self, context):
+    def fail_animation(self, context):  # Анимация при пройгрыше. Кнопка exit работает, но ее не видно
         if self.__time_game_over < 30:
             self.__time_game_over += 1
         elif 30 <= self.__time_game_over < 60:

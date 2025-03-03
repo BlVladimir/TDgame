@@ -1,6 +1,7 @@
 import pygame  # импорт библиотеки pygame
 
 from os import listdir
+from math import ceil
 
 def get_coordinates(coordinates, tileValueX, tileValueY, xBais, yBais, widthScreen, heightScreen, gaps, tileScale):
     coordinates = (
@@ -16,8 +17,8 @@ class Map:
     def __init__(self, tile_array, road_array, width_screen, height_screen, tile_scale):
         self.tile_array = tile_array  # Двумерный массив, каждый массив которого строчка. Состоит из цифр, каждой из которых соответствует определенный тип тайла
         self.road_array = road_array  # массив кортежей, с координатами дорог
-        self.gaps = 0.2 * tile_scale  # размер промежутков
-        self.tile_scale = tile_scale  # размер тайлов
+        self.gaps = ceil(0.2 * tile_scale)  # размер промежутков
+        self.tile_scale = ceil(tile_scale)   # размер тайлов
         self.__image_tile_mass = [pygame.image.load("images/tile/forEnemies.png"),
                                   pygame.image.load("images/tile/commonBuilding.png"),
                                   pygame.image.load("images/tile/damageUp.png"),  # 2 - урон
@@ -104,6 +105,9 @@ class Map:
 
     def get_started_angel(self):
         return (-90) * self.road_array[1][0]
+
+    def get_tile_scale(self):
+        return self.tile_scale
 
 
 

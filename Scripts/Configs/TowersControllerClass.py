@@ -15,6 +15,9 @@ class TowerController:
             self.__animation_upgrade[i].set_alpha(150)
         self.__current_tower = None
 
+    def update_scale_animation(self, context):
+        for i in range(len(self.__animation_upgrade)):
+            self.__animation_upgrade[i] = pygame.transform.scale(self.__animation_upgrade[i], (context.get_maps_controller().get_tile_scale(), context.get_maps_controller().get_tile_scale()))
 
     def get_current_button_update(self):
         if self.__button_update_array:
@@ -33,7 +36,7 @@ class TowerController:
             self.__towers_object_array[i].is_used = state
 
     def get_current_tower(self):
-        if self.__current_tower is not None:
+        if self.__current_tower is not None and self.__towers_object_array:
             return self.__towers_object_array[self.__current_tower]
 
     def define_current_tower(self, context):  # определяет текущую башню по индексу

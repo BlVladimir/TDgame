@@ -1,8 +1,8 @@
 from Scripts.MainScripts import ButtonWorks, ShopWorks, LVL
 import pygame
 
-def level(shop, event, context):
-    ButtonWorks.is_started(context)
+def level(shop, event, highlighting, context):
+    ButtonWorks.is_started(context, highlighting)
     context.get_towers_controller().define_current_tower(context)
     context.get_enemies_controller().define_current_enemy()
     context.get_maps_controller().definition_current_tile(event, context)  # определяет текущий тайл

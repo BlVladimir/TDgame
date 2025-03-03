@@ -1,5 +1,4 @@
-from random import randrange
-from math import sqrt, atan, pi
+import math
 
 import pygame  # импорт библиотеки pygame
 import os
@@ -44,15 +43,17 @@ class Enemy:
         context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.rect)
         if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             scale = int(self.scale * 0.6)
-            Function.draw_text(str(self.health), scale, (self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
+            delta = abs((math.cos(self.__angle * math.pi / 180) + math.sin(self.__angle * math.pi / 180)) * self.scale / 2)
+            Function.draw_text(str(self.health), scale, (self.rect[0] + delta, self.rect[1] + delta), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
     def __set_coordinate_and_angle(self, deltaX, deltaY):
         self.rect[0] += deltaX
         self.rect[1] += deltaY
-        self.__angle = atan(deltaX/deltaY) * 180 / pi
+        self.__angle = math.atan(deltaX/deltaY) * 180 / math.pi
         self.pos += 1
 
-    def move(self, tile_scale, time, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
+    def move(self, time, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
+        tile_scale = context.get_maps_controller().get_tile_scale()
         if self.pos // speed != len(context.get_maps_controller().get_trajectory()) - 1:
             difference_position = context.get_maps_controller().get_trajectory()[self.pos // speed + 1] - context.get_maps_controller().get_trajectory()[self.pos // speed]
         else:
@@ -81,7 +82,7 @@ class Enemy:
                 y = ((1 + n) * x - 1)**2 - (n * x - 1)** 2
                 deltaX = x * (1.2 * tile_scale) / 8
             else:
-                y = - sqrt(9 - (n * x - 6) ** 2) + sqrt(9 - ((n + 1) * x - 6) ** 2)
+                y = - math.sqrt(9 - (n * x - 6) ** 2) + math.sqrt(9 - ((n + 1) * x - 6) ** 2)
                 deltaX = (-x) * (1.2 * tile_scale) / 8
             deltaY = y * (1.2 * tile_scale) / 8
             self.__x += x

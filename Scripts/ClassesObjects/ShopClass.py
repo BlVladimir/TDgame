@@ -8,7 +8,7 @@ class Shop:
 
     def __init__(self, height):
         self.money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (height * 0.1, height * 0.1))
-        self.image_shop = pygame.transform.scale(pygame.image.load('images/UI/shopBackground.png'), (1000 * 0.4, 1000))
+        self.image_shop = pygame.transform.scale(pygame.image.load('images/UI/shopBackground.png'), (height * 0.4, height))
         self.tower_characteristic_image = (pygame.transform.scale(pygame.image.load('images/UI/up/damageUpUp.png'), (100, 100)),
                                            pygame.transform.scale(pygame.image.load('images/UI/up/radiusUpUp.png'), (100, 100)))
         self.products = [Product("images/tower/commonFoundation.png", 3, height * 0.1, (20, 150), 2, 170, (4, 6), False, 0, "images/tower/commonGun.png"),  # coordinate = (20, 150 + i * 120)

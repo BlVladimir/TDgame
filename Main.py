@@ -26,19 +26,19 @@ def __change_using_additional_parameter(additionalParameters):
         additionalParameters = True
     return additionalParameters
 
-config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen(1500, 1000)
+config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen()
 config_constant_object = ConfigConstantObjectClass.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), __action_exit, __action_scene, __change_using_additional_parameter)
 config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 
 maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get_width(), config_parameter_screen.get_height())
-towers_controller = TowersControllerClass.TowerController(config_parameter_screen.get_tile_scale())
+towers_controller = TowersControllerClass.TowerController(maps_controller.get_tile_scale())
 enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
 
 context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller)
 shop = ShopClass.Shop(config_parameter_screen.get_height())
-highlighting = DefinitionCurrentTile.Highlighting(config_parameter_screen.get_height())
+highlighting = DefinitionCurrentTile.Highlighting(context)
 
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
@@ -46,7 +46,7 @@ while True:  # основной цикл
             pygame.quit()
             sys.exit()
         context.get_config_constant_object().get_button_exit().handle_event(event)
-        LevelController.level_controller(shop, event, context)
+        LevelController.level_controller(shop, event, highlighting, context)
     context.get_animation_controller().move_enemies(context)
     DrawScene.draw_scene(highlighting, shop, context)
     if context.get_config_gameplay().get_is_fail():

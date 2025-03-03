@@ -12,8 +12,10 @@ def button_works(event, context):
     else:
         context.get_config_gameplay().set_use_additional_parameters(False)
 
-def is_started(context):
+def is_started(context, highlighting):
     if context.get_config_gameplay().get_is_started():  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
+        context.get_towers_controller().update_scale_animation(context)
+        highlighting.update_scale(context)
         context.get_maps_controller().update_trajectory_array()
         context.get_maps_controller().create_waves(100, context)  # создает волны
         context.get_config_gameplay().set_current_wave(1 - context.get_config_gameplay().get_current_wave())  # текущая волна

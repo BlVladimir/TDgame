@@ -6,8 +6,10 @@ from Scripts.ClassesObjects.MapClass import Map
 
 class MapsController:
     def __init__(self, width, height):
-        self.__tile_scale = height * 0.1
-        self.__gasps_scale = self.__tile_scale * 0.2
+        if (width - 0.8 * height) / 1.2 <= height / 1.2:
+            self.__tile_scale = (width - 0.8 * height) / 1.2
+        else:
+            self.__tile_scale = height / 1.2
         self.__trajectory = ()
         self.__level = 0
         self.__map_array = [Map([[0, 8, 1, 1, 1],
@@ -15,20 +17,20 @@ class MapsController:
                                [2, 0, 3, 0, 3],
                                [0, 0, 0, 0, 2],
                                [1, 0, 1, 0, 1]],
-                              [[(1, 4), (1, 3), (2, 3), (3, 3), (3, 2), (3, 1), (2, 1), (1, 1)], [0, 1, 1, 0, 0, 3, 3, 0]], width, height, self.__tile_scale),
+                              [[(1, 4), (1, 3), (2, 3), (3, 3), (3, 2), (3, 1), (2, 1), (1, 1)], [0, 1, 1, 0, 0, 3, 3, 0]], width, height, self.__tile_scale / 6),
                           Map([[8, 0, 0, 0, 1],
                                [1, 2, 1, 0, 1],
                                [0, 0, 0, 0, 0],
                                [0, 1, 0, 4, 0],
                                [0, 1, 3, 0, 0]],
                               [[(0, 4), (0, 3), (0, 2), (1, 2), (2, 2), (3, 2), (3, 1), (3, 0), (2, 0), (1, 0)],
-                               [0, 0, 1, 1, 1, 0, 0, 3, 3, 3]], width, height, self.__tile_scale),
+                               [0, 0, 1, 1, 1, 0, 0, 3, 3, 3]], width, height, self.__tile_scale / 6),
                           Map([[0, 0, 0, 0, 0, 8, 0],
                                [0, 0, 1, 4, 0, 0, 1],
                                [0, 5, 2, 0, 0, 1, 0],
                                [0, 0, 1, 0, 0, 3, 0],
                                [1, 0, 0, 0, 1, 0, 0]],
-                              [[(0, 3), (1, 3), (1, 4), (2, 4), (3, 4), (3, 3), (3, 2), (4, 2), (4, 1), (5, 1)], [1, 2, 1, 1, 0, 0, 1, 0, 1, 0]], width, height, self.__tile_scale),
+                              [[(0, 3), (1, 3), (1, 4), (2, 4), (3, 4), (3, 3), (3, 2), (4, 2), (4, 1), (5, 1)], [1, 2, 1, 1, 0, 0, 1, 0, 1, 0]], width, height, self.__tile_scale / 8),
                           Map([[0, 1, 0, 0, 0, 0, 0],
                                [1, 0, 0, 1, 1, 3, 0],
                                [1, 0, 1, 0, 0, 0, 0],
@@ -37,7 +39,7 @@ class MapsController:
                                [0, 0, 0, 0, 0, 1, 0],
                                [1, 0, 0, 2, 0, 0, 0]],
                               [[(2, 0), (2, 1), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (2, 5), (3, 5), (4, 5), (4, 4), (4, 3), (4, 2), (3, 2)], [2, 3, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 3, 2]], width,
-                              height, self.__tile_scale),
+                              height, self.__tile_scale / 8),
                           Map([[0, 0, 0, 0, 1, 0, 0],
                                [1, 1, 0, 0, 0, 0, 0],
                                [0, 0, 0, 0, 0, 0, 5],
@@ -46,7 +48,7 @@ class MapsController:
                                [0, 8, 0, 3, 4, 0, 0],
                                [0, 0, 0, 0, 0, 1, 0]],
                               [[(6, 5), (5, 5), (5, 4), (5, 3), (5, 2), (5, 1), (4, 1), (3, 1), (3, 2), (2, 2), (1, 2), (1, 3), (1, 4)], [3, 0, 0, 0, 0, 3, 3, 2, 3, 3, 2, 2, 2]], width, height,
-                              self.__tile_scale),
+                              self.__tile_scale / 8),
                           Map([[0, 0, 1, 0, 0, 1, 1],
                                [1, 0, 0, 0, 0, 0, 1],
                                [0, 8, 1, 0, 0, 0, 0],
@@ -55,7 +57,7 @@ class MapsController:
                                [1, 0, 0, 0, 0, 0, 1],
                                [0, 1, 0, 0, 6, 0, 0]],
                               [[(2, 6), (2, 5), (3, 5), (4, 5), (5, 5), (5, 4), (5, 3), (5, 2), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1)], [0, 1, 1, 1, 0, 0, 0, 0, 3, 3, 3, 3, 2]], width, height,
-                              self.__tile_scale)]
+                              self.__tile_scale / 8)]
 
     def change_level(self, new_value):
         self.__level = new_value
@@ -64,7 +66,7 @@ class MapsController:
         self.__map_array[int(self.__level) - 1].draw(context)
 
     def get_tile_scale(self):
-        return self.__tile_scale
+        return self.__map_array[int(self.__level) - 1].get_tile_scale()
 
     def get_build_array(self):
         return self.__map_array[int(self.__level) - 1].build_array
@@ -102,7 +104,7 @@ class MapsController:
         mouse_pose = pygame.mouse.get_pos()  # получает позицию мышки
         context.get_config_gameplay().set_highlight_tile(None)
         if context.get_config_parameter_scene().get_width() - context.get_config_parameter_scene().get_height() * 0.4 > mouse_pose[0] > context.get_config_parameter_scene().get_height() * 0.4:
-            tile_scale = context.get_config_parameter_scene().get_tile_scale()
+            tile_scale = self.__map_array[int(self.__level) - 1].get_tile_scale()
             build_array = self.get_build_array()
             for i in range(
                     len(build_array)):  # Проходит по координатам всех тайлов, и если они совпадут с координатой мышки, то этот тайл сохранится как текущий тайл. Если мышка была нажата, та как действующий тайл
