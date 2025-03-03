@@ -2,6 +2,8 @@ import pygame  # импорт библиотеки pygame
 import math
 import os
 
+from pygame.transform import scale
+
 
 class Tower:
     # инициализация класса
@@ -19,7 +21,6 @@ class Tower:
         self.level = 1
         self.improve_cost_array = improve_cost_array
         self.__additional_money = additional_money
-        print(image_gun)
         if image_gun is not None:
             self.image_gun = pygame.image.load(image_gun)
             self.image_gun = pygame.transform.scale(self.image_gun, (scale, scale))
@@ -29,8 +30,8 @@ class Tower:
             self.image_gun = None
             self.__rotated_image = self.image_gun
         if radius is not None:
-            self.radius = radius
-            self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), (radius * 2, radius * 2))
+            self.radius = scale / 2 + radius * scale * 1.2
+            self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), ( self.radius * 2,  self.radius * 2))
         self.__is_charged = (pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/charged.png'), (self.scale / 6, self.scale / 6)),
                              pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/notCharged.png'), (self.scale / 6, self.scale / 6)))
         self.level_image_tuple = (pygame.transform.scale(pygame.image.load('images/upgrade/1lvl.png'), (self.scale / 4, self.scale / 4)),
@@ -87,6 +88,16 @@ class Tower:
 
     def get_additional_money(self):
         return self.__additional_money
+
+    def get_characteristic(self):
+        characteristic_dict = {'damage': 'damage ' + str(self.damage), 'radius': 'radius ' + str(round((self.radius - self.scale/2) / (self.scale * 1.2)))}
+        if self.armor_piercing:
+            characteristic_dict['armor'] = 'armor piercing'
+        if self.poison > 0:
+            characteristic_dict['poison'] = 'venom ' + str(self.poison)
+        if self.__additional_money > 0:
+            characteristic_dict['money'] = 'additional_money ' + str(self.__additional_money)
+        return characteristic_dict
 
 
 

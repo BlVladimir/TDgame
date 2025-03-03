@@ -21,6 +21,6 @@ def is_started(context, highlighting):
         context.get_config_gameplay().set_current_wave(1 - context.get_config_gameplay().get_current_wave())  # текущая волна
         context.get_enemies_controller().create_enemy(context)  # создает врагов на 1 клетке
         context.get_config_gameplay().set_is_started(False)  # переменная отвечает за то, началась ли игра или нет
-        context.get_config_gameplay().set_money(-context.get_config_gameplay().get_money() + 1000)
+        context.get_config_gameplay().set_money(-context.get_config_gameplay().get_money() + 3)
         for i in range(len(context.get_maps_controller().get_build_array())):  # обнуляет все тайлы
             context.get_maps_controller().get_build_array()[i]['is_filled'] = False

@@ -155,13 +155,13 @@ class Enemy:
         return self.__additional_original_price + self.__additional_tower_price
 
     def get_characteristic(self):
-        characteristic_array = {'health': 'health ' + str(self.health), 'price': 'price ' + str(2 + self.__additional_original_price)}
+        characteristic_dict = {'health': 'health ' + str(self.health), 'price': 'price ' + str(2 + self.__additional_original_price)}
         if self.__armor != 0:
-            characteristic_array['armor'] = 'armor ' + str(self.__armor)
+            characteristic_dict['armor'] = 'armor ' + str(self.__armor)
         if self.__treatment > 0:
-            characteristic_array['healing'] = 'healing ' + str(self.__treatment)
+            characteristic_dict['healing'] = 'healing ' + str(self.__treatment)
         if self.__treatment < 0:
-            characteristic_array['poison'] = 'poisoning ' + str(-self.__treatment)
-        return characteristic_array
+            characteristic_dict['poison'] = 'venom ' + str(-self.__treatment)
+        return characteristic_dict
 
 
