@@ -2,7 +2,7 @@ import pygame
 import sys
 
 from Scripts.Configs import MapsControllerClass, ConfigConstantObjectClass, AnimationControllerClass, ConfigGameplayClass, TowersControllerClass, EnemiesControllerClass, ConfigModifierClass, \
-    ConfigParameterScreenClass
+    ConfigParameterScreenClass, FileSaveControllerClass
 from Scripts import ContextClass
 from Scripts.ClassesObjects import ShopClass, DefinitionCurrentTile
 
@@ -26,9 +26,10 @@ def __change_using_additional_parameter(additionalParameters):
         additionalParameters = True
     return additionalParameters
 
+file_save_controller = FileSaveControllerClass.FileSaveController()
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen()
 config_constant_object = ConfigConstantObjectClass.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), __action_exit, __action_scene, __change_using_additional_parameter)
-config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70))
+config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70), file_save_controller)
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 
 maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get_width(), config_parameter_screen.get_height())
@@ -36,7 +37,7 @@ towers_controller = TowersControllerClass.TowerController(maps_controller.get_ti
 enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
 
-context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller)
+context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller)
 shop = ShopClass.Shop(config_parameter_screen.get_height())
 highlighting = DefinitionCurrentTile.Highlighting(context)
 

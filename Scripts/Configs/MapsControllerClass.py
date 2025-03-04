@@ -116,3 +116,6 @@ class MapsController:
                     break
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     context.get_config_gameplay().set_current_tile(None)
+
+    def get_level(self):
+        return self.__level + 1

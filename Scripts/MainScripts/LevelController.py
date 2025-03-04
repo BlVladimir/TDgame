@@ -1,4 +1,4 @@
-from Scripts.MainScripts import Level, Function, MainManu
+from Scripts.MainScripts import Level, MainManu
 
 def level_controller(shop, event, highlighting, context):
     match context.get_config_parameter_scene().get_scene():
@@ -24,6 +24,7 @@ def level_controller(shop, event, highlighting, context):
             Level.level(shop, event, highlighting, context)
         case 'setting':
             if context.get_config_constant_object().get_button_additional_parameter().is_pressed(event):
-                context.get_config_gameplay().set_always_use_additional_parameters(Function.file_change('alwaysUseAdditionalParameter'))
+                context.get_file_save_controller().file_change('alwaysUseAdditionalParameter = ')
+                context.get_file_save_controller().get_always_use_additional_parameter(context)
             if context.get_config_constant_object().get_button_main_manu().is_pressed(event):
                 context.get_config_constant_object().get_button_main_manu().handle_event_parameter({'context': context, 'lvl': 'mainMenu'})

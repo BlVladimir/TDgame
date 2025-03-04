@@ -1,8 +1,6 @@
-from Scripts.MainScripts.Function import find_in_file
-
 class ConfigGameplay:
 
-    def __init__(self, amount_of_money_position):
+    def __init__(self, amount_of_money_position, file_save_controller):
         self.__amount_of_money = 'x 0'
         self.__amount_of_money_position = amount_of_money_position
         self.__current_tower = None
@@ -14,7 +12,8 @@ class ConfigGameplay:
         self.__waves = []
         self.__current_wave = 0
         self.__is_started = False
-        self.__always_use_additional_parameters = find_in_file('alwaysUseAdditionalParameter')
+        self.__always_use_additional_parameters = file_save_controller.find_always_use_additional_parameter()
+        self.__passed_level = file_save_controller.get_level()
         self.__is_fail = False
 
     def get_highlight_tile(self):
@@ -85,3 +84,7 @@ class ConfigGameplay:
 
     def set_is_fail(self, new_value):
         self.__is_fail = new_value
+
+    def get_passed_level(self, context):
+        self.__passed_level = context.get_file_save_controller().get_level()
+        return self.__passed_level
