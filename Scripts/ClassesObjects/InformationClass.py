@@ -60,6 +60,9 @@ class Information:
         else:
             self.__current_modifier.append(text)
 
+    def reset_modifier(self):
+        self.__current_modifier = []
+
     def draw_bugs(self, height, width, context):  # рисует массив модификаторов
         is_free = context.get_config_modifier().get_is_free()
         price_up = context.get_config_modifier().get_price_up()

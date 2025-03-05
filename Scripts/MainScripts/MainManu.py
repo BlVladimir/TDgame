@@ -8,4 +8,4 @@ def handle_event(event, context):
     for i in range(len(buttons_level)):
         if buttons_level[i].is_pressed(event) and context.get_config_gameplay().get_passed_level(context) >= i + 1:
             context.get_config_gameplay().set_is_started(True)
-            buttons_level[i].handle_event_parameter({'context':context,'lvl':str(i+1)})
+            buttons_level[i].handle_event_parameter({'context': context, 'lvl': str(i+1)})

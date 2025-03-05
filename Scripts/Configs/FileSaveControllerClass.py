@@ -48,13 +48,13 @@ class FileSaveController:
             return 1
         elif parameters[additional_parameter_parameter_line].find('2') != -1:
             return 2
-        elif parameters[additional_parameter_parameter_line].find('2') != -1:
+        elif parameters[additional_parameter_parameter_line].find('3') != -1:
             return 3
-        elif parameters[additional_parameter_parameter_line].find('2') != -1:
+        elif parameters[additional_parameter_parameter_line].find('4') != -1:
             return 4
-        elif parameters[additional_parameter_parameter_line].find('2') != -1:
+        elif parameters[additional_parameter_parameter_line].find('5') != -1:
             return 5
-        elif parameters[additional_parameter_parameter_line].find('2') != -1:
+        elif parameters[additional_parameter_parameter_line].find('6') != -1:
             return 6
 
     def get_always_use_additional_parameter(self, context):
