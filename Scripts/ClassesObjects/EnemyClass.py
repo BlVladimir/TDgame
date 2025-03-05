@@ -43,13 +43,15 @@ class Enemy:
         context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.rect)
         if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
             scale = int(self.scale * 0.6)
-            delta = abs((math.cos(self.__angle * math.pi / 180) + math.sin(self.__angle * math.pi / 180)) * self.scale / 2)
+            delta = (abs(math.cos(math.radians(self.__angle))) + abs(math.sin(math.radians(self.__angle)))) * (self.scale / 2)
             Function.draw_text(str(self.health), scale, (self.rect[0] + delta, self.rect[1] + delta), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
-    def __set_coordinate_and_angle(self, deltaX, deltaY):
+    def __set_coordinate_and_angle(self, deltaX, deltaY, t = None):
         self.rect[0] += deltaX
         self.rect[1] += deltaY
         self.__angle = math.atan(deltaX/deltaY) * 180 / math.pi
+        if t is not None:
+            self.__angle += 180
         self.pos += 1
 
     def move(self, time, context, speed = 100):  # Траектория - это массив поворотов тайла для врагов. Логично, что врагу нужно двигаться в ту сторону, где находится следующий тайл. Промежутки и размер тайлов нужны для определения изменения координат. Скорость - число изменений расстояния в секунду
@@ -75,6 +77,7 @@ class Enemy:
         else:
             x = 6 / speed
             n = self.pos % speed
+            t = None
             if self.__x < 0:
                 y = ((n + 1) * x - 1) ** 3 - (n * x - 1) ** 3
                 deltaX = x * (1.2 * tile_scale) / 8
@@ -84,28 +87,29 @@ class Enemy:
             else:
                 y = - math.sqrt(9 - (n * x - 6) ** 2) + math.sqrt(9 - ((n + 1) * x - 6) ** 2)
                 deltaX = (-x) * (1.2 * tile_scale) / 8
+                t = 0
             deltaY = y * (1.2 * tile_scale) / 8
             self.__x += x
             if difference_position == 1 or difference_position == -3:
                 match context.get_maps_controller().get_trajectory()[self.pos // speed]:  # сравнивает текущую траекторию
                     case 0:
-                        self.__set_coordinate_and_angle(-deltaX, -deltaY)
+                        self.__set_coordinate_and_angle(-deltaX, -deltaY, t)
                     case 1:
-                        self.__set_coordinate_and_angle(deltaY, -deltaX)
+                        self.__set_coordinate_and_angle(deltaY, -deltaX, t)
                     case 2:
-                        self.__set_coordinate_and_angle(deltaX, deltaY)
+                        self.__set_coordinate_and_angle(deltaX, deltaY, t)
                     case 3:
-                        self.__set_coordinate_and_angle(-deltaY, deltaX)
+                        self.__set_coordinate_and_angle(-deltaY, deltaX, t)
             else:
                 match context.get_maps_controller().get_trajectory()[self.pos // speed]:  # сравнивает текущую траекторию
                     case 0:
-                        self.__set_coordinate_and_angle(deltaX, -deltaY)
+                        self.__set_coordinate_and_angle(deltaX, -deltaY, t)
                     case 1:
-                        self.__set_coordinate_and_angle(deltaY, deltaX)
+                        self.__set_coordinate_and_angle(deltaY, deltaX, t)
                     case 2:
-                        self.__set_coordinate_and_angle(-deltaX, deltaY)
+                        self.__set_coordinate_and_angle(-deltaX, deltaY, t)
                     case 3:
-                        self.__set_coordinate_and_angle(-deltaY, -deltaX)
+                        self.__set_coordinate_and_angle(-deltaY, -deltaX, t)
         self.__current_legs_image = self.__animation[time % 30]
         if self.pos // speed == len(context.get_maps_controller().get_trajectory()):
             if context.get_config_gameplay().get_current_wave() >= 15 and context.get_config_gameplay().get_passed_level(context) < context.get_maps_controller().get_level():
