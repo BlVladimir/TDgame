@@ -54,4 +54,4 @@ while True:  # основной цикл
         context.get_animation_controller().fail_animation(context)
     context.get_maps_controller().update_trajectory_array()
     pygame.display.flip()  # обновляет экран по завершению цикла
-    context.get_config_constant_object().get_clock().tick(60)  # ограничивает число кадров в секунду
+    context.get_config_constant_object().get_clock().tick(30)  # ограничивает число кадров в секунду

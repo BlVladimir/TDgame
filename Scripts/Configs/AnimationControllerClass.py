@@ -20,8 +20,8 @@ class AnimationController:
         if self.__is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
             self.__time_move += 1
             context.get_towers_controller().turn_off_or_on_all_towers(True)
-            context.get_enemies_controller().move_all_enemies(self.__time_move, context, 120)
-            if self.__time_move % 120 == 0:
+            context.get_enemies_controller().move_all_enemies(self.__time_move, context, 60)
+            if self.__time_move % 60 == 0:
                 context.get_enemies_controller().stop_walk()
                 self.__time_move = 0
                 self.__is_move = False

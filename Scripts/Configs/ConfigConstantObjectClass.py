@@ -23,6 +23,7 @@ class ConfigConstantObject:
                                      Button(width / 2 - button_level_scale * 1.5 - height / 20, height / 2 + height / 40, "images/UI/lvl/lvl4.png", button_level_scale, button_level_scale, action_scene),
                                      Button(width / 2 - button_level_scale / 2, height / 2 + height / 40, "images/UI/lvl/lvl5.png", button_level_scale, button_level_scale, action_scene),
                                      Button(width / 2 + button_level_scale / 2 + height / 20, height / 2 + height / 40, "images/UI/lvl/lvl6.png", button_level_scale, button_level_scale, action_scene))
+        self.__spites = pygame.sprite.Group()
 
     def get_clock(self):
         return self.__clock
@@ -44,3 +45,10 @@ class ConfigConstantObject:
 
     def get_button_additional_parameter(self):
         return self.__button_additional_parameter
+
+    def add_at_sprite(self, new_sprite):
+        self.__spites.add(new_sprite)
+
+    def update_sprite(self, context):
+        self.__spites.update()
+        self.__spites.draw(context.get_config_parameter_scene().get_screen())

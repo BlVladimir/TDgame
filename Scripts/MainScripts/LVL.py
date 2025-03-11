@@ -15,5 +15,7 @@ def draw_lvl(context, shop, highlighting):
         Function.draw_text(context.get_config_gameplay().get_amount_of_money(), 100, context.get_config_gameplay().get_amount_of_money_position(), context)
         context.get_config_constant_object().get_information_table().draw(context.get_config_parameter_scene().get_height(), context.get_config_parameter_scene().get_width(), context)
         context.get_towers_controller().draw_animation_upgrade(context)
+        context.get_config_constant_object().update_sprite(context)
+
         
 

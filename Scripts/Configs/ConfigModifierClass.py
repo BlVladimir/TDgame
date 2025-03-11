@@ -29,3 +29,8 @@ class ConfigModifier:
 
     def get_new_value_influence(self, new_value):
         self.__influence = new_value
+
+    def reset_price_modifier(self):
+        self.__is_free = False
+        self.__price_up = False
+
