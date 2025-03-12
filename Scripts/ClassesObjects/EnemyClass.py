@@ -17,7 +17,7 @@ class Enemy:
         self.__additional_tower_price = 0
         self.__armor = armor
         self.__treatment = treatment
-        self.center = [self.rect[0] + self.scale/2, self.rect[1] + self.scale/2]
+        self.__center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
         self.health = health
         self.test_array = [[rect[0], rect[1]]]
         self.__poison_dict = []
@@ -34,8 +34,8 @@ class Enemy:
 
 
     def get_center(self):  # получает центр врага
-        self.center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
-        return self.center
+        self.__center = [self.rect[0] + self.scale / 2, self.rect[1] + self.scale / 2]
+        return self.__center
 
     def draw(self, context):  # функция, рисующая врага
         self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)

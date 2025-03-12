@@ -26,3 +26,4 @@ def is_started(context, highlighting):
         context.get_config_gameplay().set_money(-context.get_config_gameplay().get_money() + 3)
         for i in range(len(context.get_maps_controller().get_build_array())):  # обнуляет все тайлы
             context.get_maps_controller().get_build_array()[i]['is_filled'] = False
+        context.get_config_constant_object().clear_sprites()

@@ -8,12 +8,12 @@ class Bullet(sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect()
         self.__delta = (ceil((final_coordinate_center[0] - started_coordinate_center[0]) / fps), ceil((final_coordinate_center[1] - started_coordinate_center[1]) / fps))
-        self.__final_coordinate_x = started_coordinate_center[0] + self.__delta[0] * fps
-        self.__end = False
         self.rect.center = started_coordinate_center
+        self.__time_to_destroy = fps
 
     def update(self):
         self.rect.x += self.__delta[0]
         self.rect.y += self.__delta[1]
-        if self.rect.x == self.__final_coordinate_x:
-            self.__end = True
+        self.__time_to_destroy -= 1
+        if self.__time_to_destroy == 0:
+            self.kill()

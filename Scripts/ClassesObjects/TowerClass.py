@@ -97,7 +97,7 @@ class Tower:
         return characteristic_dict
 
     def get_started_coordinate_bullet(self):
-        return (self.__coordinate[0] + self.scale / 2 + self.scale / 3 * math.cos(math.radians(90 - self.angle)), self.__coordinate[1] + self.scale / 2 + self.scale / 3 * math.sin(math.radians(90 - self.angle)))
+        return (math.ceil(self.__coordinate[0] + self.scale / 2 + self.scale / 3 * math.cos(math.radians(90 - self.angle))), math.ceil(self.__coordinate[1] + self.scale / 2 + self.scale / 3 * math.sin(math.radians(90 - self.angle))))
 
 
 
