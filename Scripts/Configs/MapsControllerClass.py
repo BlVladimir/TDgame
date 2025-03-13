@@ -118,4 +118,4 @@ class MapsController:
                     context.get_config_gameplay().set_current_tile(None)
 
     def get_level(self):
-        return self.__level + 1
+        return int(self.__level) + 1

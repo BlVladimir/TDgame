@@ -1,68 +1,28 @@
+import json
+
 class FileSaveController:
+
     def __init__(self):
-        self.__file_save = 'Save'
-        self.__base_file = ['alwaysUseAdditionalParameter = False\n',
-                            'level = 0\n']
+        self.__file_save = 'save.json'
+        self.__base_data = {'always use additional parameter': False, 'level': 1}
 
-    def file_change(self, changed_parameter, new_value = True):  # изменяет значение в файле
-        changed_parameter_line, parameters = self.__find_in_file(changed_parameter)
-        if new_value:
-            if parameters[changed_parameter_line].find('True') != -1:
-                n = parameters[changed_parameter_line].find('True')
-                parameters[changed_parameter_line] = parameters[changed_parameter_line][0:n-1] + 'False\n'
-            elif parameters[changed_parameter_line].find('False') != -1:
-                n = parameters[changed_parameter_line].find('True')
-                parameters[changed_parameter_line] = parameters[changed_parameter_line][0:n-1] + 'True\n'
-            else:
-                new_value = 'reset settings'
+    def get_parameter(self, parameter_name):
+        with open(self.__file_save, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        parameter_value = data[parameter_name]
+        return parameter_value
+
+    def set_parameter(self, parameter_name, new_value):
+        with open(self.__file_save, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        data[parameter_name] = new_value
+        with open(self.__file_save, 'w', encoding='utf-8') as file:
+            json.dump(data, file)
+
+    def change_true_false(self, parameter_name):
+        with open(self.__file_save, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        if data[parameter_name]:
+            self.set_parameter(parameter_name, False)
         else:
-            n = parameters[changed_parameter_line].find('=')
-            parameters[changed_parameter_line] = parameters[changed_parameter_line][0:n + 1] + str(new_value) + '\n'
-        file_save = open(self.__file_save, 'w')
-        if new_value == 'reset settings':
-            for i in self.__base_file:
-                file_save.write(i)
-        else:
-            for i in parameters:
-                file_save.write(i)
-        file_save.close()
-
-    def reset_settings(self):
-        file_save = open(self.__file_save, 'w')
-        for i in self.__base_file:
-            file_save.write(i)
-        file_save.close()
-
-    def __find_in_file(self, parameter):  # находит значение в файле
-        file_save = open(self.__file_save, 'r')
-        parameters = file_save.readlines()
-        file_save.close()
-        for i in range(len(parameters)):
-            if parameters[i].find(parameter) != -1:
-                return i, parameters
-        self.reset_settings()
-
-    def get_level(self):
-        additional_parameter_parameter_line, parameters = self.__find_in_file('level = ')
-        if parameters[additional_parameter_parameter_line].find('1') != -1:
-            return 1
-        elif parameters[additional_parameter_parameter_line].find('2') != -1:
-            return 2
-        elif parameters[additional_parameter_parameter_line].find('3') != -1:
-            return 3
-        elif parameters[additional_parameter_parameter_line].find('4') != -1:
-            return 4
-        elif parameters[additional_parameter_parameter_line].find('5') != -1:
-            return 5
-        elif parameters[additional_parameter_parameter_line].find('6') != -1:
-            return 6
-
-    def get_always_use_additional_parameter(self, context):
-        context.get_config_gameplay().set_always_use_additional_parameters(self.find_always_use_additional_parameter())
-
-    def find_always_use_additional_parameter(self):
-        additional_parameter_parameter_line, parameters = self.__find_in_file('alwaysUseAdditionalParameter = ')
-        if parameters[additional_parameter_parameter_line].find('True') != -1:
-            return False
-        else:
-            return True
+            self.set_parameter(parameter_name, True)

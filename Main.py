@@ -40,7 +40,6 @@ animation_controller = AnimationControllerClass.AnimationController(config_param
 context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller)
 shop = ShopClass.Shop(config_parameter_screen.get_height())
 highlighting = DefinitionCurrentTile.Highlighting(context)
-
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно

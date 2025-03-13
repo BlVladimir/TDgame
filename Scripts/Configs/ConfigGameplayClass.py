@@ -12,8 +12,8 @@ class ConfigGameplay:
         self.__waves = []
         self.__current_wave = 0
         self.__is_started = False
-        self.__always_use_additional_parameters = file_save_controller.find_always_use_additional_parameter()
-        self.__passed_level = file_save_controller.get_level()
+        self.__always_use_additional_parameters = file_save_controller.get_parameter('always use additional parameter')
+        self.__passed_level = file_save_controller.get_parameter('level')
         self.__is_fail = False
 
     def get_highlight_tile(self):
@@ -86,5 +86,5 @@ class ConfigGameplay:
         self.__is_fail = new_value
 
     def get_passed_level(self, context):
-        self.__passed_level = context.get_file_save_controller().get_level()
+        self.__passed_level = context.get_file_save_controller().get_parameter('level')
         return self.__passed_level

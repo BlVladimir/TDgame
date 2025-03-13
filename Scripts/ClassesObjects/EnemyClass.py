@@ -112,8 +112,8 @@ class Enemy:
                         self.__set_coordinate_and_angle(-deltaY, -deltaX, t)
         self.__current_legs_image = self.__animation[time % 30]
         if self.pos // speed == len(context.get_maps_controller().get_trajectory()):
-            if context.get_config_gameplay().get_current_wave() >= 15 and context.get_config_gameplay().get_passed_level(context) < context.get_maps_controller().get_level():
-                context.get_file_save_controller().file_change('level', context.get_maps_controller().get_level())
+            if context.get_config_gameplay().get_current_wave() >= 20 and context.get_config_gameplay().get_passed_level(context) < context.get_maps_controller().get_level():
+                context.get_file_save_controller().set_paramete('level', context.get_maps_controller().get_level() + 1)
             context.get_config_gameplay().set_is_fail(True)
 
     def end_walk(self):
