@@ -29,7 +29,7 @@ def __change_using_additional_parameter(additionalParameters):
 file_save_controller = FileSaveControllerClass.FileSaveController()
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen()
 config_constant_object = ConfigConstantObjectClass.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), __action_exit, __action_scene, __change_using_additional_parameter)
-config_gameplay = ConfigGameplayClass.ConfigGameplay((600, 70), file_save_controller)
+config_gameplay = ConfigGameplayClass.ConfigGameplay(config_parameter_screen.get_height(), file_save_controller)
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 
 maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get_width(), config_parameter_screen.get_height())

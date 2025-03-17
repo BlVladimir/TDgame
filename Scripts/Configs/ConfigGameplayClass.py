@@ -1,8 +1,11 @@
+from Scripts.MainScripts.Function import draw_text
+from math import ceil
+
 class ConfigGameplay:
 
-    def __init__(self, amount_of_money_position, file_save_controller):
+    def __init__(self, height, file_save_controller):
         self.__amount_of_money = 'x 0'
-        self.__amount_of_money_position = amount_of_money_position
+        self.__amount_of_money_position = (height * 0.57, height * 0.1)
         self.__current_tower = None
         self.__highlight_tile = None
         self.__current_tile = None
@@ -28,14 +31,12 @@ class ConfigGameplay:
     def set_current_tile(self, new_value):
         self.__current_tile = new_value
 
-    def get_amount_of_money(self):
-        return self.__amount_of_money
-
     def set_amount_of_money(self, new_value):
         self.__amount_of_money = new_value
 
-    def get_amount_of_money_position(self):
-        return self.__amount_of_money_position
+    def draw_money(self, context):
+        draw_text(self.__amount_of_money, ceil(context.get_config_parameter_scene().get_height() * 0.08), self.__amount_of_money_position, context)
+        draw_text('wave: ' + str(self.__current_wave), ceil(context.get_config_parameter_scene().get_height() * 0.08), (self.__amount_of_money_position[0] + context.get_config_parameter_scene().get_height() * 0.2, self.__amount_of_money_position[1]), context)
 
     def get_shop_type(self):
         return self.__shop_type
