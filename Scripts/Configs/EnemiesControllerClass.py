@@ -14,10 +14,10 @@ class EnemiesController:
     def define_current_enemy(self):
         self.__current_enemy = None
         if self.__enemy_array:
-            scale = self.__enemy_array[0].scale
+            scale = self.__enemy_array[0].get_scale()
             mousePose = pygame.mouse.get_pos()
             for i in range(len(self.__enemy_array)):
-                if self.__enemy_array[i].rect[0] + scale * 0.9 >= mousePose[0] >= self.__enemy_array[i].rect[0] + scale * 0.1 and self.__enemy_array[i].rect[1] + scale * 0.9 >= mousePose[1] >= self.__enemy_array[i].rect[1] + scale * 0.1:
+                if self.__enemy_array[i].get_rect()[0] + scale * 0.9 >= mousePose[0] >= self.__enemy_array[i].get_rect()[0] + scale * 0.1 and self.__enemy_array[i].get_rect()[1] + scale * 0.9 >= mousePose[1] >= self.__enemy_array[i].get_rect()[1] + scale * 0.1:
                     self.__current_enemy = i
                     break
 
@@ -33,7 +33,7 @@ class EnemiesController:
     def kill_enemies(self, context):
         __kill_array = []
         for i in range(len(self.__enemy_array)):
-            if self.__enemy_array[i].health <= 0:
+            if self.__enemy_array[i].get_health() <= 0:
                 __kill_array.append(i)
         self.__current_enemy = None
         for i in range(len(__kill_array)):
@@ -50,6 +50,10 @@ class EnemiesController:
         for i in range(len(self.__enemy_array)):
             self.__enemy_array[i].move(time, context, speed)
             if context.get_config_gameplay().get_is_fail():
+                if context.get_config_gameplay().get_current_wave() >= 20 and context.get_config_gameplay().get_passed_level(context) < context.get_maps_controller().get_level():
+                    context.get_file_save_controller().set_parameter('level', context.get_maps_controller().get_level())
+                    self.__current_enemy = None
+
                 break
 
     def stop_walk(self):
@@ -59,11 +63,11 @@ class EnemiesController:
     def change_health_enemy(self, influence):
         if influence == 1:
             for i in range(len(self.__enemy_array)):
-                if self.__enemy_array[i].health > 1:
-                    self.__enemy_array[i].health -= 1
+                if self.__enemy_array[i].get_health() > 1:
+                    self.__enemy_array[i].set_health(-1)
         else:
             for i in range(len(self.__enemy_array)):
-                self.__enemy_array[i].health += 1
+                self.__enemy_array[i].set_health(1)
 
     def draw_enemies(self, context):
         for i in range(len(self.__enemy_array)):  # рисует каждого врага

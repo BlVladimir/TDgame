@@ -34,7 +34,7 @@ class TowerController:
 
     def turn_off_or_on_all_towers(self, state):
         for i in range(len(self.__towers_object_array)):
-            self.__towers_object_array[i].is_used = state
+            self.__towers_object_array[i].set_is_used(state)
 
     def get_current_tower(self):
         if self.__current_tower is not None and self.__towers_object_array:
@@ -44,18 +44,18 @@ class TowerController:
         self.__current_tower = None
         if self.__towers_object_array:
             for i in range(len(self.__towers_object_array)):
-                if self.__towers_object_array[i].index == context.get_config_gameplay().get_current_tile():
+                if self.__towers_object_array[i].get_index() == context.get_config_gameplay().get_current_tile():
                     self.__current_tower = i
                     break
 
     def change_damage(self, influence):
         if influence == 0:
             for i in range(len(self.__towers_object_array)):
-                if self.__towers_object_array[i].damage > 1:
-                    self.__towers_object_array[i].damage -= 1
+                if self.__towers_object_array[i].get_damage() > 1:
+                    self.__towers_object_array[i].set_damage(-1)
         else:
             for i in range(len(self.__towers_object_array)):
-                self.__towers_object_array[i].damage += 1
+                self.__towers_object_array[i].set_damage(1)
 
     def append_upgrade(self, context):
         self.__upgrade_array.append([context.get_maps_controller().get_build_array()[context.get_config_gameplay().get_current_tile()]['coordinate'], 0])
@@ -75,16 +75,16 @@ class TowerController:
         if self.__towers_object_array:
             for i in self.__towers_object_array:  # проходится по массиву объектов башен и рисует их
                 i.draw_tower(context)
-            if self.__current_tower is not None and self.__towers_object_array[self.__current_tower].radius:
+            if self.__current_tower is not None and self.__towers_object_array[self.__current_tower].get_radius():
                 self.__towers_object_array[self.__current_tower].draw_radius(context)
 
     def fire(self, context):
         if context.get_enemies_controller().get_current_enemy():  # если выделенный враг существует и существует хотя бы одна башня
             if self.__current_tower is not None and self.__towers_object_array[self.__current_tower].is_in_radius(context):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
                 context.get_config_constant_object().add_at_sprite(BulletClass.Bullet(pygame.transform.scale(pygame.image.load('images/tower/Bullets/CommomBullet.png'), (context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)), self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
-                                                               context.get_enemies_controller().get_current_enemy().get_center(), 10))
+                                                                                      context.get_enemies_controller().get_current_enemy().get_center(), 10))
                 context.get_enemies_controller().get_current_enemy().remove_health(context)  # отнимает у врага здоровье, равное урону башни
-                self.__towers_object_array[self.__current_tower].is_used = True  # переменная отвечает за то, что башня была использована
+                self.__towers_object_array[self.__current_tower].set_is_used(True)  # переменная отвечает за то, что башня была использована
                 context.get_enemies_controller().get_current_enemy().reset_to_zero_additional_tower_price()
                 context.get_enemies_controller().get_current_enemy().new_value_additional_tower_price(context)
                 context.get_enemies_controller().kill_enemies(context)

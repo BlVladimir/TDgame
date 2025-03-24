@@ -69,7 +69,7 @@ class MapsController:
         return self.__map_array[int(self.__level) - 1].get_tile_scale()
 
     def get_build_array(self):
-        return self.__map_array[int(self.__level) - 1].build_array
+        return self.__map_array[int(self.__level) - 1].get_build_array()
 
     def get_started_position(self, position_enemy_on_tile):
         return self.__map_array[int(self.__level) - 1].get_started_position(position_enemy_on_tile)
