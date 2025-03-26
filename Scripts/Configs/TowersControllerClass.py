@@ -81,8 +81,21 @@ class TowerController:
     def fire(self, context):
         if context.get_enemies_controller().get_current_enemy():  # если выделенный враг существует и существует хотя бы одна башня
             if self.__current_tower is not None and self.__towers_object_array[self.__current_tower].is_in_radius(context):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
-                context.get_config_constant_object().add_at_sprite(BulletClass.Bullet(pygame.transform.scale(pygame.image.load('images/tower/Bullets/CommomBullet.png'), (context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)), self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
-                                                                                      context.get_enemies_controller().get_current_enemy().get_center(), 10))
+                if not self.__towers_object_array[self.__current_tower].get_armor_piercing() and not self.__towers_object_array[self.__current_tower].get_poison():
+                    context.get_config_constant_object().add_at_sprite(BulletClass.Bullet(pygame.transform.scale(pygame.image.load('images/tower/Bullets/CommomBullet.png'), (context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)), self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
+                                                                                          context.get_enemies_controller().get_current_enemy().get_center(), 10))
+                elif self.__towers_object_array[self.__current_tower].get_armor_piercing():
+                    context.get_config_constant_object().add_at_sprite(BulletClass.BulletWithAnimation(pygame.transform.scale(pygame.image.load('images/tower/Bullets/CommomBullet.png'), (
+                        context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)),
+                                                                                                       self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
+                                                                                                       context.get_enemies_controller().get_current_enemy().get_center(), 10, 'AnimationElectricBullet',
+                                                                                                       context.get_maps_controller().get_tile_scale() * 0.2))
+                else:
+                    context.get_config_constant_object().add_at_sprite(BulletClass.BulletWithAnimation(pygame.transform.scale(pygame.image.load('images/tower/Bullets/CommomBullet.png'), (
+                        context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)),
+                                                                                                       self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
+                                                                                                       context.get_enemies_controller().get_current_enemy().get_center(), 10, 'AnimationPoisonBullet',
+                                                                                                       context.get_maps_controller().get_tile_scale() * 0.2))
                 context.get_enemies_controller().get_current_enemy().remove_health(context)  # отнимает у врага здоровье, равное урону башни
                 self.__towers_object_array[self.__current_tower].set_is_used(True)  # переменная отвечает за то, что башня была использована
                 context.get_enemies_controller().get_current_enemy().reset_to_zero_additional_tower_price()

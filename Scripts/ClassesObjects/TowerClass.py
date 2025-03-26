@@ -97,7 +97,10 @@ class Tower:
         return characteristic_dict
 
     def get_started_coordinate_bullet(self):  # возвращает кортеж координат начального положения пули
-        return (math.ceil(self.__coordinate[0] + self.__scale / 2 + self.__scale / 3 * math.cos(math.radians(90 - self.__angle))), math.ceil(self.__coordinate[1] + self.__scale / 2 + self.__scale / 3 * math.sin(math.radians(90 - self.__angle))))
+        if self.__rotated_image is not None:
+            return (math.ceil(self.__coordinate[0] + self.__scale / 2 + self.__scale / 3 * math.cos(math.radians(90 - self.__angle))), math.ceil(self.__coordinate[1] + self.__scale / 2 + self.__scale / 3 * math.sin(math.radians(90 - self.__angle))))
+        else:
+            return (self.__coordinate[0] + self.__scale / 2, self.__coordinate[1] + self.__scale / 2)
 
     def get_index(self):  # геттеры
         return self.__index
