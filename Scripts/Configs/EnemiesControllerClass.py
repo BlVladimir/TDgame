@@ -22,7 +22,7 @@ class EnemiesController:
                     break
 
     def get_current_enemy(self):
-        if self.__current_enemy is not None:
+        if self.__current_enemy is not None and not self.__enemy_array[self.__current_enemy].get_is_dying():
             return self.__enemy_array[self.__current_enemy]
         else:
             return None
@@ -33,7 +33,7 @@ class EnemiesController:
     def kill_enemies(self, context):
         __kill_array = []
         for i in range(len(self.__enemy_array)):
-            if self.__enemy_array[i].get_health() <= 0:
+            if self.__enemy_array[i].get_is_dead(context.get_animation_controller().get_fps()):
                 __kill_array.append(i)
         self.__current_enemy = None
         for i in range(len(__kill_array)):

@@ -2,7 +2,7 @@ import pygame
 import sys
 
 from Scripts.Configs import MapsControllerClass, ConfigConstantObjectClass, AnimationControllerClass, ConfigGameplayClass, TowersControllerClass, EnemiesControllerClass, ConfigModifierClass, \
-    ConfigParameterScreenClass, FileSaveControllerClass
+    ConfigParameterScreenClass, FileSaveControllerClass, SoundControllerClass
 from Scripts import ContextClass
 from Scripts.ClassesObjects import ShopClass, DefinitionCurrentTile
 
@@ -36,8 +36,9 @@ maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get
 towers_controller = TowersControllerClass.TowerController(maps_controller.get_tile_scale())
 enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
+sound_controller = SoundControllerClass.SoundController()
 
-context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller)
+context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller)
 shop = ShopClass.Shop(config_parameter_screen.get_height())
 highlighting = DefinitionCurrentTile.Highlighting(context)
 while True:  # основной цикл
@@ -47,6 +48,7 @@ while True:  # основной цикл
             sys.exit()
         context.get_config_constant_object().get_button_exit().handle_event(event)
         LevelController.level_controller(shop, event, highlighting, context)
+        context.get_sound_controller().click_sound(event)
     context.get_animation_controller().move_enemies(context)
     DrawScene.draw_scene(highlighting, shop, context)
     if context.get_config_gameplay().get_is_fail():

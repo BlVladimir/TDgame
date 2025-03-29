@@ -1,11 +1,11 @@
-from Scripts.MainScripts import MainManu, LVL
+from Scripts.MainScripts import MainMenu, LVL
 
 def draw_scene(highlighting, shop, context):
     context.get_animation_controller().move_enemies(context)
     context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     match context.get_config_parameter_scene().get_scene():
         case 'mainMenu':
-            MainManu.draw_buttons(context)
+            MainMenu.draw_buttons(context)
             context.get_config_constant_object().get_button_setting().draw(context)
         case '1':
             LVL.draw_lvl(context, shop, highlighting)

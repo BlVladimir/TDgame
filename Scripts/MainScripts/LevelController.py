@@ -1,9 +1,9 @@
-from Scripts.MainScripts import Level, MainManu
+from Scripts.MainScripts import Level, MainMenu
 
 def level_controller(shop, event, highlighting, context):
     match context.get_config_parameter_scene().get_scene():
         case 'mainMenu':
-            MainManu.handle_event(event, context)
+            MainMenu.handle_event(event, context)
             if context.get_config_gameplay().get_waves():  # обнуляет массив врагов и их количество на каждой волне в меню
                 context.get_config_gameplay().set_waves([])
                 context.get_enemies_controller().clear_enemies_array()

@@ -30,6 +30,8 @@ class Enemy:
             self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/' + i), (self.__scale, self.__scale)))
         self.__rotated_image = self.__image
         self.__current_legs_image = self.__animation[0]
+        self.__is_dying = False
+        self.__time_dying = 0
 
     def get_center(self):  # получает центр врага
         self.__center = [self.__rect[0] + self.__scale / 2, self.__rect[1] + self.__scale / 2]
@@ -37,12 +39,19 @@ class Enemy:
 
     def draw(self, context):  # функция, рисующая врага
         self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
+        if not self.__is_dying:
+            if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
+                scale = int(self.__scale * 0.6)
+                delta = (abs(math.cos(math.radians(self.__angle))) + abs(math.sin(math.radians(self.__angle)))) * (self.__scale / 2)
+                Function.draw_text(str(self.__health), scale, (self.__rect[0] + delta, self.__rect[1] + delta), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
+        else:
+            fps = context.get_animation_controller().get_fps()
+            if self.__time_dying < fps:
+                self.__time_dying += 1
+                self.__rotated_image.set_alpha(int(100 * self.__time_dying / fps))
+                self.__current_legs_image.set_alpha(int(100 * self.__time_dying / fps))
         context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.__rect)
         context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.__rect)
-        if context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters():
-            scale = int(self.__scale * 0.6)
-            delta = (abs(math.cos(math.radians(self.__angle))) + abs(math.sin(math.radians(self.__angle)))) * (self.__scale / 2)
-            Function.draw_text(str(self.__health), scale, (self.__rect[0] + delta, self.__rect[1] + delta), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
 
     def __set_coordinate_and_angle(self, deltaX, deltaY, t = None):  # получает из координат вектора новое положение врага и угол поворота
         self.__rect[0] += deltaX
@@ -177,3 +186,16 @@ class Enemy:
 
     def set_health(self, value):
         self.__health += value
+
+    def check_dying(self):
+        if self.__health <= 0:
+            self.__is_dying = True
+
+    def get_is_dying(self):
+        return self.__is_dying
+
+    def get_is_dead(self, fps):
+        if self.__time_dying == fps:
+            return True
+        else:
+            return False
