@@ -28,3 +28,17 @@ class SoundController:
     def stop_sound(self, name_sound):
         if self.__play_sound:
             self.__sound_directory_dict[name_sound].stop()
+
+    def sound_setting(self):
+        if self.__play_sound:
+            self.__play_sound = False
+        else:
+            self.__play_sound = True
+
+    def music_setting(self):
+        if self.__play_music:
+            self.__play_music = False
+            mixer.music.stop()
+        else:
+            self.__play_music = True
+            mixer.music.play()

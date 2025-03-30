@@ -1,6 +1,3 @@
-from Scripts.MainScripts import Function
-
-
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
 
 def draw_lvl(context, shop, highlighting):

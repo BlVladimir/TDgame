@@ -20,6 +20,6 @@ def draw_scene(highlighting, shop, context):
         case '6':
             LVL.draw_lvl(context, shop, highlighting)
         case 'setting':
-            context.get_config_constant_object().get_button_additional_parameter().draw(context)
+            context.get_settings_objects().draw_buttons(context)
             context.get_config_constant_object().get_button_main_manu().draw(context)
     context.get_config_constant_object().get_button_exit().draw(context)  # вне switch, что бы всегда было видно

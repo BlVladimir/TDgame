@@ -2,7 +2,7 @@ import pygame
 import sys
 
 from Scripts.Configs import MapsControllerClass, ConfigConstantObjectClass, AnimationControllerClass, ConfigGameplayClass, TowersControllerClass, EnemiesControllerClass, ConfigModifierClass, \
-    ConfigParameterScreenClass, FileSaveControllerClass, SoundControllerClass
+    ConfigParameterScreenClass, FileSaveControllerClass, SoundControllerClass, SettingsObjectsClass
 from Scripts import ContextClass
 from Scripts.ClassesObjects import ShopClass, DefinitionCurrentTile
 
@@ -28,7 +28,7 @@ def __change_using_additional_parameter(additionalParameters):
 
 file_save_controller = FileSaveControllerClass.FileSaveController()
 config_parameter_screen = ConfigParameterScreenClass.ConfigParameterScreen()
-config_constant_object = ConfigConstantObjectClass.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), __action_exit, __action_scene, __change_using_additional_parameter)
+config_constant_object = ConfigConstantObjectClass.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), __action_exit, __action_scene)
 config_gameplay = ConfigGameplayClass.ConfigGameplay(config_parameter_screen.get_height(), file_save_controller)
 config_modifier = ConfigModifierClass.ConfigModifier(False, False, None, None)
 
@@ -37,8 +37,9 @@ towers_controller = TowersControllerClass.TowerController(maps_controller.get_ti
 enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
 sound_controller = SoundControllerClass.SoundController()
+settings_objects = SettingsObjectsClass.SettingsObjects(config_parameter_screen.get_width(), config_parameter_screen.get_height(), __change_using_additional_parameter, sound_controller)
 
-context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller)
+context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, settings_objects)
 shop = ShopClass.Shop(config_parameter_screen.get_height())
 highlighting = DefinitionCurrentTile.Highlighting(context)
 while True:  # основной цикл

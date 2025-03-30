@@ -1,6 +1,6 @@
 class Context:
 
-    def __init__(self, config_constant_object, config_gameplay, config_modifier, config_parameter_scene, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller):
+    def __init__(self, config_constant_object, config_gameplay, config_modifier, config_parameter_scene, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, settings_objects):
         self.config_constant_object = config_constant_object
         self.config_gameplay = config_gameplay
         self.config_modifier = config_modifier
@@ -11,6 +11,7 @@ class Context:
         self.maps_controller = maps_controller
         self.file_save_controller = file_save_controller
         self.sound_controller = sound_controller
+        self.settings_objects = settings_objects
 
     def get_config_constant_object(self):
         return self.config_constant_object
@@ -41,3 +42,6 @@ class Context:
 
     def get_sound_controller(self):
         return self.sound_controller
+
+    def get_settings_objects(self):
+        return self.settings_objects
