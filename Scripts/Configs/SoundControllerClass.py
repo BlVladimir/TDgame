@@ -46,3 +46,9 @@ class SoundController:
             self.__play_music = True
             mixer.music.play()
             context.get_file_save_controller().set_parameter('play_music', True)
+
+    def get_play_sound(self):
+        return self.__play_sound
+
+    def get_play_music(self):
+        return self.__play_music

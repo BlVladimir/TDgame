@@ -1,6 +1,5 @@
 import pygame  # импорт библиотеки pygame
-
-
+from Scripts.MainScripts.Function import draw_text
 
 class Button:
     # инициализация класса
@@ -25,6 +24,10 @@ class Button:
             context.get_config_parameter_scene().get_screen().blit(self.__highlight, (self.__x, self.__y))
         if self.__additional_image is not None:
             context.get_config_parameter_scene().get_screen().blit(self.__additional_image, (self.__x, self.__y))
+
+    def draw_button_with_text(self, text, context):
+        self.draw(context)
+        draw_text(text, int(self.__width/len(text)) * 3, (self.__x + self.__width/2, self.__y + self.__height/2), context)
 
     def is_pressed(self, event): # функция, считывающая нажатие кнопки
         if event.type == pygame.MOUSEBUTTONDOWN and self.__x + self.__width >= event.pos[0] >= self.__x and self.__y + self.__height >= event.pos[1] >= self.__y:
