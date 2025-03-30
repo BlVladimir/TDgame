@@ -35,7 +35,7 @@ class EnemiesController:
         for i in range(len(self.__enemy_array)):
             if self.__enemy_array[i].get_is_dead(context.get_animation_controller().get_fps()):
                 __kill_array.append(i)
-        self.__current_enemy = None
+                self.__current_enemy = None
         for i in range(len(__kill_array)):
             context.get_config_gameplay().set_money(2 + self.__enemy_array[__kill_array[len(__kill_array) - 1 - i]].get_additional_money())
             self.__enemy_array.pop(__kill_array[len(__kill_array)-1-i])
@@ -44,7 +44,6 @@ class EnemiesController:
     def treat_enemies(self, context):
         for i in range(len(self.__enemy_array)):
             self.__enemy_array[i].treat()
-        self.kill_enemies(context)
 
     def move_all_enemies(self, time, context, speed=60):  # двигает всех врагов
         for i in range(len(self.__enemy_array)):
@@ -56,7 +55,8 @@ class EnemiesController:
 
                 break
 
-    def stop_walk(self):
+    def stop_walk(self, context):
+        context.get_sound_controller().stop_sound('walk')
         for i in range(len(self.__enemy_array)):
             self.__enemy_array[i].end_walk()
 

@@ -14,8 +14,9 @@ class AnimationController:
             self.__animation_game_over.append(pygame.transform.scale(pygame.image.load('images/UI/gameOverAnimation/' + i), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))
         self.__fps = 30
 
-    def start_move(self):
+    def start_move(self, context):
         self.__is_move = True
+        context.get_sound_controller().play_sound('walk')
 
     def move_enemies(self, context):
         if self.__is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
@@ -23,7 +24,7 @@ class AnimationController:
             context.get_towers_controller().turn_off_or_on_all_towers(True)
             context.get_enemies_controller().move_all_enemies(self.__time_move, context, 60)
             if self.__time_move % 60 == 0:
-                context.get_enemies_controller().stop_walk()
+                context.get_enemies_controller().stop_walk(context)
                 self.__time_move = 0
                 self.__is_move = False
                 context.get_enemies_controller().treat_enemies(context)

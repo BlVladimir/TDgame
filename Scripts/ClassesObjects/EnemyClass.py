@@ -48,8 +48,11 @@ class Enemy:
             fps = context.get_animation_controller().get_fps()
             if self.__time_dying < fps:
                 self.__time_dying += 1
-                self.__rotated_image.set_alpha(int(100 * self.__time_dying / fps))
-                self.__current_legs_image.set_alpha(int(100 * self.__time_dying / fps))
+                self.__rotated_image.set_alpha(int(100 * (fps - self.__time_dying) / fps))
+                self.__current_legs_image.set_alpha(int(100 * (fps - self.__time_dying) / fps))
+            else:
+                self.__rotated_image.set_alpha(0)
+                self.__current_legs_image.set_alpha(0)
         context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.__rect)
         context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.__rect)
 
@@ -118,7 +121,7 @@ class Enemy:
                     case 3:
                         self.__set_coordinate_and_angle(-deltaY, -deltaX, t)
         self.__current_legs_image = self.__animation[time % 30]
-        if self.__pos // speed == len(context.get_maps_controller().get_trajectory()):
+        if self.__pos // speed == len(context.get_maps_controller().get_trajectory()) and not self.__is_dying:
             context.get_config_gameplay().set_is_fail(True)
 
     def end_walk(self):  # завершает передвижение врага
@@ -187,8 +190,9 @@ class Enemy:
     def set_health(self, value):
         self.__health += value
 
-    def check_dying(self):
+    def check_dying(self, context):
         if self.__health <= 0:
+            context.get_sound_controller().play_sound('death')
             self.__is_dying = True
 
     def get_is_dying(self):

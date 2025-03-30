@@ -6,7 +6,7 @@ def button_works(event, context):
     if context.get_config_constant_object().get_button_main_manu().is_pressed(event):
         context.get_config_constant_object().get_button_main_manu().handle_event_parameter({'context': context, 'lvl': 'mainMenu'})  # кнопка перехода в главное меню нажат
     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and not context.get_config_gameplay().get_is_fail():  # если кнопка была нажата
-        context.get_animation_controller().start_move()  # переменная isMove нужна, чтобы определять, закончено движение или нет
+        context.get_animation_controller().start_move(context)  # переменная isMove нужна, чтобы определять, закончено движение или нет
     if pygame.key.get_pressed()[pygame.K_TAB]:  # была нажата кнопка таб
         context.get_config_gameplay().set_use_additional_parameters(True)
     else:
