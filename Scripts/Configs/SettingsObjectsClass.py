@@ -16,6 +16,6 @@ class SettingsObjects:
             context.get_file_save_controller().change_true_false('always use additional parameter')
             context.get_config_gameplay().set_always_use_additional_parameters(context.get_file_save_controller().get_parameter('always use additional parameter'))
         if self.__button_sound_setting.is_pressed(event):
-            self.__button_sound_setting.handle_event(event)
+            self.__button_sound_setting.handle_event_parameter(context)
         if self.__button_music_setting.is_pressed(event):
-            self.__button_music_setting.handle_event(event)
+            self.__button_music_setting.handle_event_parameter(context)

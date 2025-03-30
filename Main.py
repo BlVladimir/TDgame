@@ -36,7 +36,7 @@ maps_controller = MapsControllerClass.MapsController(config_parameter_screen.get
 towers_controller = TowersControllerClass.TowerController(maps_controller.get_tile_scale())
 enemies_controller = EnemiesControllerClass.EnemiesController()
 animation_controller = AnimationControllerClass.AnimationController(config_parameter_screen)
-sound_controller = SoundControllerClass.SoundController()
+sound_controller = SoundControllerClass.SoundController(file_save_controller)
 settings_objects = SettingsObjectsClass.SettingsObjects(config_parameter_screen.get_width(), config_parameter_screen.get_height(), __change_using_additional_parameter, sound_controller)
 
 context = ContextClass.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, settings_objects)
