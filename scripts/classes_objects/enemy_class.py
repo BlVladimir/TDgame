@@ -137,8 +137,9 @@ class Enemy:
                 self.__treatment -= context.get_towers_controller().get_current_tower().get_poison() - self.__current_damage_poison
                 self.__current_damage_poison = context.get_towers_controller().get_current_tower().get_poison()
             self.__poison_dict.append({'damage': context.get_towers_controller().get_current_tower().get_poison(), 'time': 2})
+        self.check_dying(context)
 
-    def treat(self):  # отравление/лечение
+    def treat(self, context):  # отравление/лечение
         if self.__treatment > 0:
             self.__health += self.__treatment
         elif self.__treatment + self.__armor < 0:
@@ -157,6 +158,7 @@ class Enemy:
                     max_damage = self.__poison_dict[i]['damage']
             self.__treatment -= max_damage - self.__current_damage_poison
             self.__current_damage_poison = max_damage
+        self.check_dying(context)
 
     def reset_to_zero_additional_tower_price(self):  # сбрасывает до 0 дополнительное золото от башни
         self.__additional_tower_price = 0

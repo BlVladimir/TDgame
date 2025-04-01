@@ -45,7 +45,6 @@ highlighting = definition_current_tile.Highlighting(context)
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно
-            pygame.quit()
             sys.exit()
         context.get_config_constant_object().get_button_exit().handle_event(event)
         level_controller.level_controller(shop, event, highlighting, context)

@@ -43,7 +43,7 @@ class EnemiesController:
 
     def treat_enemies(self, context):
         for i in range(len(self.__enemy_array)):
-            self.__enemy_array[i].treat()
+            self.__enemy_array[i].treat(context)
 
     def move_all_enemies(self, time, context, speed=60):  # двигает всех врагов
         for i in range(len(self.__enemy_array)):
