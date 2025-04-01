@@ -85,10 +85,10 @@ class EnemiesController:
         treatment = 0
         match context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave() - 1][1]:
             case 1:
-                image_enemy = 'images/enemy/armoredEnemy.png'
+                image_enemy = 'images/enemy/armored_enemy.png'
                 health = 6
             case 2:
-                image_enemy = 'images/enemy/ShieldEnemy.png'
+                image_enemy = 'images/enemy/shield_enemy.png'
                 armor = 3
             case 3:
                 image_enemy = 'images/enemy/regen.png'

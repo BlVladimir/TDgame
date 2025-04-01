@@ -9,9 +9,9 @@ class AnimationController:
         self.__time_game_over = 0
         self.__is_fail = False
         self.__animation_game_over = []
-        files_animation_game_over = os.listdir('images/UI/gameOverAnimation')
+        files_animation_game_over = os.listdir('images/UI/game_over_animation')
         for i in files_animation_game_over:
-            self.__animation_game_over.append(pygame.transform.scale(pygame.image.load('images/UI/gameOverAnimation/' + i), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))
+            self.__animation_game_over.append(pygame.transform.scale(pygame.image.load('images/UI/game_over_animation/' + i), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))
         self.__fps = 30
 
     def start_move(self, context):

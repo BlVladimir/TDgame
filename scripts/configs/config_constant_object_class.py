@@ -10,7 +10,7 @@ class ConfigConstantObject:
         self.__clock = pygame.time.Clock()
         self.__information_table = Information(height, width)
         self.__button_exit = Button(width - 170 - height * 0.4, 20, "images/UI/exit.png", 150, 75, action_exit)
-        self.__button_main_manu = Button(150, 20, "images/UI/exitInMainManu.png", 100, 100, action_scene)
+        self.__button_main_manu = Button(150, 20, "images/UI/exit_in_main_menu.png", 100, 100, action_scene)
         self.__button_setting = Button(20, 20, "images/UI/settings.png", 100, 100, action_scene)  # объекты кнопок
         if height / 2.5 > width / 4:
             button_level_scale = ceil(width / 4)

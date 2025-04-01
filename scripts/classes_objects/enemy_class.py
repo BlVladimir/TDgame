@@ -25,9 +25,9 @@ class Enemy:
         self.__angle = angle
         self.__animation = []
         self.__x = -1
-        files_animation = os.listdir('images/enemy/animationWalking')
+        files_animation = os.listdir('images/enemy/animation_walking')
         for i in files_animation:
-            self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animationWalking/' + i), (self.__scale, self.__scale)))
+            self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animation_walking/' + i), (self.__scale, self.__scale)))
         self.__rotated_image = self.__image
         self.__current_legs_image = self.__animation[0]
         self.__is_dying = False

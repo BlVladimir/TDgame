@@ -18,13 +18,13 @@ def get_coordinate_list(interval_x, interval_y, value_lines, coordinate, t = 0):
 class Information:
     def __init__(self, height, width):
         self.__coordinate = (width - 0.4 * height, 0)
-        self.__image = pygame.transform.scale(pygame.image.load('images/UI/shopBackground.png'), (height * 0.4, height))
+        self.__image = pygame.transform.scale(pygame.image.load('images/UI/shop_background.png'), (height * 0.4, height))
         self.__modifier_array = ('free purchase', 'price up', 'health', 'money', 'damage')
-        self.__image_characteristic_dict = {'health': pygame.image.load('images/UI/enemyСharacteristic/health.png'),
+        self.__image_characteristic_dict = {'health': pygame.image.load('images/UI/enemy_characteristic/health.png'),
                                            'price': pygame.image.load('images/UI/money.png'),
-                                           'healing': pygame.image.load('images/UI/enemyСharacteristic/healing.png'),
-                                           'armor': pygame.image.load('images/UI/enemyСharacteristic/shield.png'),
-                                           'poison': pygame.image.load('images/UI/enemyСharacteristic/poison.png')}
+                                           'healing': pygame.image.load('images/UI/enemy_characteristic/healing.png'),
+                                           'armor': pygame.image.load('images/UI/enemy_characteristic/shield.png'),
+                                           'poison': pygame.image.load('images/UI/enemy_characteristic/poison.png')}
         self.__current_modifier = []
         for i in self.__image_characteristic_dict.keys():
             self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.05, height * 0.05))
@@ -42,7 +42,7 @@ class Information:
 
     def draw(self, height, width, context):  # рисует панель информации
         context.get_config_parameter_scene().get_screen().blit(self.__image, self.__coordinate)
-        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.4))
+        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load('images/UI/enemy_characteristic/bugs.png'), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.4))
         self.__draw_characteristic(height, context)
         self.draw_bugs(height, width, context)
 

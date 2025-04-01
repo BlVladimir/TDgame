@@ -11,7 +11,7 @@ class Button:
         self.__action = action  # действие(функция, которая вызывается при нажатии)
         self.__image = pygame.image.load(image)  # картинка
         self.__image = pygame.transform.scale(self.__image, (self.__width, self.__height))
-        self.__highlight = pygame.transform.scale(pygame.image.load('images/UI/highlighting/highlightingTower.png'), (self.__width, self.__height))  # выделение кнопки
+        self.__highlight = pygame.transform.scale(pygame.image.load('images/UI/highlighting/highlighting_tower.png'), (self.__width, self.__height))  # выделение кнопки
         if additional_image is not None:
             self.__additional_image = pygame.transform.scale(pygame.image.load(additional_image), (self.__width, self.__height))  # картинка, которая накладывается при отрисовки кнопки
         else:

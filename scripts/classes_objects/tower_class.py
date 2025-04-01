@@ -29,8 +29,8 @@ class Tower:
         if radius is not None:
             self.__radius = scale / 2 + radius * scale * 1.2
             self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), (self.__radius * 2, self.__radius * 2))
-        self.__is_charged = (pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/charged.png'), (self.__scale / 6, self.__scale / 6)),
-                             pygame.transform.scale(pygame.image.load('images/UI/enemyСharacteristic/notCharged.png'), (self.__scale / 6, self.__scale / 6)))
+        self.__is_charged = (pygame.transform.scale(pygame.image.load('images/UI/enemy_characteristic/charged.png'), (self.__scale / 6, self.__scale / 6)),
+                             pygame.transform.scale(pygame.image.load('images/UI/enemy_characteristic/not_charged.png'), (self.__scale / 6, self.__scale / 6)))
         self.__level_image_tuple = (pygame.transform.scale(pygame.image.load('images/upgrade/1lvl.png'), (self.__scale / 4, self.__scale / 4)),
                                     pygame.transform.scale(pygame.image.load('images/upgrade/2lvl.png'), (self.__scale / 4, self.__scale / 4)),
                                     pygame.transform.scale(pygame.image.load('images/upgrade/3lvl.png'), (self.__scale / 4, self.__scale / 4)))
