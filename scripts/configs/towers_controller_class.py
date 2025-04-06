@@ -100,7 +100,4 @@ class TowerController:
                                                                                                        context.get_maps_controller().get_tile_scale() * 0.2))
                     context.get_sound_controller().play_sound('poison_shot')
                 context.get_enemies_controller().get_current_enemy().remove_health(context)  # отнимает у врага здоровье, равное урону башни
-                context.get_enemies_controller().get_current_enemy().reset_to_zero_additional_tower_price()
-                context.get_enemies_controller().get_current_enemy().new_value_additional_tower_price(context)
-                context.get_enemies_controller().get_current_enemy().check_dying(context)
                 self.__towers_object_array[self.__current_tower].set_is_used(True)  # переменная отвечает за то, что башня была использована

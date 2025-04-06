@@ -137,6 +137,8 @@ class Enemy:
                 self.__treatment -= context.get_towers_controller().get_current_tower().get_poison() - self.__current_damage_poison
                 self.__current_damage_poison = context.get_towers_controller().get_current_tower().get_poison()
             self.__poison_dict.append({'damage': context.get_towers_controller().get_current_tower().get_poison(), 'time': 2})
+        self.reset_to_zero_additional_tower_price()
+        self.new_value_additional_tower_price(context)
         self.check_dying(context)
 
     def treat(self, context):  # отравление/лечение
