@@ -18,12 +18,12 @@ class Button:
             self.__additional_image = None
 
     def draw(self, context):  # функция, рисующая кнопку
-        context.get_config_parameter_scene().get_screen().blit(self.__image, (self.__x, self.__y))
+        context.config_parameter_scene.get_screen().blit(self.__image, (self.__x, self.__y))
         mouse_position = pygame.mouse.get_pos()
         if self.__x + self.__width >= mouse_position[0] >= self.__x and self.__y + self.__height >= mouse_position[1] >= self.__y:
-            context.get_config_parameter_scene().get_screen().blit(self.__highlight, (self.__x, self.__y))
+            context.config_parameter_scene.get_screen().blit(self.__highlight, (self.__x, self.__y))
         if self.__additional_image is not None:
-            context.get_config_parameter_scene().get_screen().blit(self.__additional_image, (self.__x, self.__y))
+            context.config_parameter_scene.get_screen().blit(self.__additional_image, (self.__x, self.__y))
 
     def draw_button_with_text(self, text, context):
         self.draw(context)

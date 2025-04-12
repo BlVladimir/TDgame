@@ -47,7 +47,7 @@ class ConfigConstantObject:
 
     def update_sprite(self, context):
         self.__spites.update()
-        self.__spites.draw(context.get_config_parameter_scene().get_screen())
+        self.__spites.draw(context.config_parameter_scene.get_screen())
 
     def clear_sprites(self):
         self.__spites.empty()

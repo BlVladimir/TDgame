@@ -33,11 +33,11 @@ class EnemiesController:
     def kill_enemies(self, context):
         __kill_array = []
         for i in range(len(self.__enemy_array)):
-            if self.__enemy_array[i].get_is_dead(context.get_animation_controller().get_fps()):
+            if self.__enemy_array[i].get_is_dead(context.animation_controller.get_fps()):
                 __kill_array.append(i)
                 self.__current_enemy = None
         for i in range(len(__kill_array)):
-            context.get_config_gameplay().set_money(2 + self.__enemy_array[__kill_array[len(__kill_array) - 1 - i]].get_additional_money())
+            context.config_gameplay.set_money(2 + self.__enemy_array[__kill_array[len(__kill_array) - 1 - i]].get_additional_money())
             self.__enemy_array.pop(__kill_array[len(__kill_array)-1-i])
             bugs(context)
 
@@ -48,15 +48,15 @@ class EnemiesController:
     def move_all_enemies(self, time, context, speed=60):  # двигает всех врагов
         for i in range(len(self.__enemy_array)):
             self.__enemy_array[i].move(time, context, speed)
-            if context.get_config_gameplay().get_is_fail():
-                if context.get_config_gameplay().get_current_wave() >= 20 and context.get_config_gameplay().get_passed_level(context) < context.get_maps_controller().get_level():
-                    context.get_file_save_controller().set_parameter('level', context.get_maps_controller().get_level())
+            if context.config_gameplay.get_is_fail():
+                if context.config_gameplay.get_current_wave() >= 20 and context.config_gameplay.get_passed_level(context) < context.maps_controller.get_level():
+                    context.file_save_controller.set_parameter('level', context.maps_controller.get_level())
                     self.__current_enemy = None
 
                 break
 
     def stop_walk(self, context):
-        context.get_sound_controller().stop_sound('walk')
+        context.sound_controller.stop_sound('walk')
         for i in range(len(self.__enemy_array)):
             self.__enemy_array[i].end_walk()
 
@@ -74,16 +74,16 @@ class EnemiesController:
             self.__enemy_array[i].draw(context)
 
     def create_enemy(self, context):  # Добавляет в массив врагов новые элементы. В зависимости от количества врагов у каждого врага разные координаты
-        if (context.get_config_gameplay().get_current_wave() + 1) % 4 == 0:
-            additional_health = ((context.get_config_gameplay().get_current_wave() + 1) // 4 - 1) * 2 + 1
+        if (context.config_gameplay.get_current_wave() + 1) % 4 == 0:
+            additional_health = ((context.config_gameplay.get_current_wave() + 1) // 4 - 1) * 2 + 1
         else:
-            additional_health = ((context.get_config_gameplay().get_current_wave() + 1) // 4) * 2 + (context.get_config_gameplay().get_current_wave() + 1) % 4 - 1
+            additional_health = ((context.config_gameplay.get_current_wave() + 1) // 4) * 2 + (context.config_gameplay.get_current_wave() + 1) % 4 - 1
         additional_health += randrange(-1, 2)
         image_enemy = 'images/enemy/common.png'
         health = 3
         armor = 0
         treatment = 0
-        match context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave() - 1][1]:
+        match context.config_gameplay.get_waves()[context.config_gameplay.get_current_wave() - 1][1]:
             case 1:
                 image_enemy = 'images/enemy/armored_enemy.png'
                 health = 6
@@ -94,20 +94,20 @@ class EnemiesController:
                 image_enemy = 'images/enemy/regen.png'
                 health = 4
                 treatment = 2
-        scale = context.get_maps_controller().get_tile_scale()
-        angle = context.get_maps_controller().get_started_angle()
-        if context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave()][0] == 1:
+        scale = context.maps_controller.get_tile_scale()
+        angle = context.maps_controller.get_started_angle()
+        if context.config_gameplay.get_waves()[context.config_gameplay.get_current_wave()][0] == 1:
             self.__enemy_array.append(
-                enemy_class.Enemy(image_enemy, context.get_maps_controller().get_started_position(0), scale / 2, angle, health + additional_health, context.get_config_gameplay().get_current_wave() // 2, 0, armor=armor, treatment=treatment))
-        elif context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave()][0] == 2:
+                enemy_class.Enemy(image_enemy, context.maps_controller.get_started_position(0), scale / 2, angle, health + additional_health, context.config_gameplay.get_current_wave() // 2, 0, armor=armor, treatment=treatment))
+        elif context.config_gameplay.get_waves()[context.config_gameplay.get_current_wave()][0] == 2:
             self.__enemy_array.append(
-                enemy_class.Enemy(image_enemy, context.get_maps_controller().get_started_position(1), scale / 2, angle, health + additional_health, context.get_config_gameplay().get_current_wave() // 2, 1, armor=armor, treatment=treatment))
+                enemy_class.Enemy(image_enemy, context.maps_controller.get_started_position(1), scale / 2, angle, health + additional_health, context.config_gameplay.get_current_wave() // 2, 1, armor=armor, treatment=treatment))
             self.__enemy_array.append(
-                enemy_class.Enemy(image_enemy, context.get_maps_controller().get_started_position(2), scale / 2, angle, health + additional_health, context.get_config_gameplay().get_current_wave() // 2, 2, armor=armor, treatment=treatment))
-        elif context.get_config_gameplay().get_waves()[context.get_config_gameplay().get_current_wave()][0] == 3:
+                enemy_class.Enemy(image_enemy, context.maps_controller.get_started_position(2), scale / 2, angle, health + additional_health, context.config_gameplay.get_current_wave() // 2, 2, armor=armor, treatment=treatment))
+        elif context.config_gameplay.get_waves()[context.config_gameplay.get_current_wave()][0] == 3:
             self.__enemy_array.append(
-                enemy_class.Enemy(image_enemy, context.get_maps_controller().get_started_position(2), scale / 2, angle, health + additional_health, context.get_config_gameplay().get_current_wave() // 2, 2, armor=armor, treatment=treatment))
+                enemy_class.Enemy(image_enemy, context.maps_controller.get_started_position(2), scale / 2, angle, health + additional_health, context.config_gameplay.get_current_wave() // 2, 2, armor=armor, treatment=treatment))
             self.__enemy_array.append(
-                enemy_class.Enemy(image_enemy, context.get_maps_controller().get_started_position(3), scale / 2, angle, health + additional_health, context.get_config_gameplay().get_current_wave() // 2, 3, armor=armor, treatment=treatment))
+                enemy_class.Enemy(image_enemy, context.maps_controller.get_started_position(3), scale / 2, angle, health + additional_health, context.config_gameplay.get_current_wave() // 2, 3, armor=armor, treatment=treatment))
             self.__enemy_array.append(
-                enemy_class.Enemy(image_enemy, context.get_maps_controller().get_started_position(4), scale / 2, angle, health + additional_health, context.get_config_gameplay().get_current_wave() // 2, 4, armor=armor, treatment=treatment))
+                enemy_class.Enemy(image_enemy, context.maps_controller.get_started_position(4), scale / 2, angle, health + additional_health, context.config_gameplay.get_current_wave() // 2, 4, armor=armor, treatment=treatment))

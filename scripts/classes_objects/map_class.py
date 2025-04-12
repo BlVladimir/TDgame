@@ -66,23 +66,23 @@ class Map:
         for y in range(len(self.__tile_array)):
             for x in range(len(self.__tile_array[y])):
                 if self.__tile_array[y][x] != 0 and self.__tile_array[y][x] != 8:
-                    context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[self.__tile_array[y][x]], self.__coordinates[p])
+                    context.config_parameter_scene.get_screen().blit(self.__image_tile_mass[self.__tile_array[y][x]], self.__coordinates[p])
                     p += 1
-                elif self.__tile_array[y][x] == 8 and not context.get_config_gameplay().get_is_fail():
-                    context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.__coordinates[p])
-                    context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[7], self.__coordinates[p])
+                elif self.__tile_array[y][x] == 8 and not context.config_gameplay.get_is_fail():
+                    context.config_parameter_scene.get_screen().blit(self.__image_tile_mass[1], self.__coordinates[p])
+                    context.config_parameter_scene.get_screen().blit(self.__image_tile_mass[7], self.__coordinates[p])
                     p += 1
-                elif self.__tile_array[y][x] == 8 and context.get_config_gameplay().get_is_fail():
-                    time = context.get_animation_controller().get_time_game_over()
+                elif self.__tile_array[y][x] == 8 and context.config_gameplay.get_is_fail():
+                    time = context.animation_controller.get_time_game_over()
                     if time < 30:
-                        context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.__coordinates[p])
-                        context.get_config_parameter_scene().get_screen().blit(self.__animation_destruction[time // 2], self.__coordinates[p])
+                        context.config_parameter_scene.get_screen().blit(self.__image_tile_mass[1], self.__coordinates[p])
+                        context.config_parameter_scene.get_screen().blit(self.__animation_destruction[time // 2], self.__coordinates[p])
                     else:
-                        context.get_config_parameter_scene().get_screen().blit(self.__image_tile_mass[1], self.__coordinates[p])
-                        context.get_config_parameter_scene().get_screen().blit(self.__animation_destruction[14], self.__coordinates[p])
+                        context.config_parameter_scene.get_screen().blit(self.__image_tile_mass[1], self.__coordinates[p])
+                        context.config_parameter_scene.get_screen().blit(self.__animation_destruction[14], self.__coordinates[p])
                     p += 1
         for i in range(len(self.__road_array[0])):
-            context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.__road_array[1][i] * (-90)), self.__road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
+            context.config_parameter_scene.get_screen().blit(pygame.transform.rotate(self.__image_tile_mass[0], self.__road_array[1][i] * (-90)), self.__road_array[0][i])   # Функция рисует тайлы. Дороги отдельно от остальных
 
     def get_started_position(self, position_enemy_on_tile):  # возвращает массив координат начального положения врага
         rectEnemy = [0, 0]

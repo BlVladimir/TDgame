@@ -11,9 +11,9 @@ from scripts.main_scripts import level_controller, draw_scene
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
 def __action_scene(parameter_dict):  # функция, меняющая переменную сцены
-    parameter_dict['context'].get_config_parameter_scene().set_scene(parameter_dict['lvl'])
+    parameter_dict['context'].config_parameter_scene.set_scene(parameter_dict['lvl'])
     if parameter_dict['lvl'].isdigit():
-        parameter_dict['context'].get_maps_controller().change_level(parameter_dict['lvl'])
+        parameter_dict['context'].maps_controller.change_level(parameter_dict['lvl'])
 
 def __action_exit():  # функция, закрывающая окно
     pygame.quit()
@@ -41,19 +41,19 @@ settings_objects = settings_objects_class.SettingsObjects(config_parameter_scree
 
 context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, settings_objects)
 shop = shop_class.Shop(config_parameter_screen.get_height())
-context.get_config_constant_object().add_at_sprite(shop)
+(context.config_constant_object.add_at_sprite(shop))
 highlighting = definition_current_tile.Highlighting(context)
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно
             sys.exit()
-        context.get_config_constant_object().get_button_exit().handle_event(event)
+        (context.config_constant_object.get_button_exit().handle_event(event))
         level_controller.level_controller(shop, event, highlighting, context)
-        context.get_sound_controller().click_sound(event)
-    context.get_animation_controller().move_enemies(context)
+        context.sound_controller.click_sound(event)
+    context.animation_controller.move_enemies(context)
     draw_scene.draw_scene(highlighting, shop, context)
-    if context.get_config_gameplay().get_is_fail():
-        context.get_animation_controller().fail_animation(context)
-    context.get_maps_controller().update_trajectory_array()
+    if context.config_gameplay.get_is_fail():
+        context.animation_controller.fail_animation(context)
+    context.maps_controller.update_trajectory_array()
     pygame.display.flip()  # обновляет экран по завершению цикла
-    context.get_config_constant_object().get_clock().tick(30)  # ограничивает число кадров в секунду
+    context.config_constant_object.get_clock().tick(30)  # ограничивает число кадров в секунду

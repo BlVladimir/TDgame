@@ -30,47 +30,47 @@ class Shop(pygame.sprite.Sprite):
 
 
     def draw(self, towers_controller, context): #  рисует магазин
-        if context.get_config_gameplay().get_shop_type() == 1:
+        if context.config_gameplay.get_shop_type() == 1:
             self.__draw_store(context)
             for i in self.__products:
                 i.draw(context)
-        elif context.get_config_gameplay().get_shop_type() == 2:
+        elif context.config_gameplay.get_shop_type() == 2:
             self.__draw_up(towers_controller, context)
 
     def __draw_up(self, towers_controller, context):  # рисует кнопку улучшения
-        height = context.get_config_parameter_scene().get_height()
-        context.get_config_parameter_scene().get_screen().blit(self.__image_shop, (0, 0))
+        height = context.config_parameter_scene.get_height()
+        # context.get_config_parameter_scene.get_screen().blit(self.__image_shop, (0, 0))
         if towers_controller.get_current_tower() is not None:
             towers_controller.get_current_tower().draw_picture_tower(height * 0.16, (height * 0.2, 200), context)
             self.__draw_tower_parameter(context)
             towers_controller.get_current_button_update().draw(context)
 
     def __draw_store(self, context): #  проходится по массиву возможных покупок и рисует магазин
-        # context.get_config_parameter_scene().get_screen().blit(self.__image_shop, (0, 0))
+        # context.get_config_parameter_scene.get_screen().blit(self.__image_shop, (0, 0))
         for i in self.__products:
             function.draw_text('x' + str(i.get_cost()), 100, (i.get_product_coordinate()[0] + self.__scale_products * 1.5, i.get_product_coordinate()[1] + self.__scale_products * 0.5), context)
-            context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(self.__money_picture, (self.__scale_products * 0.9, self.__scale_products * 0.9)), (i.get_product_coordinate()[0] + self.__scale_products * 2.1, i.get_product_coordinate()[1] + self.__scale_products * 0.1))
+            context.config_parameter_scene.get_screen().blit(pygame.transform.scale(self.__money_picture, (self.__scale_products * 0.9, self.__scale_products * 0.9)), (i.get_product_coordinate()[0] + self.__scale_products * 2.1, i.get_product_coordinate()[1] + self.__scale_products * 0.1))
 
     def __draw_tower_parameter(self, context):  # рисует характеристики башни
-        height = context.get_config_parameter_scene().get_height()
-        if context.get_towers_controller().get_current_tower() is not None:
-            characteristic_dict = context.get_towers_controller().get_current_tower().get_characteristic()
+        height = context.config_parameter_scene.get_height()
+        if context.towers_controller.get_current_tower() is not None:
+            characteristic_dict = context.towers_controller.get_current_tower().get_characteristic()
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.5, len(characteristic_dict), (0, height * 0.16), 1)
             i = 0
             for j in characteristic_dict.keys():
-                context.get_config_parameter_scene().get_screen().blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.06, coordinate_array[i][1] - context.get_config_parameter_scene().get_height() * 0.02))
-                function.draw_text(characteristic_dict[j], int(context.get_config_parameter_scene().get_height() * 0.06), (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.15, coordinate_array[i][1]), context, 1)
+                context.config_parameter_scene.get_screen().blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.config_parameter_scene.get_height() * 0.06, coordinate_array[i][1] - context.config_parameter_scene.get_height() * 0.02))
+                function.draw_text(characteristic_dict[j], int(context.config_parameter_scene.get_height() * 0.06), (coordinate_array[i][0] + context.config_parameter_scene.get_height() * 0.15, coordinate_array[i][1]), context, 1)
                 i += 1
 
 
     def build_tower(self, event, context):  # проверяет, нажата ли кнопка продуктов и покупает башню
         mouse_pose = pygame.mouse.get_pos()
-        current_tile = context.get_config_gameplay().get_current_tile()
+        current_tile = context.config_gameplay.get_current_tile()
         if current_tile is not None:
             for i in self.__products:
                 if i.get_coordinate()[0] < mouse_pose[0] < i.get_coordinate()[0] + i.get_scale() and i.get_coordinate()[0] < mouse_pose[0] < i.get_coordinate()[0] + i.get_scale():
-                    context.get_maps_controller().get_build_array()[current_tile]['is_filled'] = i.buy(event, context)
-                    if context.get_maps_controller().get_build_array()[current_tile]['is_filled']:
+                    context.maps_controller.get_build_array()[current_tile]['is_filled'] = i.buy(event, context)
+                    if context.maps_controller.get_build_array()[current_tile]['is_filled']:
                         break
 
     def get_money_picture(self):  # возвращает картинку монеты
