@@ -15,7 +15,7 @@ class SoundController:
         mixer.music.load('sound/music_game.mp3')
         mixer.music.set_volume(0.01)
         if self.__play_music:
-            mixer.music.play()
+            mixer.music.play(loops=-1)
 
     def click_sound(self, event):
         if self.__play_sound and event.type == MOUSEBUTTONDOWN:
@@ -44,7 +44,7 @@ class SoundController:
             context.get_file_save_controller().set_parameter('play_music', False)
         else:
             self.__play_music = True
-            mixer.music.play()
+            mixer.music.play(loops=-1)
             context.get_file_save_controller().set_parameter('play_music', True)
 
     def get_play_sound(self):

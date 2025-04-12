@@ -152,7 +152,7 @@ class Enemy:
             if self.__poison_dict[i]['time'] == 0:
                 remove_array.append(i)
         if remove_array:
-            for i in range(len(remove_array)):
+            for i in range(len(remove_array)-1, 0, -1):
                 self.__poison_dict.pop(remove_array[i])
             max_damage = 0
             for i in range(len(self.__poison_dict)):

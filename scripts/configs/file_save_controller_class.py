@@ -3,7 +3,7 @@ import json
 class FileSaveController:
 
     def __init__(self):
-        self.__file_save = 'save.json'
+        self.__file_save = 'save/save.json'
         self.__base_data = {'always use additional parameter': False, 'level': 1, 'play_sound': True, 'play_music': True}
 
     def get_parameter(self, parameter_name):
