@@ -5,11 +5,11 @@ from scripts.classes_objects.information_class import get_coordinate_list
 
 pygame.init()
 
-class Shop:
+class Shop(pygame.sprite.Sprite):
 
     def __init__(self, height):
+        pygame.sprite.Sprite.__init__(self)
         self.__money_picture = pygame.transform.scale(pygame.image.load('images/UI/money.png'), (height * 0.1, height * 0.1))
-        self.__image_shop = pygame.transform.scale(pygame.image.load('images/UI/shop_background.png'), (height * 0.4, height))
         self.__tower_characteristic_image = (pygame.transform.scale(pygame.image.load('images/UI/up/damage_up_up.png'), (100, 100)),
                                            pygame.transform.scale(pygame.image.load('images/UI/up/radius_up_up.png'), (100, 100)))
         self.__products = [Product("images/tower/common_foundation.png", 3, height * 0.1, (20, 150), 2, 1, (4, 6), False, 0, "images/tower/common_gun.png"),  # coordinate = (20, 150 + i * 120)
@@ -21,6 +21,8 @@ class Shop:
                                             'armor': pygame.image.load('images/UI/up/anty_shield_up.png'),
                                             'poison': pygame.image.load('images/UI/up/poison_up_up.png'),
                                             'money': pygame.image.load('images/UI/up/money_up_up.png')}
+        self.image = pygame.transform.scale(pygame.image.load('images/UI/shop_background.png'), (height * 0.4, height))  # картинка
+        self.rect = (0, 0)
 
         self.__scale_products = height * 0.1
         for i in self.__image_characteristic_dict.keys():
@@ -44,7 +46,7 @@ class Shop:
             towers_controller.get_current_button_update().draw(context)
 
     def __draw_store(self, context): #  проходится по массиву возможных покупок и рисует магазин
-        context.get_config_parameter_scene().get_screen().blit(self.__image_shop, (0, 0))
+        # context.get_config_parameter_scene().get_screen().blit(self.__image_shop, (0, 0))
         for i in self.__products:
             function.draw_text('x' + str(i.get_cost()), 100, (i.get_product_coordinate()[0] + self.__scale_products * 1.5, i.get_product_coordinate()[1] + self.__scale_products * 0.5), context)
             context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(self.__money_picture, (self.__scale_products * 0.9, self.__scale_products * 0.9)), (i.get_product_coordinate()[0] + self.__scale_products * 2.1, i.get_product_coordinate()[1] + self.__scale_products * 0.1))
