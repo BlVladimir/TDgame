@@ -78,7 +78,10 @@ class EnemiesController:
             additional_health = ((context.get_config_gameplay().get_current_wave() + 1) // 4 - 1) * 2 + 1
         else:
             additional_health = ((context.get_config_gameplay().get_current_wave() + 1) // 4) * 2 + (context.get_config_gameplay().get_current_wave() + 1) % 4 - 1
-        additional_health += randrange(-1, 2)
+        if context.get_config_gameplay().get_current_wave()==0:
+            additional_health += randrange(-1, 2)
+        else:
+            additional_health -= 1
         image_enemy = 'images/enemy/common.png'
         health = 3
         armor = 0
