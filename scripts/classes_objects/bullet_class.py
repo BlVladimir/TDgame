@@ -19,11 +19,12 @@ class Bullet(pygame.sprite.Sprite):  # наследование от спрай�
         if self.__time_to_destroy == 0:
             self.kill()
 
-    def get_time_to_destroy(self):
-        return self.__time_to_destroy
-
     def get_delta(self):
         return self.__delta
+
+    @property
+    def time_to_destroy(self):
+        return self.__time_to_destroy
 
 class BulletWithAnimation(Bullet):
     def __init__(self, image, started_coordinate_center, final_coordinate_center, fps, animation_directory, scale):
@@ -34,5 +35,5 @@ class BulletWithAnimation(Bullet):
             self.__animation.append(pygame.transform.scale(pygame.image.load('images/tower/Bullets/' + animation_directory + '/' + i), (scale, scale)))
 
     def update(self):
-        self.image = pygame.transform.rotate(self.__animation[Bullet.get_time_to_destroy(self) % len(self.__animation)], degrees(atan2(Bullet.get_delta(self)[0], Bullet.get_delta(self)[1])) + 180)  # картинка
+        self.image = pygame.transform.rotate(self.__animation[self.time_to_destroy % len(self.__animation)], degrees(atan2(Bullet.get_delta(self)[0], Bullet.get_delta(self)[1])) + 180)  # картинка
         Bullet.update(self)

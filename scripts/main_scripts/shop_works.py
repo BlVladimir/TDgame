@@ -1,4 +1,4 @@
-def shop_works(shop, event, context):
+def shop_works(event, context):
     if context.config_gameplay.get_current_tile() is None:
         context.config_gameplay.set_shop_type(0)
     elif context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile()]['is_filled']:
@@ -6,7 +6,7 @@ def shop_works(shop, event, context):
     else:
         context.config_gameplay.set_shop_type(1)
     if context.config_gameplay.get_shop_type() == 1:
-        shop.build_tower(event, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
+        context.config_constant_object.shop.build_tower(event, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
     if context.towers_controller.get_current_tower():
         if context.towers_controller.get_current_tower().get_image_gun() is not None:
             context.towers_controller.get_current_tower().rotate_gun()

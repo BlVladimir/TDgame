@@ -40,18 +40,16 @@ sound_controller = sound_controller_class.SoundController(file_save_controller)
 settings_objects = settings_objects_class.SettingsObjects(config_parameter_screen.get_width(), config_parameter_screen.get_height(), __change_using_additional_parameter, sound_controller)
 
 context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, settings_objects)
-shop = shop_class.Shop(config_parameter_screen.get_height())
-(context.config_constant_object.add_at_sprite(shop))
 highlighting = definition_current_tile.Highlighting(context)
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно
             sys.exit()
         (context.config_constant_object.get_button_exit().handle_event(event))
-        level_controller.level_controller(shop, event, highlighting, context)
+        level_controller.level_controller(event, highlighting, context)
         context.sound_controller.click_sound(event)
     context.animation_controller.move_enemies(context)
-    draw_scene.draw_scene(highlighting, shop, context)
+    draw_scene.draw_scene(highlighting, context)
     if context.config_gameplay.get_is_fail():
         context.animation_controller.fail_animation(context)
     context.maps_controller.update_trajectory_array()

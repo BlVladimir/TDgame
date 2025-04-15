@@ -2,6 +2,7 @@ import pygame
 from math import ceil
 from scripts.classes_objects.information_class import Information
 from scripts.classes_objects.button_class import Button
+from scripts.classes_objects.shop_class import Shop
 
 
 class ConfigConstantObject:
@@ -22,7 +23,8 @@ class ConfigConstantObject:
                                      Button(width / 2 - button_level_scale * 1.5 - height / 20, height / 2 + height / 40, "images/UI/lvl/lvl4.png", button_level_scale, button_level_scale, action_scene),
                                      Button(width / 2 - button_level_scale / 2, height / 2 + height / 40, "images/UI/lvl/lvl5.png", button_level_scale, button_level_scale, action_scene),
                                      Button(width / 2 + button_level_scale / 2 + height / 20, height / 2 + height / 40, "images/UI/lvl/lvl6.png", button_level_scale, button_level_scale, action_scene))
-        self.__spites = pygame.sprite.Group()
+        self.__spites_UI_group = pygame.sprite.Group()
+        self.__shop = Shop(height)
 
     def get_clock(self):
         return self.__clock
@@ -43,11 +45,16 @@ class ConfigConstantObject:
         return self.__button_setting
 
     def add_at_sprite(self, new_sprite):
-        self.__spites.add(new_sprite)
+        self.__spites_UI_group.add(new_sprite)
 
     def update_sprite(self, context):
-        self.__spites.update()
-        self.__spites.draw(context.config_parameter_scene.get_screen())
+        self.__spites_UI_group.update()
+        self.__spites_UI_group.draw(context.config_parameter_scene.get_screen())
 
     def clear_sprites(self):
-        self.__spites.empty()
+        self.__spites_UI_group.empty()
+        self.__spites_UI_group.add(self.__shop)
+
+    @property
+    def shop(self):
+        return self.__shop
