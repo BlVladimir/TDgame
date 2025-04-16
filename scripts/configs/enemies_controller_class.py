@@ -22,7 +22,7 @@ class EnemiesController:
                     break
 
     def get_current_enemy(self):
-        if self.__current_enemy is not None and not self.__enemy_array[self.__current_enemy].get_is_dying():
+        if self.__current_enemy is not None and len(self.__enemy_array)-1>=self.__current_enemy and not self.__enemy_array[self.__current_enemy].get_is_dying():
             return self.__enemy_array[self.__current_enemy]
         else:
             return None
