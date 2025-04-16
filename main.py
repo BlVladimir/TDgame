@@ -5,7 +5,6 @@ from scripts.configs import maps_controller_class, config_constant_object_class,
     config_parameter_screen_class, file_save_controller_class, sound_controller_class, settings_objects_class
 from scripts import context_class
 from scripts.classes_objects import shop_class, definition_current_tile
-
 from scripts.main_scripts import level_controller, draw_scene
 
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
