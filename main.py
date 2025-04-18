@@ -10,22 +10,6 @@ from scripts.main_scripts import level_controller, draw_scene
 
 pygame.init()  # импорт библиотеки pygame и sys, и импорт класса ClassButton из файла Button
 
-def __action_scene(parameter_dict):  # функция, меняющая переменную сцены
-    parameter_dict['context'].config_parameter_scene.set_scene(parameter_dict['lvl'])
-    if parameter_dict['lvl'].isdigit():
-        parameter_dict['context'].maps_controller.change_level(parameter_dict['lvl'])
-
-def __action_exit():  # функция, закрывающая окно
-    pygame.quit()
-    sys.exit()
-
-def __change_using_additional_parameter(additionalParameters):
-    if additionalParameters:
-        additionalParameters = False
-    else:
-        additionalParameters = True
-    return additionalParameters
-
 file_save_controller = file_save_controller_class.FileSaveController()
 config_parameter_screen = config_parameter_screen_class.ConfigParameterScreen()
 config_constant_object = config_constant_object_class.ConfigConstantObject(config_parameter_screen.get_height(), config_parameter_screen.get_width(), __action_exit, __action_scene)
