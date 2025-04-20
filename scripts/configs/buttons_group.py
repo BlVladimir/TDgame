@@ -6,6 +6,19 @@ def action_scene(**kwargs):  # функция, меняющая переменн
     kwargs['context'].config_parameter_scene.set_scene(kwargs['lvl'])
     if kwargs['lvl'].isdigit():
         kwargs['context'].maps_controller.change_level(kwargs['lvl'])
+        kwargs['context'].config_constant_object.get_information_table().reset_modifier()
+        kwargs['context'].config_modifier.reset_price_modifier()
+        kwargs['context'].towers_controller.update_scale_animation(kwargs['context'])
+        kwargs['context'].config_parameter_scene.highlighting.update_scale(kwargs['context'])
+        kwargs['context'].maps_controller.update_trajectory_array()
+        kwargs['context'].maps_controller.create_waves(100, kwargs['context'])  # создает волны
+        kwargs['context'].config_gameplay.set_current_wave(1 - kwargs['context'].config_gameplay.get_current_wave())  # текущая волна
+        kwargs['context'].enemies_controller.create_enemy(kwargs['context'])  # создает врагов на 1 клетке
+        kwargs['context'].config_gameplay.set_is_started(False)  # переменная отвечает за то, началась ли игра или нет
+        kwargs['context'].config_gameplay.set_money(-kwargs['context'].config_gameplay.get_money() + 4)
+        for i in range(len(kwargs['context'].maps_controller.get_build_array())):  # обнуляет все тайлы
+            kwargs['context'].maps_controller.get_build_array()[i]['is_filled'] = False
+        kwargs['context'].config_constant_object.clear_sprites()
 
 def action_exit():  # функция, закрывающая окно
     exit()
@@ -24,10 +37,11 @@ class ButtonsGroup:
             self.__button_group.update({'context':context})
 
     def action(self, event, **kwargs):
-        for i in self.__button_group.sprites():
-            if i.is_pressed(event):
-                i.handle_event_parameter(kwargs)
-                break
+        if self.__active:
+            for i in self.__button_group.sprites():
+                if i.is_pressed(event):
+                    i.handle_event_parameter(kwargs)
+                    break
 
     def clear_buttons(self):
         self.__button_group.empty()
