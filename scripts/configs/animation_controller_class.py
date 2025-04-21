@@ -1,6 +1,7 @@
 import os
 import pygame
 from scripts.main_scripts.function import draw_text
+from scripts.main_scripts.resourse_path import resource_path
 
 class AnimationController:
     def __init__(self, config_parameter_screen):
@@ -11,7 +12,7 @@ class AnimationController:
         self.__animation_game_over = []
         files_animation_game_over = os.listdir('images/UI/game_over_animation')
         for i in files_animation_game_over:
-            self.__animation_game_over.append(pygame.transform.scale(pygame.image.load('images/UI/game_over_animation/' + i), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))
+            self.__animation_game_over.append(pygame.transform.scale(pygame.image.load(resource_path('images/UI/game_over_animation/' + i)), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))
         self.__fps = 30
 
     def start_move(self, context):

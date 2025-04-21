@@ -1,5 +1,6 @@
 import pygame  # импорт библиотеки pygame
 import math
+from scripts.main_scripts.resourse_path import resource_path
 
 
 class Tower:
@@ -7,7 +8,7 @@ class Tower:
     def __init__(self, image_foundation, scale, damage, coordinate, index, improve_cost_array, armor_piercing, poison, additional_money = 0, image_gun = None, radius = None):
         self.__is_used = False
         self.__index = index
-        self.__image_foundation = pygame.image.load(image_foundation)
+        self.__image_foundation = pygame.image.load(resource_path(image_foundation))
         self.__image_foundation = pygame.transform.scale(self.__image_foundation, (scale, scale))
         self.__damage = damage
         self.__scale = scale
@@ -19,7 +20,7 @@ class Tower:
         self.__improve_cost_array = improve_cost_array
         self.__additional_money = additional_money
         if image_gun is not None:
-            self.__image_gun = pygame.image.load(image_gun)
+            self.__image_gun = pygame.image.load(resource_path(image_gun))
             self.__image_gun = pygame.transform.scale(self.__image_gun, (scale, scale))
             self.__rotated_image = self.__image_gun
             self.__rotated_image_rect = coordinate
@@ -28,12 +29,12 @@ class Tower:
             self.__rotated_image = self.__image_gun
         if radius is not None:
             self.__radius = scale / 2 + radius * scale * 1.2
-            self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), (self.__radius * 2, self.__radius * 2))
-        self.__is_charged = (pygame.transform.scale(pygame.image.load('images/UI/enemy_characteristic/charged.png'), (self.__scale / 6, self.__scale / 6)),
-                             pygame.transform.scale(pygame.image.load('images/UI/enemy_characteristic/not_charged.png'), (self.__scale / 6, self.__scale / 6)))
-        self.__level_image_tuple = (pygame.transform.scale(pygame.image.load('images/upgrade/1lvl.png'), (self.__scale / 4, self.__scale / 4)),
-                                    pygame.transform.scale(pygame.image.load('images/upgrade/2lvl.png'), (self.__scale / 4, self.__scale / 4)),
-                                    pygame.transform.scale(pygame.image.load('images/upgrade/3lvl.png'), (self.__scale / 4, self.__scale / 4)))
+            self.__radius_image = pygame.transform.scale(pygame.image.load(resource_path('images/UI/highlighting/radius.png')), (self.__radius * 2, self.__radius * 2))
+        self.__is_charged = (pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/charged.png')), (self.__scale / 6, self.__scale / 6)),
+                             pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/not_charged.png')), (self.__scale / 6, self.__scale / 6)))
+        self.__level_image_tuple = (pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/1lvl.png')), (self.__scale / 4, self.__scale / 4)),
+                                    pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/2lvl.png')), (self.__scale / 4, self.__scale / 4)),
+                                    pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/3lvl.png')), (self.__scale / 4, self.__scale / 4)))
 
 
 
@@ -81,7 +82,7 @@ class Tower:
     def upgrade(self, increase_damage, increase_radius):  # улучшение башни(увеличивает урон и радиус на заданное значение)
         self.__damage += increase_damage
         self.__radius += increase_radius
-        self.__radius_image = pygame.transform.scale(pygame.image.load('images/UI/highlighting/radius.png'), (self.__radius * 2, self.__radius * 2))
+        self.__radius_image = pygame.transform.scale(pygame.image.load(resource_path('images/UI/highlighting/radius.png')), (self.__radius * 2, self.__radius * 2))
 
     def get_additional_money(self):  # возвращает дополнительные деньги за башню
         return self.__additional_money

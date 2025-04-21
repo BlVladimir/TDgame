@@ -1,5 +1,6 @@
 import pygame  # импорт библиотеки pygame
 from scripts.main_scripts.function import draw_text
+from scripts.main_scripts.resourse_path import resource_path
 
 class Button:
     # инициализация класса
@@ -9,11 +10,11 @@ class Button:
         self.__width = width  # ширина
         self.__height = height  # высота
         self.__action = action  # действие(функция, которая вызывается при нажатии)
-        self.__image = pygame.image.load(image)  # картинка
+        self.__image = pygame.image.load(resource_path(image))  # картинка
         self.__image = pygame.transform.scale(self.__image, (self.__width, self.__height))
-        self.__highlight = pygame.transform.scale(pygame.image.load('images/UI/highlighting/highlighting_tower.png'), (self.__width, self.__height))  # выделение кнопки
+        self.__highlight = pygame.transform.scale(pygame.image.load(resource_path('images/UI/highlighting/highlighting_tower.png')), (self.__width, self.__height))  # выделение кнопки
         if additional_image is not None:
-            self.__additional_image = pygame.transform.scale(pygame.image.load(additional_image), (self.__width, self.__height))  # картинка, которая накладывается при отрисовки кнопки
+            self.__additional_image = pygame.transform.scale(pygame.image.load(resource_path(additional_image)), (self.__width, self.__height))  # картинка, которая накладывается при отрисовки кнопки
         else:
             self.__additional_image = None
 
@@ -44,5 +45,5 @@ class Button:
 
 
     def change_image(self, new_image):  # меняет картинку кнопки
-        self.__image = pygame.transform.scale(pygame.image.load(new_image), (self.__width, self.__height))
+        self.__image = pygame.transform.scale(pygame.image.load(resource_path(new_image)), (self.__width, self.__height))
 

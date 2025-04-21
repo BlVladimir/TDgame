@@ -1,6 +1,7 @@
 import pygame
 from math import ceil, atan2, degrees
 from os import listdir
+from scripts.main_scripts.resourse_path import resource_path
 
 class Bullet(pygame.sprite.Sprite):  # наследование от спрайта
 
@@ -31,7 +32,7 @@ class BulletWithAnimation(Bullet):
         files_animation = listdir('images/tower/Bullets/' + animation_directory + '/')
         self.__animation = []
         for i in files_animation:
-            self.__animation.append(pygame.transform.scale(pygame.image.load('images/tower/Bullets/' + animation_directory + '/' + i), (scale, scale)))
+            self.__animation.append(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/' + animation_directory + '/' + i)), (scale, scale)))
 
     def update(self):
         self.image = pygame.transform.rotate(self.__animation[Bullet.get_time_to_destroy(self) % len(self.__animation)], degrees(atan2(Bullet.get_delta(self)[0], Bullet.get_delta(self)[1])) + 180)  # картинка

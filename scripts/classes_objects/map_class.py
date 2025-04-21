@@ -2,6 +2,7 @@ import pygame  # импорт библиотеки pygame
 
 from os import listdir
 from math import ceil
+from scripts.main_scripts.resourse_path import resource_path
 
 def get_coordinates(coordinates, tileValueX, tileValueY, xBais, yBais, widthScreen, heightScreen, gaps, tileScale):
     coordinates = (
@@ -19,18 +20,18 @@ class Map:
         self.__road_array = road_array  # массив кортежей, с координатами дорог
         self.__gaps = ceil(0.2 * tile_scale)  # размер промежутков
         self.__tile_scale = ceil(tile_scale)   # размер тайлов
-        self.__image_tile_mass = [pygame.image.load("images/tile/for_enemies.png"),
-                                  pygame.image.load("images/tile/common_building.png"),
-                                  pygame.image.load("images/tile/damage_up.png"),  # 2 - урон
-                                  pygame.image.load("images/tile/radius_up.png"),  # 3 - радиус
-                                  pygame.image.load("images/tile/anty_shield.png"),  # 4 - бронебойный
-                                  pygame.image.load("images/tile/poison_up.png"),  # 5 - ядовитая
-                                  pygame.image.load("images/tile/money_up.png"),  # 6 - больше денег
-                                  pygame.image.load("images/tile/base.png")]  # массив картинок тайлов
+        self.__image_tile_mass = [pygame.image.load(resource_path("images/tile/for_enemies.png")),
+                                  pygame.image.load(resource_path("images/tile/common_building.png")),
+                                  pygame.image.load(resource_path("images/tile/damage_up.png")),  # 2 - урон
+                                  pygame.image.load(resource_path("images/tile/radius_up.png")),  # 3 - радиус
+                                  pygame.image.load(resource_path("images/tile/anty_shield.png")),  # 4 - бронебойный
+                                  pygame.image.load(resource_path("images/tile/poison_up.png")),  # 5 - ядовитая
+                                  pygame.image.load(resource_path("images/tile/money_up.png")),  # 6 - больше денег
+                                  pygame.image.load(resource_path("images/tile/base.png"))]  # массив картинок тайлов
         files_animation = listdir('images/tile/destruction_base_animation')
         self.__animation_destruction = []
         for i in files_animation:
-            self.__animation_destruction.append(pygame.transform.scale(pygame.image.load('images/tile/destruction_base_animation/' + i), (tile_scale, tile_scale)))
+            self.__animation_destruction.append(pygame.transform.scale(pygame.image.load(resource_path('images/tile/destruction_base_animation/' + i)), (tile_scale, tile_scale)))
         self.__image_tile_mass[0] = pygame.transform.scale(self.__image_tile_mass[0], (self.__tile_scale, self.__tile_scale + self.__gaps))  # Меняет размер дороги(так как она прямоугольная)
         for i in range(len(self.__image_tile_mass) - 1):
             self.__image_tile_mass[i + 1] = pygame.transform.scale(self.__image_tile_mass[i + 1], (self.__tile_scale, self.__tile_scale))  # меняет остальные размеры

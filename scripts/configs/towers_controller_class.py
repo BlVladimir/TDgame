@@ -1,6 +1,7 @@
 import os
 import pygame
 from scripts.classes_objects import bullet_class
+from scripts.main_scripts.resourse_path import resource_path
 
 class TowerController:
 
@@ -11,7 +12,7 @@ class TowerController:
         self.__upgrade_array = []
         files_animation = os.listdir('images/upgrade/animation_upgrade')
         for i in files_animation:
-            self.__animation_upgrade.append(pygame.transform.scale(pygame.image.load('images/upgrade/animation_upgrade/' + i), (scale, scale)))
+            self.__animation_upgrade.append(pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/animation_upgrade/' + i)), (scale, scale)))
         for i in range(len(self.__animation_upgrade)):
             self.__animation_upgrade[i].set_alpha(50)
         self.__current_tower = None
@@ -82,18 +83,18 @@ class TowerController:
         if context.get_enemies_controller().get_current_enemy():  # если выделенный враг существует и существует хотя бы одна башня
             if self.__current_tower is not None and self.__towers_object_array[self.__current_tower].is_in_radius(context):  # если индекс башни равен текущему тайлу и текущий враг в радиусе башни
                 if not self.__towers_object_array[self.__current_tower].get_armor_piercing() and not self.__towers_object_array[self.__current_tower].get_poison():
-                    context.get_config_constant_object().add_at_sprite(bullet_class.Bullet(pygame.transform.scale(pygame.image.load('images/tower/Bullets/common_bullet.png'), (context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)), self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
+                    context.get_config_constant_object().add_at_sprite(bullet_class.Bullet(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/common_bullet.png')), (context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)), self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
                                                                                           context.get_enemies_controller().get_current_enemy().get_center(), 10))
                     context.get_sound_controller().play_sound('shot')
                 elif self.__towers_object_array[self.__current_tower].get_armor_piercing():
-                    context.get_config_constant_object().add_at_sprite(bullet_class.BulletWithAnimation(pygame.transform.scale(pygame.image.load('images/tower/Bullets/common_bullet.png'), (
+                    context.get_config_constant_object().add_at_sprite(bullet_class.BulletWithAnimation(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/common_bullet.png')), (
                         context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)),
                                                                                                        self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
                                                                                                        context.get_enemies_controller().get_current_enemy().get_center(), 10, 'animation_electric_bullet',
                                                                                                        context.get_maps_controller().get_tile_scale() * 0.2))
                     context.get_sound_controller().play_sound('electric_shot')
                 else:
-                    context.get_config_constant_object().add_at_sprite(bullet_class.BulletWithAnimation(pygame.transform.scale(pygame.image.load('images/tower/Bullets/common_bullet.png'), (
+                    context.get_config_constant_object().add_at_sprite(bullet_class.BulletWithAnimation(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/common_bullet.png')), (
                         context.get_maps_controller().get_tile_scale() * 0.2, context.get_maps_controller().get_tile_scale() * 0.2)),
                                                                                                        self.__towers_object_array[self.__current_tower].get_started_coordinate_bullet(),
                                                                                                        context.get_enemies_controller().get_current_enemy().get_center(), 10, 'animation_poison_bullet',

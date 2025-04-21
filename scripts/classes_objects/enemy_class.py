@@ -3,12 +3,13 @@ import math
 import pygame  # импорт библиотеки pygame
 import os
 from scripts.main_scripts import function
+from scripts.main_scripts.resourse_path import resource_path
 
 
 class Enemy:
     # инициализация класса
     def __init__(self, image, rect, scale, angle, health, additional_price, position_on_tile, armor = 0, treatment = 0,pos = 0):
-        self.__image = pygame.image.load(image)  # картинка
+        self.__image = pygame.image.load(resource_path(image))  # картинка
         self.__scale = scale  # размер врага
         self.__image = pygame.transform.scale(self.__image, (self.__scale, self.__scale))
         self.__rect = rect  # массив координаты врага
@@ -27,7 +28,7 @@ class Enemy:
         self.__x = -1
         files_animation = os.listdir('images/enemy/animation_walking')
         for i in files_animation:
-            self.__animation.append(pygame.transform.scale(pygame.image.load('images/enemy/animation_walking/' + i), (self.__scale, self.__scale)))
+            self.__animation.append(pygame.transform.scale(pygame.image.load(resource_path('images/enemy/animation_walking/' + i)), (self.__scale, self.__scale)))
         self.__rotated_image = self.__image
         self.__current_legs_image = self.__animation[0]
         self.__is_dying = False
