@@ -29,7 +29,7 @@ class Bullet(pygame.sprite.Sprite):  # наследование от спрай�
 class BulletWithAnimation(Bullet):
     def __init__(self, image, started_coordinate_center, final_coordinate_center, fps, animation_directory, scale):
         Bullet.__init__(self, image, started_coordinate_center, final_coordinate_center, fps)
-        files_animation = listdir('images/tower/Bullets/' + animation_directory + '/')
+        files_animation = listdir(resource_path('images/tower/Bullets/' + animation_directory + '/'))
         self.__animation = []
         for i in files_animation:
             self.__animation.append(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/' + animation_directory + '/' + i)), (scale, scale)))
