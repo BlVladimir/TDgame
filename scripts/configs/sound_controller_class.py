@@ -1,18 +1,19 @@
 from pygame import MOUSEBUTTONDOWN, mixer
+from scripts.main_scripts.resourse_path import resource_path
 
 class SoundController:
 
     def __init__(self, file_save_controller):
-        self.__sound_directory_dict = {'shot':mixer.Sound('sound/shot.mp3'),
-                                       'poison_shot':mixer.Sound('sound/poison_shot.mp3'), 'electric_shot':mixer.Sound('sound/electric_shot.mp3'), 'click':mixer.Sound('sound/click.mp3'),
-                                       'death':mixer.Sound('sound/death_enemy.mp3'), 'walk':mixer.Sound('sound/movement_enemy.mp3')}
+        self.__sound_directory_dict = {'shot':mixer.Sound(resource_path('sound/shot.mp3')),
+                                       'poison_shot':mixer.Sound(resource_path('sound/poison_shot.mp3')), 'electric_shot':mixer.Sound(resource_path('sound/electric_shot.mp3')), 'click':mixer.Sound(resource_path('sound/click.mp3')),
+                                       'death':mixer.Sound(resource_path('sound/death_enemy.mp3')), 'walk':mixer.Sound(resource_path('sound/movement_enemy.mp3'))}
         mixer.Sound.set_volume(self.__sound_directory_dict['shot'], 0.03)
         mixer.Sound.set_volume(self.__sound_directory_dict['electric_shot'], 0.03)
         mixer.Sound.set_volume(self.__sound_directory_dict['poison_shot'], 0.1)
         mixer.Sound.set_volume(self.__sound_directory_dict['death'], 0.1)
         self.__play_music = file_save_controller.get_parameter('play_music')
         self.__play_sound = file_save_controller.get_parameter('play_sound')
-        mixer.music.load('sound/music_game.mp3')
+        mixer.music.load(resource_path('sound/music_game.mp3'))
         mixer.music.set_volume(0.01)
         if self.__play_music:
             mixer.music.play(loops=-1)

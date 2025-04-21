@@ -28,7 +28,7 @@ class Map:
                                   pygame.image.load(resource_path("images/tile/poison_up.png")),  # 5 - ядовитая
                                   pygame.image.load(resource_path("images/tile/money_up.png")),  # 6 - больше денег
                                   pygame.image.load(resource_path("images/tile/base.png"))]  # массив картинок тайлов
-        files_animation = listdir('images/tile/destruction_base_animation')
+        files_animation = listdir(resource_path('images/tile/destruction_base_animation'))
         self.__animation_destruction = []
         for i in files_animation:
             self.__animation_destruction.append(pygame.transform.scale(pygame.image.load(resource_path('images/tile/destruction_base_animation/' + i)), (tile_scale, tile_scale)))

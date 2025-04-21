@@ -10,7 +10,7 @@ class TowerController:
         self.__button_update_array = []
         self.__animation_upgrade = []
         self.__upgrade_array = []
-        files_animation = os.listdir('images/upgrade/animation_upgrade')
+        files_animation = os.listdir(resource_path('images/upgrade/animation_upgrade'))
         for i in files_animation:
             self.__animation_upgrade.append(pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/animation_upgrade/' + i)), (scale, scale)))
         for i in range(len(self.__animation_upgrade)):
