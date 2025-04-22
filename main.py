@@ -18,11 +18,8 @@ def __action_exit():  # функция, закрывающая окно
     pygame.quit()
     sys.exit()
 
-def __change_using_additional_parameter(additionalParameters):
-    if additionalParameters:
-        additionalParameters = False
-    else:
-        additionalParameters = True
+def __change_using_additional_parameter(additionalParameters):  # включает и выключает использование дополнительных параметров
+    additionalParameters = not additionalParameters
     return additionalParameters
 
 file_save_controller = file_save_controller_class.FileSaveController()

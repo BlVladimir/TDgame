@@ -1,6 +1,6 @@
 from scripts.main_scripts import level, main_menu
 
-def level_controller(shop, event, highlighting, context):
+def level_controller(shop, event, highlighting, context):  # все действия в игре каждый кадр
     match context.get_config_parameter_scene().get_scene():
         case 'mainMenu':
             main_menu.handle_event(event, context)

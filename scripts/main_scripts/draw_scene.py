@@ -1,6 +1,6 @@
 from scripts.main_scripts import main_menu, level_gameplay_draw
 
-def draw_scene(highlighting, shop, context):
+def draw_scene(highlighting, shop, context):  # отрисовка всей игры
     context.get_animation_controller().move_enemies(context)
     context.get_config_parameter_scene().get_screen().fill((0, 0, 0))  # закрашивает весь экран, чтобы не было видно предыдущую сцену
     match context.get_config_parameter_scene().get_scene():

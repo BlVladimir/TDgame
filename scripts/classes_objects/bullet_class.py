@@ -29,11 +29,11 @@ class Bullet(pygame.sprite.Sprite):  # наследование от спрай�
 class BulletWithAnimation(Bullet):
     def __init__(self, image, started_coordinate_center, final_coordinate_center, fps, animation_directory, scale):
         Bullet.__init__(self, image, started_coordinate_center, final_coordinate_center, fps)
-        files_animation = listdir(resource_path('images/tower/Bullets/' + animation_directory + '/'))
+        files_animation = listdir(resource_path('images/tower/Bullets/' + animation_directory + '/'))  # получает имена всех файлов из пути
         self.__animation = []
         for i in files_animation:
-            self.__animation.append(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/' + animation_directory + '/' + i)), (scale, scale)))
+            self.__animation.append(pygame.transform.scale(pygame.image.load(resource_path('images/tower/Bullets/' + animation_directory + '/' + i)), (scale, scale)))  # загружает все картинки анимации
 
     def update(self):
-        self.image = pygame.transform.rotate(self.__animation[Bullet.get_time_to_destroy(self) % len(self.__animation)], degrees(atan2(Bullet.get_delta(self)[0], Bullet.get_delta(self)[1])) + 180)  # картинка
+        self.image = pygame.transform.rotate(self.__animation[Bullet.get_time_to_destroy(self) % len(self.__animation)], degrees(atan2(Bullet.get_delta(self)[0], Bullet.get_delta(self)[1])) + 180)  # меняет картинку в зависимости от кадра
         Bullet.update(self)

@@ -1,4 +1,4 @@
-def shop_works(shop, event, context):
+def shop_works(shop, event, context):  # работа магазина
     if context.get_config_gameplay().get_current_tile() is None:
         context.get_config_gameplay().set_shop_type(0)
     elif context.get_maps_controller().get_build_array()[context.get_config_gameplay().get_current_tile()]['is_filled']:

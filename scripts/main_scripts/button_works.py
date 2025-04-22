@@ -1,6 +1,6 @@
 import pygame
 
-def button_works(event, context):
+def button_works(event, context):  # проверка на нажатие каждой кнопки и соответствующие действие
     if context.get_config_constant_object().get_button_setting().is_pressed(event):
         context.get_config_constant_object().get_button_setting().handle_event_parameter({'context': context, 'lvl': 'setting'})
     if context.get_config_constant_object().get_button_main_manu().is_pressed(event):
@@ -12,7 +12,7 @@ def button_works(event, context):
     else:
         context.get_config_gameplay().set_use_additional_parameters(False)
 
-def is_started(context, highlighting):
+def is_started(context, highlighting):  # все действия при запуске уровня
     if context.get_config_gameplay().get_is_started():  # если кнопка перехода на 1 уровень нажата, то задает рандомно количество врагов от 1 до 3 на 10 волн
         context.get_config_constant_object().get_information_table().reset_modifier()
         context.get_config_modifier().reset_price_modifier()

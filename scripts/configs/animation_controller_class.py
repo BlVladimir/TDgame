@@ -5,21 +5,21 @@ from scripts.main_scripts.resourse_path import resource_path
 
 class AnimationController:
     def __init__(self, config_parameter_screen):
-        self.__is_move = False
-        self.__time_move = 0
-        self.__time_game_over = 0
-        self.__is_fail = False
+        self.__is_move = False  # двигаются ли враги
+        self.__time_move = 0  # время движения
+        self.__time_game_over = 0  # время анимации пройгрыша
+        self.__is_fail = False  # проиграл игрок или нет
         self.__animation_game_over = []
-        files_animation_game_over = os.listdir(resource_path('images/UI/game_over_animation'))
+        files_animation_game_over = os.listdir(resource_path('images/UI/game_over_animation'))  # получает все файлы по данному пути
         for i in files_animation_game_over:
-            self.__animation_game_over.append(pygame.transform.scale(pygame.image.load(resource_path('images/UI/game_over_animation/' + i)), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))
-        self.__fps = 30
+            self.__animation_game_over.append(pygame.transform.scale(pygame.image.load(resource_path('images/UI/game_over_animation/' + i)), (config_parameter_screen.get_width(), config_parameter_screen.get_height())))  # загружает все картинки анимации пройгрыша
+        self.__fps = 30  # кадры в секунду
 
-    def start_move(self, context):
+    def start_move(self, context):  # враги начинают двигаться
         self.__is_move = True
         context.get_sound_controller().play_sound('walk')
 
-    def move_enemies(self, context):
+    def move_enemies(self, context):  # движение всех врагов
         if self.__is_move:  # если движение не законченно, то враг двигается и идет проверка, закончено движение или нет
             self.__time_move += 1
             context.get_towers_controller().turn_off_or_on_all_towers(True)

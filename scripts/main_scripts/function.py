@@ -2,10 +2,7 @@ from random import randrange
 
 import pygame
 import random
-
-
 pygame.font.init()
-
 
 def draw_text(words, size, coordinate, context, t = 0): #  рисует текст
     f = pygame.font.Font(None, size)

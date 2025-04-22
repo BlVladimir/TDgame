@@ -9,23 +9,21 @@ pygame.init()
 class Shop:
 
     def __init__(self, height):
-        self.__money_picture = pygame.transform.scale(pygame.image.load(resource_path('images/UI/money.png')), (height * 0.1, height * 0.1))
-        self.__image_shop = pygame.transform.scale(pygame.image.load(resource_path('images/UI/shop_background.png')), (height * 0.4, height))
-        self.__tower_characteristic_image = (pygame.transform.scale(pygame.image.load(resource_path('images/UI/up/damage_up_up.png')), (100, 100)),
-                                           pygame.transform.scale(pygame.image.load(resource_path('images/UI/up/radius_up_up.png')), (100, 100)))
+        self.__money_picture = pygame.transform.scale(pygame.image.load(resource_path('images/UI/money.png')), (height * 0.1, height * 0.1))  # картинка монеты
+        self.__image_shop = pygame.transform.scale(pygame.image.load(resource_path('images/UI/shop_background.png')), (height * 0.4, height))  # картинка фона для магазина
         self.__products = [Product("images/tower/common_foundation.png", 3, height * 0.1, (20, 150), 2, 1, (4, 6), False, 0, "images/tower/common_gun.png"),  # coordinate = (20, 150 + i * 120)
                            Product("images/tower/sniper_foundation.png", 5, height * 0.1, (20, 270), 4, 2, (6, 8), False, 0, "images/tower/sniper_gun.png"),
                            Product("images/tower/anty_shield.png", 4, height * 0.1, (20, 390), 3, 1.5, (5, 7), True, 0),
-                           Product("images/tower/venom_foundation.png", 5, height * 0.1, (20, 510), 2, 1, (6, 8), False, 2, "images/tower/venom_gun.png")]
+                           Product("images/tower/venom_foundation.png", 5, height * 0.1, (20, 510), 2, 1, (6, 8), False, 2, "images/tower/venom_gun.png")]  # объекты продуктов
         self.__image_characteristic_dict = {'damage': pygame.image.load(resource_path('images/UI/up/damage_up_up.png')),
                                             'radius': pygame.image.load(resource_path('images/UI/up/radius_up_up.png')),
                                             'armor': pygame.image.load(resource_path('images/UI/up/anty_shield_up.png')),
                                             'poison': pygame.image.load(resource_path('images/UI/up/poison_up_up.png')),
-                                            'money': pygame.image.load(resource_path('images/UI/up/money_up_up.png'))}
+                                            'money': pygame.image.load(resource_path('images/UI/up/money_up_up.png'))}  # картинки характеристик башни
 
-        self.__scale_products = height * 0.1
+        self.__scale_products = height * 0.1  # размер кнопок продуктов
         for i in self.__image_characteristic_dict.keys():
-            self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.08, height * 0.08))
+            self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.08, height * 0.08))  # меняет размеры всем характеристикам
 
 
     def draw(self, towers_controller, context): #  рисует магазин

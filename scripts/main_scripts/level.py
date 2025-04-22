@@ -1,7 +1,7 @@
 from scripts.main_scripts import button_works, shop_works
 import pygame
 
-def level(shop, event, highlighting, context):
+def level(shop, event, highlighting, context):  # все действия на уровне каждый кадр
     button_works.is_started(context, highlighting)
     context.get_towers_controller().define_current_tower(context)
     context.get_enemies_controller().define_current_enemy()

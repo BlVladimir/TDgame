@@ -1,6 +1,6 @@
 #  вся отрисовка вынесена в отдельный файл, чтобы не захламлять основной
 
-def draw_lvl(context, shop, highlighting):
+def draw_lvl(context, shop, highlighting):  # рисует уровень
         context.get_maps_controller().draw_map(context)
         highlighting.draw_highlighting(context.get_maps_controller().get_build_array(), context)
         context.get_towers_controller().draw_towers(context)
