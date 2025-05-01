@@ -22,9 +22,8 @@ towers_controller = towers_controller_class.TowerController(maps_controller.get_
 enemies_controller = enemies_controller_class.EnemiesController()
 animation_controller = animation_controller_class.AnimationController(config_parameter_screen)
 sound_controller = sound_controller_class.SoundController(file_save_controller)
-settings_objects = settings_objects_class.SettingsObjects(config_parameter_screen.get_width(), config_parameter_screen.get_height(), sound_controller)
 
-context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, settings_objects)
+context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller)
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно

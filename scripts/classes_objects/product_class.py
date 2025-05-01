@@ -1,20 +1,36 @@
 from scripts.classes_objects.button_class import Button
 from scripts.classes_objects import tower_class
+def buy_tower(**kwargs):
+    height = kwargs['height']
+    if 'additional_image' in kwargs.keys():
+        kwargs['context'].towers_controller.append_tower_object(
+            tower_class.Tower(kwargs['image'], kwargs['context'].maps_controller.get_tile_scale(), kwargs['damage'],
+                              kwargs['context'].maps_controller.get_build_array()[kwargs['context'].config_gameplay.get_current_tile()]['coordinate'],
+                              kwargs['context'].config_gameplay.get_current_tile(),
+                              kwargs['improve_array'], kwargs['armor_piercing'], kwargs['poison'], image_gun=kwargs['additional_image'],
+                              radius=kwargs['radius']),
+            Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower, '1'))
+    else:
+        kwargs['context'].towers_controller.append_tower_object(
+            tower_class.Tower(kwargs['image'], kwargs['context'].maps_controller.get_tile_scale(), kwargs['damage'],
+                              kwargs['context'].maps_controller.get_build_array()[kwargs['context'].config_gameplay.get_current_tile()]['coordinate'],
+                              kwargs['context'].config_gameplay.get_current_tile(),
+                              kwargs['improve_array'], kwargs['armor_piercing'], kwargs['poison'], radius=kwargs['radius']),
+            Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower, '1'))
 
-
-def buy_tower(parameter_dict):  # добавляет в массив башен новую
-    height = parameter_dict['height']
-    if 'additional_image' in parameter_dict.keys():
-        parameter_dict['context'].towers_controller.append_tower_object(
-            tower_class.Tower(parameter_dict['image'], parameter_dict['context'].maps_controller.get_tile_scale(), parameter_dict['damage'],
-                              parameter_dict['context'].maps_controller.get_build_array()[parameter_dict['context'].config_gameplay.get_current_tile()]['coordinate'], parameter_dict['context'].config_gameplay.get_current_tile(),
-                              parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], image_gun=parameter_dict['additional_image'], radius=parameter_dict['radius']),
+def buy_tower1(kwargs):  # добавляет в массив башен новую
+    height = kwargs['height']
+    if 'additional_image' in kwargs.keys():
+        kwargs['context'].towers_controller.append_tower_object(
+            tower_class.Tower(kwargs['image'], kwargs['context'].maps_controller.get_tile_scale(), kwargs['damage'],
+                              kwargs['context'].maps_controller.get_build_array()[kwargs['context'].config_gameplay.get_current_tile()]['coordinate'], kwargs['context'].config_gameplay.get_current_tile(),
+                              kwargs['improve_array'], kwargs['armor_piercing'], kwargs['poison'], image_gun=kwargs['additional_image'], radius=kwargs['radius']),
             Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
     else:
-        parameter_dict['context'].towers_controller.append_tower_object(
-            tower_class.Tower(parameter_dict['image'], parameter_dict['context'].maps_controller.get_tile_scale(), parameter_dict['damage'],
-                              parameter_dict['context'].maps_controller.get_build_array()[parameter_dict['context'].config_gameplay.get_current_tile()]['coordinate'], parameter_dict['context'].config_gameplay.get_current_tile(),
-                              parameter_dict['improve_array'], parameter_dict['armor_piercing'], parameter_dict['poison'], radius=parameter_dict['radius']),
+        kwargs['context'].towers_controller.append_tower_object(
+            tower_class.Tower(kwargs['image'], kwargs['context'].maps_controller.get_tile_scale(), kwargs['damage'],
+                              kwargs['context'].maps_controller.get_build_array()[kwargs['context'].config_gameplay.get_current_tile()]['coordinate'], kwargs['context'].config_gameplay.get_current_tile(),
+                              kwargs['improve_array'], kwargs['armor_piercing'], kwargs['poison'], radius=kwargs['radius']),
             Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, upgrade_tower))
 
 def upgrade_tower(context):  # улучшение башни по номеру
