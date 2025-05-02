@@ -2,9 +2,9 @@ import pygame
 import sys
 
 from scripts.configs import maps_controller_class, config_constant_object_class, animation_controller_class, config_gameplay_class, towers_controller_class, enemies_controller_class, config_modifier_class, \
-    config_parameter_screen_class, file_save_controller_class, sound_controller_class, settings_objects_class
+    config_parameter_screen_class, file_save_controller_class, sound_controller_class, event_controller_class, buttons_groups_controller
 from scripts import context_class
-from scripts.classes_objects import shop_class, definition_current_tile
+from scripts.classes_objects import definition_current_tile
 
 from scripts.main_scripts import level_controller, draw_scene
 
@@ -22,8 +22,11 @@ towers_controller = towers_controller_class.TowerController(maps_controller.get_
 enemies_controller = enemies_controller_class.EnemiesController()
 animation_controller = animation_controller_class.AnimationController(config_parameter_screen)
 sound_controller = sound_controller_class.SoundController(file_save_controller)
+event_controller = event_controller_class.EventController()
+buttons_groups_controller = buttons_groups_controller.ButtonGroupController(config_parameter_screen.get_width(), config_parameter_screen.get_height(), sound_controller, config_gameplay)
 
-context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller)
+
+context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, event_controller, buttons_groups_controller)
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно

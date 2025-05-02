@@ -6,7 +6,6 @@ class TowerController:
 
     def __init__(self, scale):
         self.__towers_object_array = []
-        self.__button_update_array = []
         self.__animation_upgrade = []
         self.__upgrade_array = []
         files_animation = os.listdir('images/upgrade/animation_upgrade')
@@ -20,17 +19,11 @@ class TowerController:
         for i in range(len(self.__animation_upgrade)):
             self.__animation_upgrade[i] = pygame.transform.scale(self.__animation_upgrade[i], (context.maps_controller.get_tile_scale(), context.maps_controller.get_tile_scale()))
 
-    def get_current_button_update(self):
-        if self.__button_update_array:
-            return self.__button_update_array[self.__current_tower]
-
-    def append_tower_object(self, new_tower_object, new_button_object):
+    def append_tower_object(self, new_tower_object):
         self.__towers_object_array.append(new_tower_object)
-        self.__button_update_array.append(new_button_object)
 
     def clear_towers_arrays(self):
         self.__towers_object_array.clear()
-        self.__button_update_array.clear()
 
     def turn_off_or_on_all_towers(self, state):
         for i in range(len(self.__towers_object_array)):

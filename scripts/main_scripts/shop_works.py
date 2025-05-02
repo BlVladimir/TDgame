@@ -5,8 +5,6 @@ def shop_works(event, context):
         context.config_gameplay.set_shop_type(2)
     else:
         context.config_gameplay.set_shop_type(1)
-    if context.config_gameplay.get_shop_type() == 1:
-        context.config_constant_object.shop.build_tower(event, context)  # если мышка нажмет на иконку башни в магазине, то башня построится на текущем тайле
     if context.towers_controller.get_current_tower():
         if context.towers_controller.get_current_tower().get_image_gun() is not None:
             context.towers_controller.get_current_tower().rotate_gun()

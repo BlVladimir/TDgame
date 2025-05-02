@@ -1,8 +1,63 @@
 from sys import exit
+from scripts.classes_objects.tower_class import Tower
+import json
+
+def buy_tower(**kwargs):
+    if 'additional_image' in kwargs.keys():
+        kwargs['context'].towers_controller.append_tower_object(
+            Tower(kwargs['image'], kwargs['context'].maps_controller.get_tile_scale(), kwargs['damage'],
+                              kwargs['context'].maps_controller.get_build_array()[kwargs['context'].config_gameplay.get_current_tile()]['coordinate'],
+                              kwargs['context'].config_gameplay.get_current_tile(),
+                              kwargs['improve_array'], kwargs['armor_piercing'], kwargs['poison'], image_gun=kwargs['additional_image'],
+                              radius=kwargs['radius']))
+    else:
+        kwargs['context'].towers_controller.append_tower_object(
+            Tower(kwargs['image'], kwargs['context'].maps_controller.get_tile_scale(), kwargs['damage'],
+                              kwargs['context'].maps_controller.get_build_array()[kwargs['context'].config_gameplay.get_current_tile()]['coordinate'],
+                              kwargs['context'].config_gameplay.get_current_tile(),
+                              kwargs['improve_array'], kwargs['armor_piercing'], kwargs['poison'], radius=kwargs['radius']))
 
 class EventController:
+    def __init__(self):
+        self.__products = json.dumps({'common': dict(image="images/tower/common_foundation.png", damage=2, cost=3, radius=1, improve_cost_array=(4, 6), armor_piercing=False, poison=0, additional_money=2,
+                                  additional_image="images/tower/common_gun.png"),
+                   'sniper': dict(image="images/tower/common_foundation.png", damage=4, cost=5, radius=2, improve_cost_array=(6, 8), armor_piercing=False, poison=0, additional_money=0,
+                                  additional_image="images/tower/sniper_gun.png"),
+                   'anty_shield': dict(image="images/tower/anty_shield.png", damage=3, cost=4, radius=1.5, improve_cost_array=(5, 7), armor_piercing=True, poison=0, additional_money=0),
+                   'venom': dict(image="images/tower/venom_foundation.png", damage=2, cost=5, radius=1, improve_cost_array=(4, 6), armor_piercing=False, poison=2, additional_money=0,
+                                 additional_image="images/tower/venom_gun.png")})
+
+    def __create_tower(self, price_coefficient, context, type):  # создает башню с характеристиками, зависящими от текущего тайла
+        characteristic = json.loads(self.__products)[type]
+        match context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile()]['type']:
+            case 1:
+                buy_tower(
+                    image=characteristic['image'], damage=characteristic['damage_tower'], improve_array=characteristic['improve_cost_array'], armor_piercing=characteristic['armor_piercing'],
+                    poison=characteristic['poison'], additional_money=characteristic['additional_money'], radius=characteristic['radius_tower'], context=context)
+            case 2:
+                buy_tower(
+                    image=characteristic['image'], damage=characteristic['damage_tower'] + 1, improve_array=characteristic['improve_cost_array'], armor_piercing=characteristic['__armor_piercing'],
+                    poison=characteristic['poison'], additional_money=characteristic['additional_money'], radius=characteristic['radius_tower'], context=context)
+            case 3:
+                buy_tower(
+                    image=characteristic['image'], damage=characteristic['damage_tower'], improve_array=characteristic['improve_cost_array'], armor_piercing=characteristic['armor_piercing'],
+                    poison=characteristic['poison'], additional_money=characteristic['additional_money'], radius=characteristic['radius_tower'] * 1.2, context=context)
+            case 4:
+                buy_tower(
+                    image=characteristic['image'], damage=characteristic['damage_tower'], improve_array=characteristic['improve_cost_array'], armor_piercing=True,
+                    poison=characteristic['poison'], additional_money=characteristic['additional_money'], radius=characteristic['radius_tower'], context=context)
+            case 5:
+                buy_tower(
+                    image=characteristic['image'], damage=characteristic['damage_tower'], improve_array=characteristic['improve_cost_array'], armor_piercing=characteristic['armor_piercing'],
+                    poison=characteristic['poison'] + 1, additional_money=characteristic['additional_money'], radius=characteristic['radius_tower'], context=context)
+            case 6:
+                buy_tower(
+                    image=characteristic['image'], damage=characteristic['damage_tower'], improve_array=characteristic['improve_cost_array'], armor_piercing=characteristic['armor_piercing'],
+                    poison=characteristic['poison'], additional_money=characteristic['additional_money'] + 2, radius=characteristic['radius_tower'], context=context)
+        context.config_gameplay.set_money(-characteristic['cost']*price_coefficient)
+
     def update(self, context):
-        button_event = context.buttons_groups_controller.action
+        button_event = context.buttons_groups_controller.action()
         match button_event.name:
             case 'exit':
                 exit()
@@ -22,7 +77,54 @@ class EventController:
                     context.config_gameplay.set_money(-context.config_gameplay.get_money() + 4)
                     for i in range(len(context.maps_controller.get_build_array())):  # обнуляет все тайлы
                         context.maps_controller.get_build_array()[i]['is_filled'] = False
-                    context.config_constant_object.clear_sprites()
+                context.buttons_groups_controller.change_buttons_active(context)
             case 'using_additional_parameter_setting':
                 context.file_save_controller.change_true_false('always use additional parameter')
                 context.config_gameplay.set_always_use_additional_parameters(context.file_save_controller.get_parameter('always use additional parameter'))
+            case 'buy_tower':
+                is_free = context.config_modifier.get_is_free()
+                price_up = context.config_modifier.get_price_up()
+                if not price_up and not is_free and context.config_gameplay.get_money() >= json.loads(self.__products)[button_event.parameter['type']['cost']]:
+                    self.__create_tower(1, context, button_event.parameter['type'])
+                    context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile()]['is_filled'] = True
+                elif price_up and not is_free and context.config_gameplay.get_money() >= json.loads(self.__products)[button_event.parameter['type']['cost']] * 2:
+                    self.__create_tower(2, context, button_event.parameter['type'])
+                    context.config_modifier.get_new_value_price_up(False)
+                    context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile()]['is_filled'] = True
+                elif is_free:
+                    self.__create_tower(0, context, button_event.parameter['type'])
+                    context.config_modifier.get_new_value_price_up(False)
+                    context.config_modifier.get_new_value_is_free(False)
+                    context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile()]['is_filled'] = True
+            case 'upgrade':
+                if context.towers_controller.get_current_tower() and context.towers_controller.get_current_tower().get_level() != 3:
+                    cost = context.towers_controller.get_current_tower().get_improve_cost_array()[context.towers_controller.get_current_tower().get_level() - 1]
+                    is_free = context.config_modifier.get_is_free()
+                    price_up = context.config_modifier.get_price_up()
+                    if is_free:
+                        context.towers_controller.get_current_tower().upgrade(1, 60)
+                        context.towers_controller.get_current_tower().set_level()
+                        context.towers_controller.get_current_button_update().change_image('images/upgrade/2lvl.png') if context.towers_controller.get_current_tower().get_level() == 2 \
+                            else context.towers_controller.get_current_button_update().change_image('images/upgrade/3lvl.png')
+                        context.config_modifier.get_new_value_is_free(False)
+                        context.config_modifier.get_new_value_price_up(False)
+                        context.towers_controller.append_upgrade(context)
+                    elif price_up and context.config_gameplay.get_money() >= cost * 2:
+                        context.towers_controller.get_current_tower().upgrade(1, 60)
+                        context.towers_controller.get_current_tower().set_level()
+                        context.towers_controller.get_current_button_update().change_image('images/upgrade/2lvl.png') if context.towers_controller.get_current_tower().get_level() == 2 \
+                            else context.towers_controller.get_current_button_update().change_image('images/upgrade/3lvl.png')
+                        context.config_gameplay.set_money(-cost * 2)
+                        context.config_modifier.get_new_value_price_up(False)
+                        context.towers_controller.append_upgrade(context)
+                    elif not price_up and context.config_gameplay.get_money() >= cost:
+                        context.towers_controller.get_current_tower().upgrade(1, 60)
+                        context.towers_controller.get_current_tower().set_level()
+                        context.towers_controller.get_current_button_update().change_image('images/upgrade/2lvl.png') if context.towers_controller.get_current_tower().get_level() == 2 \
+                            else context.towers_controller.get_current_button_update().change_image('images/upgrade/3lvl.png')
+                        context.config_gameplay.set_money(-cost)
+                        context.towers_controller.append_upgrade(context)
+            case 'sound':
+                context.sound_controller.sound_setting(context)
+            case 'music':
+                context.sound_controller.music_setting(context)

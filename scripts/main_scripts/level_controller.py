@@ -1,6 +1,7 @@
 from scripts.main_scripts import level, main_menu
 
 def level_controller(event, highlighting, context):
+    context.event_controller.update(context)
     match context.config_parameter_scene.get_scene():
         case 'mainMenu':
             main_menu.handle_event(event, context)
@@ -10,17 +11,7 @@ def level_controller(event, highlighting, context):
                 context.towers_controller.clear_towers_arrays()
             if context.config_constant_object.get_button_setting().is_pressed(event):
                 context.config_constant_object.get_button_setting().handle_event_parameter({'context': context, 'lvl': 'setting'})
-        case '1':
-            level.level(event, highlighting, context)
-        case '2':
-            level.level(event, highlighting, context)
-        case '3':
-            level.level(event, highlighting, context)
-        case '4':
-            level.level(event, highlighting, context)
-        case '5':
-            level.level(event, highlighting, context)
-        case '6':
+        case '1' | '2' | '3' | '4' | '5' | '6':
             level.level(event, highlighting, context)
         case 'setting':
             context.settings_objects.action_settings(event, context)
