@@ -9,6 +9,4 @@ def shop_works(event, context):
         if context.towers_controller.get_current_tower().get_image_gun() is not None:
             context.towers_controller.get_current_tower().rotate_gun()
             context.towers_controller.get_current_tower().draw_radius(context)
-        if context.towers_controller.get_current_button_update().is_pressed(event):
-            context.towers_controller.get_current_button_update().handle_event_parameter(context)
     context.config_gameplay.set_amount_of_money('x' + str(context.config_gameplay.get_money()))  # рисует количество денег

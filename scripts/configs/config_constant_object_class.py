@@ -10,12 +10,16 @@ class ConfigConstantObject:
         self.__information_table = Information(height, width)
         self.__shop = Shop(height)
         self.__highlighting = highlighting
+        self.__bullets_group = pygame.sprite.Group()
 
     def get_clock(self):
         return self.__clock
 
     def get_information_table(self):
         return self.__information_table
+
+    def add_at_sprite(self, sprite):
+        self.__bullets_group.add(sprite)
 
     @property
     def shop(self):

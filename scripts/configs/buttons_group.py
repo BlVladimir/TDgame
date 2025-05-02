@@ -11,7 +11,7 @@ class ButtonsGroup:
     def draw(self, context):
         if self.__active:
             self.__button_group.draw(context.config_parameter_scene.get_screen())
-            self.__button_group.update({'context':context})
+            self.__button_group.update(context=context)
 
     def action(self, event):
         if self.__active:
@@ -21,7 +21,8 @@ class ButtonsGroup:
         return False
 
     def update(self, context):
-        self.__button_group.update(context = context)
+        if self.__active:
+            self.__button_group.update(context = context)
 
     @property
     def active(self):
@@ -34,6 +35,10 @@ class ButtonsGroup:
 class TextButtonsGroup(ButtonsGroup):
     def __init__(self, sprites = None):
         super().__init__(sprites)
+        self.__button_group = Group()
+        if sprites:
+            for i in sprites:
+                self.__button_group.add(i)
 
     def change_text(self, **kwargs):
         sprites = self.__button_group.sprites()
@@ -46,12 +51,11 @@ class ChangeableButtonGroup:
         self.__button_group = Group()
         self.__buttons_dict = sprites_dict  # объекты кнопок, встречающихся везде
         for i in self.__buttons_dict.keys():
-            print(i)
             self.__button_group.add(i)
 
-    def __get_sprites(self, parameter):  # 1-для главного меню, 2-для настроек
+    def __get_sprites(self, parameter):
         returning_group = self.__button_group.copy()
-        for i in self.__buttons_dict.keys:
+        for i in self.__buttons_dict.keys():
             if parameter in self.__buttons_dict[i]:
                 returning_group.remove(i)
         return returning_group

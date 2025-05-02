@@ -27,11 +27,11 @@ buttons_groups_controller = buttons_groups_controller.ButtonGroupController(conf
 
 
 context = context_class.Context(config_constant_object, config_gameplay, config_modifier, config_parameter_screen, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, event_controller, buttons_groups_controller)
+context.buttons_groups_controller.change_buttons_active(context)
 while True:  # основной цикл
     for event in pygame.event.get():  # цикл получает значение event, и в зависимости от его типа делает определенное действие
         if event.type == pygame.QUIT:  # закрывает окно
             sys.exit()
-        (context.config_constant_object.get_button_exit().handle_event(event))
         level_controller.level_controller(event, highlighting, context)
         context.sound_controller.click_sound(event)
     context.animation_controller.move_enemies(context)

@@ -20,7 +20,7 @@ class Button(pygame.sprite.Sprite):
             context.config_parameter_scene.get_screen().blit(self.__highlight, self.rect)
 
     def is_pressed(self, event): # функция, считывающая нажатие кнопки
-        if self.rect[0] + self.__width >= event.pos[0] >= self.rect[0] and self.rect[1] + self.__height >= event.pos[1] >= self.rect[1]:
+        if self.rect[0] + self.__width >= pygame.mouse.get_pos()[0] >= self.rect[0] and self.rect[1] + self.__height >= pygame.mouse.get_pos()[1] >= self.rect[1]:
             return self.__event
         else:
             return False  # Возвращает правду, если нажата и ложь, если не нажата. Нужно, чтобы сделать действие, следующие сразу после нажатия кнопки
@@ -37,6 +37,8 @@ class ButtonWithAdditionalImage(Button):
 class ButtonWithText(Button):
     def __init__(self, x, y, image, width, height, event, text, name, coordinate_text = (0, 0)):
         super().__init__(x, y, image, width, height, event)
+        self.__width = width
+        self.__height = height
         self.__text = text
         self.__coordinate_text = coordinate_text
         self.__name = name

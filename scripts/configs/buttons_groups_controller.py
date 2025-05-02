@@ -35,10 +35,10 @@ class ButtonGroupController:
              ButtonWithText(20, 390, "images/tower/anty_shield.png", height * 0.1, height * 0.1, ButtonEvent('buy_tower', type='anty_shield'), 'x 4', 'anty_shield', (100, 0)),
              ButtonWithText(20, 510, "images/tower/venom_foundation.png", height * 0.1, height * 0.1, ButtonEvent('buy_tower', type='venom'), 'x 5', 'venom_foundation', (100, 0))))
         self.__general_group = ChangeableButtonGroup({Button(width - 170 - height * 0.4, 20, "images/UI/exit.png", 150, 75, ButtonEvent('exit')): [],
-                                                    Button(150, 20, "images/UI/exit_in_main_menu.png", 100, 100, ButtonEvent('change_scene', scene='go_to_main_menu')): ['mainMenu'],
-                                                    (20, 20, "images/UI/settings.png", 100, 100, ButtonEvent('change_scene', scene='go_to_settings')):['setting']})
-        self.__upgrade_group = ChangeableButtonGroup({Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, 'upgrade'):[2, 3],
-                                                      Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/2lvl.png', 0.16 * height, 0.16 * height, 'upgrade'):[1, 3]})
+                                                    Button(150, 20, "images/UI/exit_in_main_menu.png", 100, 100, ButtonEvent('change_scene', scene='mainMenu')): ['mainMenu'],
+                                                    Button(20, 20, "images/UI/settings.png", 100, 100, ButtonEvent('change_scene', scene='setting')):['setting']})
+        self.__upgrade_group = ChangeableButtonGroup({Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, ButtonEvent('upgrade')):[2, 3],
+                                                      Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/2lvl.png', 0.16 * height, 0.16 * height, ButtonEvent('upgrade')):[1, 3]})
 
     def action(self, event, context):
         match context.config_parameter_scene.get_scene():
@@ -48,7 +48,7 @@ class ButtonGroupController:
             case 'setting':
                 if self.__settings_group.action(event):
                     return self.__settings_group.action(event)
-            case '1' | '2' | '3' | '4' | '5' |'6':
+            case '1' | '2' | '3' | '4' | '5' | '6':
                 if self.__products_group.action(event):
                     return self.__products_group.action(event)
                 if context.towers_controller.get_current_tower() and self.__upgrade_group.action(event, context.towers_controller.get_current_tower().get_level()):
@@ -71,14 +71,22 @@ class ButtonGroupController:
                 self.__main_menu_group.active = True
                 self.__settings_group.active = False
                 self.__products_group.active = False
-                self.__upgrade_group.active = False
             case 'setting':
                 self.__main_menu_group.active = False
                 self.__settings_group.active = True
                 self.__products_group.active = False
-                self.__upgrade_group.active = False
             case '1' | '2' | '3' | '4' | '5' | '6':
                 self.__main_menu_group.active = False
                 self.__settings_group.active = False
                 self.__products_group.active = False
-                self.__upgrade_group.active = True
+
+    def update_state(self, context):
+        self.__settings_group.change_text(additional_parameter='Additional parameter:' + str(context.config_gameplay.get_always_use_additional_parameters()),
+                                          sound='Play sound:' + str(context.sound_controller.get_play_sound()),
+                                          music='Play music:' + str(context.sound_controller.get_play_music()))
+
+    def activate_products_group(self):
+        self.__products_group.active = True
+
+    def deactivate_products_group(self):
+        self.__products_group.active = False

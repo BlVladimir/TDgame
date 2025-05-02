@@ -26,13 +26,17 @@ class Shop(pygame.sprite.Sprite):
     def draw(self, towers_controller, context): #  рисует магазин
         if context.config_gameplay.get_shop_type() == 2:
             self.__draw_up(towers_controller, context)
+            context.buttons_groups_controller.deactivate_products_group()
+        elif context.config_gameplay.get_shop_type() == 1:
+            context.buttons_groups_controller.activate_products_group()
+        else:
+            context.buttons_groups_controller.deactivate_products_group()
 
     def __draw_up(self, towers_controller, context):  # рисует кнопку улучшения
         height = context.config_parameter_scene.get_height()
         if towers_controller.get_current_tower() is not None:
             towers_controller.get_current_tower().draw_picture_tower(height * 0.16, (height * 0.2, 200), context)
             self.__draw_tower_parameter(context)
-            towers_controller.get_current_button_update().draw(context)
 
     def __draw_tower_parameter(self, context):  # рисует характеристики башни
         height = context.config_parameter_scene.get_height()
