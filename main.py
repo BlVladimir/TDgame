@@ -36,8 +36,8 @@ while True:  # основной цикл
         context.sound_controller.click_sound(event)
     context.animation_controller.move_enemies(context)
     draw_scene.draw_scene(highlighting, context)
-    if context.config_gameplay.get_is_fail:
+    if context.config_gameplay.get_is_fail():
         context.animation_controller.fail_animation(context)
-    context.maps_controller.update_trajectory_array
+    context.maps_controller.update_trajectory_array()
     pygame.display.flip()  # обновляет экран по завершению цикла
-    context.config_constant_object.get_clock.tick(30)  # ограничивает число кадров в секунду
+    context.config_constant_object.get_clock().tick(30)  # ограничивает число кадров в секунду

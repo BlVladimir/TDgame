@@ -67,35 +67,35 @@ class EventController:
                     if button_event.parameter['scene'].isdigit():
                         highlighting.update_scale(context)
                         context.maps_controller.change_level(button_event.parameter['scene'])
-                        context.config_constant_object.get_information_table.reset_modifier()
-                        context.config_modifier.reset_price_modifier
+                        context.config_constant_object.get_information_table().reset_modifier()
+                        context.config_modifier.reset_price_modifier()
                         context.towers_controller.update_scale_animation(context)
-                        context.maps_controller.update_trajectory_array
+                        context.maps_controller.update_trajectory_array()
                         context.maps_controller.create_waves(100, context)  # создает волны
-                        context.config_gameplay.set_current_wave(1 - context.config_gameplay.get_current_wave)  # текущая волна
+                        context.config_gameplay.set_current_wave(1 - context.config_gameplay.get_current_wave())  # текущая волна
                         context.enemies_controller.create_enemy(context)  # создает врагов на 1 клетке
                         context.config_gameplay.set_is_started(False)  # переменная отвечает за то, началась ли игра или нет
-                        context.config_gameplay.set_money(-context.config_gameplay.get_money + 4)
-                        for i in range(len(context.maps_controller.get_build_array)):  # обнуляет все тайлы
-                            context.maps_controller.get_build_array[i]['is_filled'] = False
+                        context.config_gameplay.set_money(-context.config_gameplay.get_money()+ 4)
+                        for i in range(len(context.maps_controller.get_build_array())):  # обнуляет все тайлы
+                            context.maps_controller.get_build_array()[i]['is_filled'] = False
                     context.buttons_groups_controller.change_buttons_active(context)
                 case 'buy_tower':
                     is_free = context.config_modifier.get_is_free
                     price_up = context.config_modifier.get_price_up
-                    if not price_up and not is_free and context.config_gameplay.get_money >= json.loads(self.__products)[button_event.parameter['type']]['cost']:
+                    if not price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[button_event.parameter['type']]['cost']:
                         self.__create_tower(1, context, button_event.parameter['type'])
-                        context.maps_controller.get_build_array[context.config_gameplay.get_current_tile]['is_filled'] = True
-                    elif price_up and not is_free and context.config_gameplay.get_money >= json.loads(self.__products)[button_event.parameter['type']]['cost'] * 2:
+                        context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile]['is_filled'] = True
+                    elif price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[button_event.parameter['type']]['cost'] * 2:
                         self.__create_tower(2, context, button_event.parameter['type'])
                         context.config_modifier.get_new_value_price_up(False)
-                        context.maps_controller.get_build_array[context.config_gameplay.get_current_tile]['is_filled'] = True
+                        context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile]['is_filled'] = True
                     elif is_free:
                         self.__create_tower(0, context, button_event.parameter['type'])
                         context.config_modifier.get_new_value_price_up(False)
                         context.config_modifier.get_new_value_is_free(False)
-                        context.maps_controller.get_build_array[context.config_gameplay.get_current_tile]['is_filled'] = True
+                        context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile]['is_filled'] = True
                 case 'upgrade':
-                    if context.towers_controller.get_current_tower and context.towers_controller.get_current_tower.get_level() != 3:
+                    if context.towers_controller.get_current_tower()and context.towers_controller.get_current_tower.get_level() != 3:
                         cost = context.towers_controller.get_current_tower.get_improve_cost_array()[context.towers_controller.get_current_tower.get_level() - 1]
                         is_free = context.config_modifier.get_is_free
                         price_up = context.config_modifier.get_price_up
@@ -105,13 +105,13 @@ class EventController:
                             context.config_modifier.get_new_value_is_free(False)
                             context.config_modifier.get_new_value_price_up(False)
                             context.towers_controller.append_upgrade(context)
-                        elif price_up and context.config_gameplay.get_money >= cost * 2:
+                        elif price_up and context.config_gameplay.get_money()>= cost * 2:
                             context.towers_controller.get_current_tower.upgrade(1, 60)
                             context.towers_controller.get_current_tower.set_level()
                             context.config_gameplay.set_money(-cost * 2)
                             context.config_modifier.get_new_value_price_up(False)
                             context.towers_controller.append_upgrade(context)
-                        elif not price_up and context.config_gameplay.get_money >= cost:
+                        elif not price_up and context.config_gameplay.get_money()>= cost:
                             context.towers_controller.get_current_tower.upgrade(1, 60)
                             context.towers_controller.get_current_tower.set_level()
                             context.config_gameplay.set_money(-cost)

@@ -46,7 +46,7 @@ def upgrade_tower(context):  # улучшение башни по номеру
             context.config_modifier.get_new_value_is_free(False)
             context.config_modifier.get_new_value_price_up(False)
             context.towers_controller.append_upgrade(context)
-        elif price_up and context.config_gameplay.get_money >= cost * 2:
+        elif price_up and context.config_gameplay.get_money()>= cost * 2:
             context.towers_controller.get_current_tower.upgrade(1, 60)
             context.towers_controller.get_current_tower.set_level()
             context.towers_controller.get_current_button_update.change_image('images/upgrade/2lvl.png') if context.towers_controller.get_current_tower.get_level() == 2 \
@@ -54,7 +54,7 @@ def upgrade_tower(context):  # улучшение башни по номеру
             context.config_gameplay.set_money(-cost * 2)
             context.config_modifier.get_new_value_price_up(False)
             context.towers_controller.append_upgrade(context)
-        elif not price_up and context.config_gameplay.get_money >= cost:
+        elif not price_up and context.config_gameplay.get_money()>= cost:
             context.towers_controller.get_current_tower.upgrade(1, 60)
             context.towers_controller.get_current_tower.set_level()
             context.towers_controller.get_current_button_update.change_image('images/upgrade/2lvl.png') if context.towers_controller.get_current_tower.get_level() == 2 \
@@ -132,10 +132,10 @@ class Product:  # класс продуктов
         is_free = context.config_modifier.get_is_free
         price_up = context.config_modifier.get_price_up
         is_filled = False
-        if not price_up and not is_free and self.__button_product.is_pressed(event) and context.config_gameplay.get_money >= self.__cost:
+        if not price_up and not is_free and self.__button_product.is_pressed(event) and context.config_gameplay.get_money()>= self.__cost:
             self.__create_tower(1, context.config_parameter_scene.get_height, context)
             is_filled = True
-        elif price_up and not is_free and self.__button_product.is_pressed(event) and context.config_gameplay.get_money >= self.__cost * 2:
+        elif price_up and not is_free and self.__button_product.is_pressed(event) and context.config_gameplay.get_money()>= self.__cost * 2:
             self.__create_tower(2, context.config_parameter_scene.get_height, context)
             context.config_modifier.get_new_value_price_up(False)
             is_filled = True

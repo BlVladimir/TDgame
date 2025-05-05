@@ -103,7 +103,7 @@ class MapsController:
     def definition_current_tile(self, event, context):
         mouse_pose = pygame.mouse.get_pos()  # получает позицию мышки
         context.config_gameplay.set_highlight_tile(None)
-        if context.config_parameter_scene.get_width - context.config_parameter_scene.get_height * 0.4 > mouse_pose[0] > context.config_parameter_scene.get_height * 0.4:
+        if context.config_parameter_scene.get_width()- context.config_parameter_scene.get_height()* 0.4 > mouse_pose[0] > context.config_parameter_scene.get_height()* 0.4:
             tile_scale = self.__map_array[int(self.__level) - 1].get_tile_scale()
             build_array = self.get_build_array()
             for i in range(

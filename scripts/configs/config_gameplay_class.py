@@ -35,8 +35,8 @@ class ConfigGameplay:
         self.__amount_of_money = new_value
 
     def draw_money(self, context):
-        draw_text(self.__amount_of_money, ceil(context.config_parameter_scene.get_height * 0.08), self.__amount_of_money_position, context)
-        draw_text('wave: ' + str(self.__current_wave), ceil(context.config_parameter_scene.get_height * 0.08), (self.__amount_of_money_position[0] + context.config_parameter_scene.get_height * 0.2, self.__amount_of_money_position[1]), context)
+        draw_text(self.__amount_of_money, ceil(context.config_parameter_scene.get_height()* 0.08), self.__amount_of_money_position, context)
+        draw_text('wave: ' + str(self.__current_wave), ceil(context.config_parameter_scene.get_height()* 0.08), (self.__amount_of_money_position[0] + context.config_parameter_scene.get_height()* 0.2, self.__amount_of_money_position[1]), context)
 
     def get_shop_type(self):
         return self.__shop_type

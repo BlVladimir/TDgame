@@ -24,10 +24,10 @@ class Shop(pygame.sprite.Sprite):
 
 
     def draw(self, towers_controller, context): #  рисует магазин
-        if context.config_gameplay.get_shop_type == 2:
+        if context.config_gameplay.get_shop_type()== 2:
             self.__draw_up(towers_controller, context)
             context.buttons_groups_controller.deactivate_products_group
-        elif context.config_gameplay.get_shop_type == 1:
+        elif context.config_gameplay.get_shop_type()== 1:
             context.buttons_groups_controller.activate_products_group
         else:
             context.buttons_groups_controller.deactivate_products_group
@@ -40,13 +40,13 @@ class Shop(pygame.sprite.Sprite):
 
     def __draw_tower_parameter(self, context):  # рисует характеристики башни
         height = context.config_parameter_scene.get_height
-        if context.towers_controller.get_current_tower is not None:
+        if context.towers_controller.get_current_tower()is not None:
             characteristic_dict = context.towers_controller.get_current_tower.get_characteristic()
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.5, len(characteristic_dict), (0, height * 0.16), 1)
             i = 0
             for j in characteristic_dict.keys():
-                context.config_parameter_scene.get_screen.blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.config_parameter_scene.get_height * 0.06, coordinate_array[i][1] - context.config_parameter_scene.get_height * 0.02))
-                function.draw_text(characteristic_dict[j], int(context.config_parameter_scene.get_height * 0.06), (coordinate_array[i][0] + context.config_parameter_scene.get_height * 0.15, coordinate_array[i][1]), context, 1)
+                context.config_parameter_scene.get_screen().blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.config_parameter_scene.get_height()* 0.06, coordinate_array[i][1] - context.config_parameter_scene.get_height()* 0.02))
+                function.draw_text(characteristic_dict[j], int(context.config_parameter_scene.get_height()* 0.06), (coordinate_array[i][0] + context.config_parameter_scene.get_height()* 0.15, coordinate_array[i][1]), context, 1)
                 i += 1
 
     def get_money_picture(self):  # возвращает картинку монеты

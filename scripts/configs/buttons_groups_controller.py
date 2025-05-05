@@ -41,7 +41,7 @@ class ButtonGroupController:
                                                       Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/2lvl.png', 0.16 * height, 0.16 * height, ButtonEvent('upgrade')):[1, 3]})
 
     def action(self, event, context):
-        match context.config_parameter_scene.get_scene:
+        match context.config_parameter_scene.get_scene():
             case 'mainMenu':
                 if self.__main_menu_group.action(event):
                     return self.__main_menu_group.action(event)
@@ -51,22 +51,22 @@ class ButtonGroupController:
             case '1' | '2' | '3' | '4' | '5' | '6':
                 if self.__products_group.action(event):
                     return self.__products_group.action(event)
-                if context.towers_controller.get_current_tower and self.__upgrade_group.action(event, context.towers_controller.get_current_tower.get_level()):
+                if context.towers_controller.get_current_tower()and self.__upgrade_group.action(event, context.towers_controller.get_current_tower.get_level()):
                     return self.__upgrade_group.action(event, context.towers_controller.get_current_tower.get_level())
-        if self.__general_group.action(event, context.config_parameter_scene.get_scene):
-            return self.__general_group.action(event, context.config_parameter_scene.get_scene)
+        if self.__general_group.action(event, context.config_parameter_scene.get_scene()):
+            return self.__general_group.action(event, context.config_parameter_scene.get_scene())
         return None
 
     def draw(self, context):
         for i in (self.__main_menu_group, self.__settings_group, self.__products_group):
             i.draw(context)
             i.update(context)
-        self.__general_group.draw(context, context.config_parameter_scene.get_scene)
-        if context.towers_controller.get_current_tower:
-            self.__upgrade_group.draw(context, context.towers_controller.get_current_tower.get_level())
+        self.__general_group.draw(context, context.config_parameter_scene.get_scene())
+        if context.towers_controller.get_current_tower():
+            self.__upgrade_group.draw(context, context.towers_controller.get_current_tower().get_level())
 
     def change_buttons_active(self, context):
-        match context.config_parameter_scene.get_scene:
+        match context.config_parameter_scene.get_scene():
             case 'mainMenu':
                 self.__main_menu_group.active = True
                 self.__settings_group.active = False
@@ -81,9 +81,9 @@ class ButtonGroupController:
                 self.__products_group.active = False
 
     def update_state(self, context):
-        self.__settings_group.change_text(additional_parameter='Additional parameter:' + str(context.config_gameplay.get_always_use_additional_parameters),
-                                          sound='Play sound:' + str(context.sound_controller.get_play_sound),
-                                          music='Play music:' + str(context.sound_controller.get_play_music))
+        self.__settings_group.change_text(additional_parameter='Additional parameter:' + str(context.config_gameplay.get_always_use_additional_parameters()),
+                                          sound='Play sound:' + str(context.sound_controller.get_play_sound()),
+                                          music='Play music:' + str(context.sound_controller.get_play_music()))
 
     def activate_products_group(self):
         self.__products_group.active = True

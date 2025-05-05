@@ -17,7 +17,7 @@ class Button(pygame.sprite.Sprite):
     def update(self, context):
         mouse_position = pygame.mouse.get_pos()
         if self.rect[0] + self.__width >= mouse_position[0] >= self.rect[0] and self.rect[1] + self.__height >= mouse_position[1] >= self.rect[1]:
-            context.config_parameter_scene.get_screen.blit(self.__highlight, self.rect)
+            context.config_parameter_scene.get_screen().blit(self.__highlight, self.rect)
 
     def is_pressed(self, event): # функция, считывающая нажатие кнопки
         if self.rect[0] + self.__width >= pygame.mouse.get_pos()[0] >= self.rect[0] and self.rect[1] + self.__height >= pygame.mouse.get_pos()[1] >= self.rect[1]:

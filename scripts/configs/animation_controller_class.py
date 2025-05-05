@@ -30,7 +30,7 @@ class AnimationController:
                 self.__is_move = False
                 context.enemies_controller.treat_enemies(context)
                 context.towers_controller.turn_off_or_on_all_towers(False)  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
-                if context.config_gameplay.get_current_wave != len(context.config_gameplay.get_waves) and context.config_gameplay.get_waves != []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
+                if context.config_gameplay.get_current_wave()!= len(context.config_gameplay.get_waves) and context.config_gameplay.get_waves()!= []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
                     context.enemies_controller.create_enemy(context)
                     context.config_gameplay.set_current_wave(1)
 
@@ -38,10 +38,10 @@ class AnimationController:
         if self.__time_game_over < 30:
             self.__time_game_over += 1
         elif 30 <= self.__time_game_over < 60:
-            context.config_parameter_scene.get_screen.blit(self.__animation_game_over[(self.__time_game_over - 30) // 2], (0, 0))
+            context.config_parameter_scene.get_screen().blit(self.__animation_game_over[(self.__time_game_over - 30) // 2], (0, 0))
             self.__time_game_over += 1
         elif 60 <= self.__time_game_over < 180:
-            context.config_parameter_scene.get_screen.blit(self.__animation_game_over[14], (0, 0))
+            context.config_parameter_scene.get_screen().blit(self.__animation_game_over[14], (0, 0))
             if (self.__time_game_over // 20) % 2 == 0:
                 draw_text('game over', 70, (30, 30), context, 1)
             else:

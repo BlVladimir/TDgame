@@ -1,5 +1,5 @@
 def shop_works(event, context):
-    if context.config_gameplay.get_current_tile is None:
+    if context.config_gameplay.get_current_tile()is None:
         context.config_gameplay.set_shop_type(0)
     elif context.maps_controller.get_build_array[context.config_gameplay.get_current_tile]['is_filled']:
         context.config_gameplay.set_shop_type(2)

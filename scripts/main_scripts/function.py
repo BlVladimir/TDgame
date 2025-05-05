@@ -11,7 +11,7 @@ def draw_text(words, size, coordinate, context, t = 0): #  рисует текс
         rect_text = text.get_rect(center = coordinate)
     else:
         rect_text = coordinate
-    context.config_parameter_scene.get_screen.blit(text, rect_text)
+    context.config_parameter_scene.get_screen().blit(text, rect_text)
 
 def bugs(context): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)
@@ -23,7 +23,7 @@ def bugs(context): #  модификаторы при убийстве враг�
             context.enemies_controller.change_health_enemy(current_influence)
         case 3:
             if current_influence == 0:
-                if context.config_gameplay.get_money > 0:
+                if context.config_gameplay.get_money()> 0:
                     context.config_gameplay.set_money(-1)
             else:
                 context.config_gameplay.set_money(1)

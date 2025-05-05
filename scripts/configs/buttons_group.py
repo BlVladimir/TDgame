@@ -10,7 +10,7 @@ class ButtonsGroup:
 
     def draw(self, context):
         if self.__active:
-            self.__button_group.draw(context.config_parameter_scene.get_screen)
+            self.__button_group.draw(context.config_parameter_scene.get_screen())
             self.__button_group.update(context=context)
 
     def action(self, event):
@@ -61,7 +61,7 @@ class ChangeableButtonGroup:
         return returning_group
 
     def draw(self, context, parameter):
-        self.__get_sprites(parameter).draw(context.config_parameter_scene.get_screen)
+        self.__get_sprites(parameter).draw(context.config_parameter_scene.get_screen())
         self.__get_sprites(parameter).update(context)
 
     def action(self, event, parameter):

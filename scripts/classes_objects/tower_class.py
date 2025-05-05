@@ -45,26 +45,26 @@ class Tower:
             return False
 
     def draw_tower(self, context):  # рисует башню на карте
-        context.config_parameter_scene.get_screen.blit(self.__image_foundation, self.__coordinate)
+        context.config_parameter_scene.get_screen().blit(self.__image_foundation, self.__coordinate)
         if self.__rotated_image is not None:
-            context.config_parameter_scene.get_screen.blit(self.__rotated_image, self.__rotated_image_rect)
-        if context.config_gameplay.get_always_use_additional_parameters or context.config_gameplay.get_use_additional_parameters:
-            context.config_parameter_scene.get_screen.blit(self.__level_image_tuple[self.__level - 1], (self.__coordinate[0] + self.__scale / 8, self.__coordinate[1] + self.__scale / 14))
+            context.config_parameter_scene.get_screen().blit(self.__rotated_image, self.__rotated_image_rect)
+        if context.config_gameplay.get_always_use_additional_parameters()or context.config_gameplay.get_use_additional_parameters:
+            context.config_parameter_scene.get_screen().blit(self.__level_image_tuple[self.__level - 1], (self.__coordinate[0] + self.__scale / 8, self.__coordinate[1] + self.__scale / 14))
             if self.__is_used:
-                context.config_parameter_scene.get_screen.blit(self.__is_charged[1], (self.__coordinate[0], self.__coordinate[1] + self.__scale / 8))
+                context.config_parameter_scene.get_screen().blit(self.__is_charged[1], (self.__coordinate[0], self.__coordinate[1] + self.__scale / 8))
             else:
-                context.config_parameter_scene.get_screen.blit(self.__is_charged[0], (self.__coordinate[0], self.__coordinate[1] + self.__scale / 8))
+                context.config_parameter_scene.get_screen().blit(self.__is_charged[0], (self.__coordinate[0], self.__coordinate[1] + self.__scale / 8))
 
     def draw_picture_tower(self, scale, coordinate_center, context):  # рисует башню с заданным размером(нужно для картинки в магазине)
-        context.config_parameter_scene.get_screen.blit(pygame.transform.scale(self.__image_foundation, (scale, scale)), (coordinate_center[0] - scale / 2, coordinate_center[1] - scale / 2))
+        context.config_parameter_scene.get_screen().blit(pygame.transform.scale(self.__image_foundation, (scale, scale)), (coordinate_center[0] - scale / 2, coordinate_center[1] - scale / 2))
         if self.__rotated_image is not None:
             __rotated_image = pygame.transform.scale(self.__image_gun, (scale, scale))
             __rotated_image = pygame.transform.rotate(__rotated_image, self.__angle)
-            context.config_parameter_scene.get_screen.blit(__rotated_image, __rotated_image.get_rect(center = coordinate_center))
+            context.config_parameter_scene.get_screen().blit(__rotated_image, __rotated_image.get_rect(center = coordinate_center))
 
 
     def draw_radius(self, context):  # рисует радиус
-        context.config_parameter_scene.get_screen.blit(self.__radius_image, (self.__coordinate[0] + self.__scale / 2 - self.__radius, self.__coordinate[1] + self.__scale / 2 - self.__radius))
+        context.config_parameter_scene.get_screen().blit(self.__radius_image, (self.__coordinate[0] + self.__scale / 2 - self.__radius, self.__coordinate[1] + self.__scale / 2 - self.__radius))
 
 
     def rotate_gun(self):  # поворачивает ствол в сторону мышки

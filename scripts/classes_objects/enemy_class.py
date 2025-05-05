@@ -49,9 +49,9 @@ class Enemy:
             else:
                 self.__rotated_image.set_alpha(0)
                 self.__current_legs_image.set_alpha(0)
-        context.config_parameter_scene.get_screen.blit(self.__rotated_image, self.__rect)
-        context.config_parameter_scene.get_screen.blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.__rect)
-        if not self.__is_dying and (context.config_gameplay.get_always_use_additional_parameters or context.config_gameplay.get_use_additional_parameters):
+        context.config_parameter_scene.get_screen().blit(self.__rotated_image, self.__rect)
+        context.config_parameter_scene.get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.__rect)
+        if not self.__is_dying and (context.config_gameplay.get_always_use_additional_parameters()or context.config_gameplay.get_use_additional_parameters):
             scale = int(self.__scale * 0.6)
             delta = (abs(math.cos(math.radians(self.__angle))) + abs(math.sin(math.radians(self.__angle)))) * (self.__scale / 2)
             function.draw_text(str(self.__health), scale, (self.__rect[0] + delta, self.__rect[1] + delta), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
