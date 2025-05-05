@@ -41,7 +41,7 @@ class Enemy:
     def draw(self, context):  # функция, рисующая врага
         self.__rotated_image = pygame.transform.rotate(self.__image, self.__angle)
         if self.__is_dying:
-            fps = context.get_animation_controller().get_fps()
+            fps = context.animation_controller.get_fps
             if self.__time_dying < fps:
                 self.__time_dying += 1
                 self.__rotated_image.set_alpha(int(100 * (fps - self.__time_dying) / fps))
@@ -49,9 +49,9 @@ class Enemy:
             else:
                 self.__rotated_image.set_alpha(0)
                 self.__current_legs_image.set_alpha(0)
-        context.get_config_parameter_scene().get_screen().blit(self.__rotated_image, self.__rect)
-        context.get_config_parameter_scene().get_screen().blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.__rect)
-        if not self.__is_dying and (context.get_config_gameplay().get_always_use_additional_parameters() or context.get_config_gameplay().get_use_additional_parameters()):
+        context.config_parameter_scene.get_screen.blit(self.__rotated_image, self.__rect)
+        context.config_parameter_scene.get_screen.blit(pygame.transform.rotate(self.__current_legs_image, self.__angle), self.__rect)
+        if not self.__is_dying and (context.config_gameplay.get_always_use_additional_parameters or context.config_gameplay.get_use_additional_parameters):
             scale = int(self.__scale * 0.6)
             delta = (abs(math.cos(math.radians(self.__angle))) + abs(math.sin(math.radians(self.__angle)))) * (self.__scale / 2)
             function.draw_text(str(self.__health), scale, (self.__rect[0] + delta, self.__rect[1] + delta), context)  # Рисует количество хп если используются дополнительный визуал. Не в центре так как размер шрифта не связан с координатами
@@ -65,13 +65,13 @@ class Enemy:
         self.__pos += 1
 
     def move(self, time, context, speed = 100):  # движение врага
-        tile_scale = context.get_maps_controller().get_tile_scale()
-        if self.__pos // speed != len(context.get_maps_controller().get_trajectory()) - 1:
-            difference_position = context.get_maps_controller().get_trajectory()[self.__pos // speed + 1] - context.get_maps_controller().get_trajectory()[self.__pos // speed]
+        tile_scale = context.maps_controller.get_tile_scale
+        if self.__pos // speed != len(context.maps_controller.get_trajectory) - 1:
+            difference_position = context.maps_controller.get_trajectory[self.__pos // speed + 1] - context.maps_controller.get_trajectory[self.__pos // speed]
         else:
             difference_position = 0
         if difference_position == 0:
-            match context.get_maps_controller().get_trajectory()[self.__pos//speed]:  # сравнивает текущую траекторию
+            match context.maps_controller.get_trajectory[self.__pos // speed]:  # сравнивает текущую траекторию
                 case 0:
                     self.__rect[1] -= (1.2 * tile_scale) / speed
                     self.__pos += 1
@@ -101,7 +101,7 @@ class Enemy:
             deltaY = y * (1.2 * tile_scale) / 8
             self.__x += x
             if difference_position == 1 or difference_position == -3:
-                match context.get_maps_controller().get_trajectory()[self.__pos // speed]:  # сравнивает текущую траекторию
+                match context.maps_controller.get_trajectory[self.__pos // speed]:  # сравнивает текущую траекторию
                     case 0:
                         self.__set_coordinate_and_angle(-deltaX, -deltaY, t)
                     case 1:
@@ -111,7 +111,7 @@ class Enemy:
                     case 3:
                         self.__set_coordinate_and_angle(-deltaY, deltaX, t)
             else:
-                match context.get_maps_controller().get_trajectory()[self.__pos // speed]:  # сравнивает текущую траекторию
+                match context.maps_controller.get_trajectory[self.__pos // speed]:  # сравнивает текущую траекторию
                     case 0:
                         self.__set_coordinate_and_angle(deltaX, -deltaY, t)
                     case 1:
@@ -121,23 +121,23 @@ class Enemy:
                     case 3:
                         self.__set_coordinate_and_angle(-deltaY, -deltaX, t)
         self.__current_legs_image = self.__animation[time % 30]
-        if self.__pos // speed == len(context.get_maps_controller().get_trajectory()) and not self.__is_dying:
-            context.get_config_gameplay().set_is_fail(True)
+        if self.__pos // speed == len(context.maps_controller.get_trajectory) and not self.__is_dying:
+            context.config_gameplay.set_is_fail(True)
 
     def end_walk(self):  # завершает передвижение врага
         self.__x = -1
 
     def remove_health(self, context): #  убрать хп
-        if context.get_towers_controller().get_current_tower().get_armor_piercing():
-            self.__health -= context.get_towers_controller().get_current_tower().get_damage()
+        if context.towers_controller.get_current_tower.get_armor_piercing():
+            self.__health -= context.towers_controller.get_current_tower.get_damage()
         else:
-            if context.get_towers_controller().get_current_tower().get_damage() - self.__armor > 0:
-                self.__health -= context.get_towers_controller().get_current_tower().get_damage() - self.__armor
-        if context.get_towers_controller().get_current_tower().get_poison() != 0:
-            if self.__current_damage_poison < context.get_towers_controller().get_current_tower().get_poison():
-                self.__treatment -= context.get_towers_controller().get_current_tower().get_poison() - self.__current_damage_poison
-                self.__current_damage_poison = context.get_towers_controller().get_current_tower().get_poison()
-            self.__poison_dict.append({'damage': context.get_towers_controller().get_current_tower().get_poison(), 'time': 2})
+            if context.towers_controller.get_current_tower.get_damage() - self.__armor > 0:
+                self.__health -= context.towers_controller.get_current_tower.get_damage() - self.__armor
+        if context.towers_controller.get_current_tower.get_poison() != 0:
+            if self.__current_damage_poison < context.towers_controller.get_current_tower.get_poison():
+                self.__treatment -= context.towers_controller.get_current_tower.get_poison() - self.__current_damage_poison
+                self.__current_damage_poison = context.towers_controller.get_current_tower.get_poison()
+            self.__poison_dict.append({'damage': context.towers_controller.get_current_tower.get_poison(), 'time': 2})
         self.reset_to_zero_additional_tower_price()
         self.new_value_additional_tower_price(context)
         self.check_dying(context)
@@ -167,7 +167,7 @@ class Enemy:
         self.__additional_tower_price = 0
 
     def new_value_additional_tower_price(self, context):  # обновляет текущую стоимость врага
-        self.__additional_tower_price = context.get_towers_controller().get_current_tower().get_additional_money()
+        self.__additional_tower_price = context.towers_controller.get_current_tower.get_additional_money()
 
     def get_additional_money(self):  # геттер стоимости врага
         return self.__additional_original_price + self.__additional_tower_price
@@ -196,7 +196,7 @@ class Enemy:
 
     def check_dying(self, context):
         if self.__health <= 0:
-            context.get_sound_controller().play_sound('death')
+            context.sound_controller.play_sound('death')
             self.__is_dying = True
 
     def get_is_dying(self):

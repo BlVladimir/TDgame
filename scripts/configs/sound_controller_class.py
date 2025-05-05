@@ -33,20 +33,20 @@ class SoundController:
     def sound_setting(self, context):
         if self.__play_sound:
             self.__play_sound = False
-            context.get_file_save_controller().set_parameter('play_sound', False)
+            context.file_save_controller.set_parameter('play_sound', False)
         else:
             self.__play_sound = True
-            context.get_file_save_controller().set_parameter('play_sound', True)
+            context.file_save_controller.set_parameter('play_sound', True)
 
     def music_setting(self, context):
         if self.__play_music:
             self.__play_music = False
             mixer.music.stop()
-            context.get_file_save_controller().set_parameter('play_music', False)
+            context.file_save_controller.set_parameter('play_music', False)
         else:
             self.__play_music = True
             mixer.music.play(loops=-1)
-            context.get_file_save_controller().set_parameter('play_music', True)
+            context.file_save_controller.set_parameter('play_music', True)
 
     def get_play_sound(self):
         return self.__play_sound

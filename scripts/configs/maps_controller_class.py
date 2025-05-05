@@ -98,24 +98,24 @@ class MapsController:
             if i != number_of_waves - 1:
                 waves_array.append([])
         waves_array[0][1] = 0
-        context.get_config_gameplay().set_waves(waves_array)
+        context.config_gameplay.set_waves(waves_array)
 
     def definition_current_tile(self, event, context):
         mouse_pose = pygame.mouse.get_pos()  # получает позицию мышки
-        context.get_config_gameplay().set_highlight_tile(None)
-        if context.get_config_parameter_scene().get_width() - context.get_config_parameter_scene().get_height() * 0.4 > mouse_pose[0] > context.get_config_parameter_scene().get_height() * 0.4:
+        context.config_gameplay.set_highlight_tile(None)
+        if context.config_parameter_scene.get_width - context.config_parameter_scene.get_height * 0.4 > mouse_pose[0] > context.config_parameter_scene.get_height * 0.4:
             tile_scale = self.__map_array[int(self.__level) - 1].get_tile_scale()
             build_array = self.get_build_array()
             for i in range(
                     len(build_array)):  # Проходит по координатам всех тайлов, и если они совпадут с координатой мышки, то этот тайл сохранится как текущий тайл. Если мышка была нажата, та как действующий тайл
                 if build_array[i]['coordinate'][0] <= mouse_pose[0] <= build_array[i]['coordinate'][0] + tile_scale and build_array[i]['coordinate'][1] <= mouse_pose[1] <= \
                         build_array[i]['coordinate'][1] + tile_scale:
-                    context.get_config_gameplay().set_highlight_tile(i)
+                    context.config_gameplay.set_highlight_tile(i)
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        context.get_config_gameplay().set_current_tile(i)
+                        context.config_gameplay.set_current_tile(i)
                     break
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    context.get_config_gameplay().set_current_tile(None)
+                    context.config_gameplay.set_current_tile(None)
 
     def get_level(self):
         return int(self.__level) + 1

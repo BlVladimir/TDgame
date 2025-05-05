@@ -31,19 +31,19 @@ class Information:
             self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.05, height * 0.05))
 
     def __draw_characteristic(self, height, context):  # рисует характеристики врага
-        if context.get_enemies_controller().get_current_enemy() is not None:
-            characteristic_dict = context.get_enemies_controller().get_current_enemy().get_characteristic()
-            coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_dict), (context.get_config_parameter_scene().get_width() - height * 0.39, height * 0.01), 1)
+        if context.enemies_controller.get_current_enemy() is not None:
+            characteristic_dict = context.enemies_controller.get_current_enemy().get_characteristic()
+            coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_dict), (context.config_parameter_scene.get_width() - height * 0.39, height * 0.01), 1)
             i = 0
             for j in characteristic_dict.keys():
-                context.get_config_parameter_scene().get_screen().blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.08, coordinate_array[i][1]))
-                function.draw_text(characteristic_dict[j], int(context.get_config_parameter_scene().get_height() * 0.06), (coordinate_array[i][0] + context.get_config_parameter_scene().get_height() * 0.15, coordinate_array[i][1]), context, 1)
+                context.config_parameter_scene.get_screen().blit(self.__image_characteristic_dict[j], (coordinate_array[i][0] + context.config_parameter_scene.get_height() * 0.08, coordinate_array[i][1]))
+                function.draw_text(characteristic_dict[j], int(context.config_parameter_scene.get_height() * 0.06), (coordinate_array[i][0] + context.config_parameter_scene.get_height() * 0.15, coordinate_array[i][1]), context, 1)
                 i += 1
 
 
     def draw(self, height, width, context):  # рисует панель информации
-        context.get_config_parameter_scene().get_screen().blit(self.__image, self.__coordinate)
-        context.get_config_parameter_scene().get_screen().blit(pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/bugs.png')), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.4))
+        context.config_parameter_scene.get_screen().blit(self.__image, self.__coordinate)
+        context.config_parameter_scene.get_screen().blit(pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/bugs.png')), (height * 0.4, height * 0.2)), (self.__coordinate[0], height * 0.4))
         self.__draw_characteristic(height, context)
         self.draw_bugs(height, width, context)
 
@@ -65,10 +65,10 @@ class Information:
         self.__current_modifier = []
 
     def draw_bugs(self, height, width, context):  # рисует массив модификаторов
-        is_free = context.get_config_modifier().get_is_free()
-        price_up = context.get_config_modifier().get_price_up()
-        type_modifier = context.get_config_modifier().get_type_new_modifier()
-        influence = context.get_config_modifier().get_influence()
+        is_free = context.config_modifier.get_is_free()
+        price_up = context.config_modifier.get_price_up()
+        type_modifier = context.config_modifier.get_type_new_modifier()
+        influence = context.config_modifier.get_influence()
         if is_free:
             self.__change_modifier_array(self.__modifier_array[0])
         elif price_up:
@@ -80,30 +80,30 @@ class Information:
             case 1:
                 if influence == 0:
                     self.__change_modifier_array(self.__modifier_array[4] + ' - 1')
-                    context.get_config_modifier().get_new_value_type_new_modifier(None)
-                    context.get_config_modifier().get_new_value_influence(None)
+                    context.config_modifier.get_new_value_type_new_modifier(None)
+                    context.config_modifier.get_new_value_influence(None)
                 elif influence == 1:
                     self.__change_modifier_array(self.__modifier_array[4] + ' + 1')
-                    context.get_config_modifier().get_new_value_type_new_modifier(None)
-                    context.get_config_modifier().get_new_value_influence(None)
+                    context.config_modifier.get_new_value_type_new_modifier(None)
+                    context.config_modifier.get_new_value_influence(None)
             case 2:
                 if influence == 0:
                     self.__change_modifier_array(self.__modifier_array[2] + ' + 1')
-                    context.get_config_modifier().get_new_value_type_new_modifier(None)
-                    context.get_config_modifier().get_new_value_influence(None)
+                    context.config_modifier.get_new_value_type_new_modifier(None)
+                    context.config_modifier.get_new_value_influence(None)
                 elif influence == 1:
                     self.__change_modifier_array(self.__modifier_array[2] + ' - 1')
-                    context.get_config_modifier().get_new_value_type_new_modifier(None)
-                    context.get_config_modifier().get_new_value_influence(None)
+                    context.config_modifier.get_new_value_type_new_modifier(None)
+                    context.config_modifier.get_new_value_influence(None)
             case 3:
                 if influence == 0:
                     self.__change_modifier_array(self.__modifier_array[3] + ' - 1')
-                    context.get_config_modifier().get_new_value_type_new_modifier(None)
-                    context.get_config_modifier().get_new_value_influence(None)
+                    context.config_modifier.get_new_value_type_new_modifier(None)
+                    context.config_modifier.get_new_value_influence(None)
                 elif influence == 1:
                     self.__change_modifier_array(self.__modifier_array[3] + ' + 1')
-                    context.get_config_modifier().get_new_value_type_new_modifier(None)
-                    context.get_config_modifier().get_new_value_influence(None)
+                    context.config_modifier.get_new_value_type_new_modifier(None)
+                    context.config_modifier.get_new_value_influence(None)
         if len(self.__current_modifier) != 0:
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(self.__current_modifier), (width - height * 0.39, height * 0.61))
             for i in range(len(self.__current_modifier)):
