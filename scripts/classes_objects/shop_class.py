@@ -1,6 +1,5 @@
 import pygame
 from scripts.main_scripts import function
-from scripts.classes_objects.product_class import Product
 from scripts.classes_objects.information_class import get_coordinate_list
 
 pygame.init()
@@ -26,11 +25,11 @@ class Shop(pygame.sprite.Sprite):
     def draw(self, towers_controller, context): #  рисует магазин
         if context.config_gameplay.get_shop_type()== 2:
             self.__draw_up(towers_controller, context)
-            context.buttons_groups_controller.deactivate_products_group
+            context.buttons_groups_controller.deactivate_products_group()
         elif context.config_gameplay.get_shop_type()== 1:
-            context.buttons_groups_controller.activate_products_group
+            context.buttons_groups_controller.activate_products_group()
         else:
-            context.buttons_groups_controller.deactivate_products_group
+            context.buttons_groups_controller.deactivate_products_group()
 
     def __draw_up(self, towers_controller, context):  # рисует кнопку улучшения
         height = context.config_parameter_scene.get_height

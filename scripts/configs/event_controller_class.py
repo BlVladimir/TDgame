@@ -57,16 +57,15 @@ class EventController:
         context.config_gameplay.set_money(-characteristic['cost']*price_coefficient)
 
     def update(self, event, context, highlighting):
-        button_event = context.buttons_groups_controller.action(event, context)
-        if button_event:
-            match button_event.name:
+        if event:
+            match event.name:
                 case 'exit':
                     exit()
                 case 'change_scene':
-                    context.config_parameter_scene.set_scene(button_event.parameter['scene'])
-                    if button_event.parameter['scene'].isdigit():
+                    context.config_parameter_scene.set_scene(event.parameter['scene'])
+                    if event.parameter['scene'].isdigit():
+                        context.maps_controller.change_level(event.parameter['scene'])
                         highlighting.update_scale(context)
-                        context.maps_controller.change_level(button_event.parameter['scene'])
                         context.config_constant_object.get_information_table().reset_modifier()
                         context.config_modifier.reset_price_modifier()
                         context.towers_controller.update_scale_animation(context)
@@ -82,15 +81,15 @@ class EventController:
                 case 'buy_tower':
                     is_free = context.config_modifier.get_is_free
                     price_up = context.config_modifier.get_price_up
-                    if not price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[button_event.parameter['type']]['cost']:
-                        self.__create_tower(1, context, button_event.parameter['type'])
+                    if not price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[event.parameter['type']]['cost']:
+                        self.__create_tower(1, context, event.parameter['type'])
                         context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile]['is_filled'] = True
-                    elif price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[button_event.parameter['type']]['cost'] * 2:
-                        self.__create_tower(2, context, button_event.parameter['type'])
+                    elif price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[event.parameter['type']]['cost'] * 2:
+                        self.__create_tower(2, context, event.parameter['type'])
                         context.config_modifier.get_new_value_price_up(False)
                         context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile]['is_filled'] = True
                     elif is_free:
-                        self.__create_tower(0, context, button_event.parameter['type'])
+                        self.__create_tower(0, context, event.parameter['type'])
                         context.config_modifier.get_new_value_price_up(False)
                         context.config_modifier.get_new_value_is_free(False)
                         context.maps_controller.get_build_array()[context.config_gameplay.get_current_tile]['is_filled'] = True

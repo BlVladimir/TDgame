@@ -65,13 +65,15 @@ class Enemy:
         self.__pos += 1
 
     def move(self, time, context, speed = 100):  # движение врага
-        tile_scale = context.maps_controller.get_tile_scale
-        if self.__pos // speed != len(context.maps_controller.get_trajectory) - 1:
-            difference_position = context.maps_controller.get_trajectory[self.__pos // speed + 1] - context.maps_controller.get_trajectory[self.__pos // speed]
+        tile_scale = context.maps_controller.get_tile_scale(
+
+        )
+        if self.__pos // speed != len(context.maps_controller.get_trajectory()) - 1:
+            difference_position = context.maps_controller.get_trajectory()[self.__pos // speed + 1] - context.maps_controller.get_trajectory()[self.__pos // speed]
         else:
             difference_position = 0
         if difference_position == 0:
-            match context.maps_controller.get_trajectory[self.__pos // speed]:  # сравнивает текущую траекторию
+            match context.maps_controller.get_trajectory()[self.__pos // speed]:  # сравнивает текущую траекторию
                 case 0:
                     self.__rect[1] -= (1.2 * tile_scale) / speed
                     self.__pos += 1
@@ -101,7 +103,7 @@ class Enemy:
             deltaY = y * (1.2 * tile_scale) / 8
             self.__x += x
             if difference_position == 1 or difference_position == -3:
-                match context.maps_controller.get_trajectory[self.__pos // speed]:  # сравнивает текущую траекторию
+                match context.maps_controller.get_trajectory()[self.__pos // speed]:  # сравнивает текущую траекторию
                     case 0:
                         self.__set_coordinate_and_angle(-deltaX, -deltaY, t)
                     case 1:
@@ -111,7 +113,7 @@ class Enemy:
                     case 3:
                         self.__set_coordinate_and_angle(-deltaY, deltaX, t)
             else:
-                match context.maps_controller.get_trajectory[self.__pos // speed]:  # сравнивает текущую траекторию
+                match context.maps_controller.get_trajectory()[self.__pos // speed]:  # сравнивает текущую траекторию
                     case 0:
                         self.__set_coordinate_and_angle(deltaX, -deltaY, t)
                     case 1:
@@ -121,7 +123,7 @@ class Enemy:
                     case 3:
                         self.__set_coordinate_and_angle(-deltaY, -deltaX, t)
         self.__current_legs_image = self.__animation[time % 30]
-        if self.__pos // speed == len(context.maps_controller.get_trajectory) and not self.__is_dying:
+        if self.__pos // speed == len(context.maps_controller.get_trajectory()) and not self.__is_dying:
             context.config_gameplay.set_is_fail(True)
 
     def end_walk(self):  # завершает передвижение врага

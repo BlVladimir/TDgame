@@ -2,6 +2,7 @@ import os
 import pygame
 from scripts.main_scripts.function import draw_text
 from scripts.main_scripts.resourse_path import resource_path
+from scripts.classes_objects.event_class import ButtonEvent
 
 class AnimationController:
     def __init__(self, config_parameter_screen):
@@ -30,11 +31,11 @@ class AnimationController:
                 self.__is_move = False
                 context.enemies_controller.treat_enemies(context)
                 context.towers_controller.turn_off_or_on_all_towers(False)  # После окончания движения врагов разрешает пользоваться башнями. Можно добавить модификатор нескольких использований башен или при максимальном уровне
-                if context.config_gameplay.get_current_wave()!= len(context.config_gameplay.get_waves) and context.config_gameplay.get_waves()!= []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
+                if context.config_gameplay.get_current_wave()!= len(context.config_gameplay.get_waves()) and context.config_gameplay.get_waves()!= []:  # после окончания движения создает врага на освободившейся клетке, если количество волн не дошло до конечной волны
                     context.enemies_controller.create_enemy(context)
                     context.config_gameplay.set_current_wave(1)
 
-    def fail_animation(self, context):  # Анимация при пройгрыше. Кнопка exit работает, но ее не видно
+    def fail_animation(self, context, highlighting):  # Анимация при пройгрыше. Кнопка exit работает, но ее не видно
         if self.__time_game_over < 30:
             self.__time_game_over += 1
         elif 30 <= self.__time_game_over < 60:
@@ -50,7 +51,7 @@ class AnimationController:
         else:
             self.__time_game_over = 0
             context.config_gameplay.set_is_fail(False)
-            context.config_parameter_scene.set_scene('mainMenu')
+            context.event_controller.update(ButtonEvent('change_scene', scene='main_menu'), context, highlighting)
 
     def get_time_game_over(self):
         return self.__time_game_over

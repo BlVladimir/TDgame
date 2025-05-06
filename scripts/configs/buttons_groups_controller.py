@@ -35,26 +35,26 @@ class ButtonGroupController:
              ButtonWithText(20, 390, "images/tower/anty_shield.png", height * 0.1, height * 0.1, ButtonEvent('buy_tower', type='anty_shield'), 'x 4', 'anty_shield', (100, 0)),
              ButtonWithText(20, 510, "images/tower/venom_foundation.png", height * 0.1, height * 0.1, ButtonEvent('buy_tower', type='venom'), 'x 5', 'venom_foundation', (100, 0))))
         self.__general_group = ChangeableButtonGroup({Button(width - 170 - height * 0.4, 20, "images/UI/exit.png", 150, 75, ButtonEvent('exit')): [],
-                                                    Button(150, 20, "images/UI/exit_in_main_menu.png", 100, 100, ButtonEvent('change_scene', scene='mainMenu')): ['mainMenu'],
+                                                    Button(150, 20, "images/UI/exit_in_main_menu.png", 100, 100, ButtonEvent('change_scene', scene='main_menu')): ['main_menu'],
                                                     Button(20, 20, "images/UI/settings.png", 100, 100, ButtonEvent('change_scene', scene='setting')):['setting']})
         self.__upgrade_group = ChangeableButtonGroup({Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/1lvl.png', 0.16 * height, 0.16 * height, ButtonEvent('upgrade')):[2, 3],
                                                       Button(height * 0.02, height - 37 * height / 150, 'images/upgrade/2lvl.png', 0.16 * height, 0.16 * height, ButtonEvent('upgrade')):[1, 3]})
 
-    def action(self, event, context):
+    def action(self, context):
         match context.config_parameter_scene.get_scene():
-            case 'mainMenu':
-                if self.__main_menu_group.action(event):
-                    return self.__main_menu_group.action(event)
+            case 'main_menu':
+                if self.__main_menu_group.action():
+                    return self.__main_menu_group.action()
             case 'setting':
-                if self.__settings_group.action(event):
-                    return self.__settings_group.action(event)
+                if self.__settings_group.action():
+                    return self.__settings_group.action()
             case '1' | '2' | '3' | '4' | '5' | '6':
-                if self.__products_group.action(event):
-                    return self.__products_group.action(event)
-                if context.towers_controller.get_current_tower()and self.__upgrade_group.action(event, context.towers_controller.get_current_tower.get_level()):
-                    return self.__upgrade_group.action(event, context.towers_controller.get_current_tower.get_level())
-        if self.__general_group.action(event, context.config_parameter_scene.get_scene()):
-            return self.__general_group.action(event, context.config_parameter_scene.get_scene())
+                if self.__products_group.action():
+                    return self.__products_group.action()
+                if context.towers_controller.get_current_tower()and self.__upgrade_group.action(context.towers_controller.get_current_tower.get_level()):
+                    return self.__upgrade_group.action(context.towers_controller.get_current_tower.get_level())
+        if self.__general_group.action(context.config_parameter_scene.get_scene()):
+            return self.__general_group.action(context.config_parameter_scene.get_scene())
         return None
 
     def draw(self, context):
@@ -67,7 +67,7 @@ class ButtonGroupController:
 
     def change_buttons_active(self, context):
         match context.config_parameter_scene.get_scene():
-            case 'mainMenu':
+            case 'main_menu':
                 self.__main_menu_group.active = True
                 self.__settings_group.active = False
                 self.__products_group.active = False

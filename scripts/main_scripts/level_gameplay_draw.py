@@ -2,7 +2,7 @@
 
 def draw_lvl(context, highlighting):
         context.maps_controller.draw_map(context)
-        highlighting.draw_highlighting(context.maps_controller.get_build_array, context)
+        highlighting.draw_highlighting(context)
         context.towers_controller.draw_towers(context)
         context.enemies_controller.draw_enemies(context)
         context.config_parameter_scene.get_screen().blit(context.config_constant_object.shop.get_money_picture(), (context.config_parameter_scene.get_height()* 0.4, context.config_parameter_scene.get_height()* 0.05))

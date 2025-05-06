@@ -13,11 +13,11 @@ class ButtonsGroup:
             self.__button_group.draw(context.config_parameter_scene.get_screen())
             self.__button_group.update(context=context)
 
-    def action(self, event):
+    def action(self):
         if self.__active:
             for i in self.__button_group.sprites():
-                if i.is_pressed(event):
-                    return i.is_pressed(event)
+                if i.is_pressed():
+                    return i.is_pressed()
         return False
 
     def update(self, context):
@@ -64,7 +64,7 @@ class ChangeableButtonGroup:
         self.__get_sprites(parameter).draw(context.config_parameter_scene.get_screen())
         self.__get_sprites(parameter).update(context)
 
-    def action(self, event, parameter):
+    def action(self, parameter):
         for i in self.__get_sprites(parameter):
-            if i.is_pressed(event):
-                return i.is_pressed(event)
+            if i.is_pressed():
+                return i.is_pressed()

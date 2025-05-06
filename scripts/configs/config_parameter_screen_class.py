@@ -3,7 +3,7 @@ import pygame
 class ConfigParameterScreen:
 
     def __init__(self):
-        self.__scene = 'mainMenu'
+        self.__scene = 'main_menu'
         self.__screen = pygame.display.set_mode()
         self.__width = self.__screen.get_width()
         self.__height = self.__screen.get_height()
