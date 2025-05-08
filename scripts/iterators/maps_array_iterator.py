@@ -4,7 +4,7 @@ import pygame
 from scripts.classes_objects.map_class import Map
 
 
-class MapsController:
+class MapsArrayIterator:
     def __init__(self, width, height):
         if (width - 0.8 * height) / 1.2 <= height / 1.2:
             self.__tile_scale = (width - 0.8 * height) / 1.2
@@ -106,16 +106,17 @@ class MapsController:
         if context.config_parameter_scene.get_width()- context.config_parameter_scene.get_height()* 0.4 > mouse_pose[0] > context.config_parameter_scene.get_height()* 0.4:
             tile_scale = self.__map_array[int(self.__level) - 1].get_tile_scale()
             build_array = self.get_build_array()
-            for i in range(
-                    len(build_array)):  # Проходит по координатам всех тайлов, и если они совпадут с координатой мышки, то этот тайл сохранится как текущий тайл. Если мышка была нажата, та как действующий тайл
+            for i in range(len(build_array)):  # Проходит по координатам всех тайлов, и если они совпадут с координатой мышки, то этот тайл сохранится как текущий тайл. Если мышка была нажата, та как действующий тайл
                 if build_array[i]['coordinate'][0] <= mouse_pose[0] <= build_array[i]['coordinate'][0] + tile_scale and build_array[i]['coordinate'][1] <= mouse_pose[1] <= \
                         build_array[i]['coordinate'][1] + tile_scale:
                     context.config_gameplay.set_highlight_tile(i)
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         context.config_gameplay.set_current_tile(i)
+                        context.config_gameplay.set_shop_type(1)
                     break
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     context.config_gameplay.set_current_tile(None)
+                    context.config_gameplay.set_shop_type(0)
 
     def get_level(self):
         return int(self.__level) + 1

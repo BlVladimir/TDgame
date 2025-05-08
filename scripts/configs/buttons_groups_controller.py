@@ -51,8 +51,8 @@ class ButtonGroupController:
             case '1' | '2' | '3' | '4' | '5' | '6':
                 if self.__products_group.action():
                     return self.__products_group.action()
-                if context.towers_controller.get_current_tower()and self.__upgrade_group.action(context.towers_controller.get_current_tower.get_level()):
-                    return self.__upgrade_group.action(context.towers_controller.get_current_tower.get_level())
+                if context.towers_array_iterator.get_current_tower()and self.__upgrade_group.action(context.towers_array_iterator.get_current_tower().get_level()):
+                    return self.__upgrade_group.action(context.towers_array_iterator.get_current_tower().get_level())
         if self.__general_group.action(context.config_parameter_scene.get_scene()):
             return self.__general_group.action(context.config_parameter_scene.get_scene())
         return None
@@ -62,8 +62,8 @@ class ButtonGroupController:
             i.draw(context)
             i.update(context)
         self.__general_group.draw(context, context.config_parameter_scene.get_scene())
-        if context.towers_controller.get_current_tower():
-            self.__upgrade_group.draw(context, context.towers_controller.get_current_tower().get_level())
+        if context.towers_array_iterator.get_current_tower():
+            self.__upgrade_group.draw(context, context.towers_array_iterator.get_current_tower().get_level())
 
     def change_buttons_active(self, context):
         match context.config_parameter_scene.get_scene():

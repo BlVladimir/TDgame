@@ -1,13 +1,13 @@
 class Context:
-    def __init__(self, config_constant_object, config_gameplay, config_modifier, config_parameter_scene, animation_controller, enemies_controller, towers_controller, maps_controller, file_save_controller, sound_controller, event_controller, buttons_groups_controller):
+    def __init__(self, config_constant_object, config_gameplay, config_modifier, config_parameter_scene, animation_controller, enemies_array_iterator, towers_array_iterator, maps_array_iterator, file_save_controller, sound_controller, event_controller, buttons_groups_controller):
         self.__config_constant_object = config_constant_object
         self.__config_gameplay = config_gameplay
         self.__config_modifier = config_modifier
         self.__config_parameter_scene = config_parameter_scene
         self.__animation_controller = animation_controller
-        self.__enemies_controller = enemies_controller
-        self.__towers_controller = towers_controller
-        self.__maps_controller = maps_controller
+        self.__enemies_array_iterator = enemies_array_iterator
+        self.__towers_array_iterator = towers_array_iterator
+        self.__maps_array_iterator = maps_array_iterator
         self.__file_save_controller = file_save_controller
         self.__sound_controller = sound_controller
         self.__event_controller = event_controller
@@ -34,16 +34,16 @@ class Context:
         return self.__animation_controller
 
     @property
-    def enemies_controller(self):
-        return self.__enemies_controller
+    def enemies_array_iterator(self):
+        return self.__enemies_array_iterator
 
     @property
-    def towers_controller(self):
-        return self.__towers_controller
+    def towers_array_iterator(self):
+        return self.__towers_array_iterator
 
     @property
-    def maps_controller(self):
-        return self.__maps_controller
+    def maps_array_iterator(self):
+        return self.__maps_array_iterator
 
     @property
     def file_save_controller(self):

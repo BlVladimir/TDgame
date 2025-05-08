@@ -18,9 +18,9 @@ def bugs(context): #  модификаторы при убийстве враг�
     current_influence = random.getrandbits(1)
     match type_of_bugs:
         case 1:
-            context.towers_controller.change_damage(current_influence)
+            context.towers_array_iterator.change_damage(current_influence)
         case 2:
-            context.enemies_controller.change_health_enemy(current_influence)
+            context.enemies_array_iterator.change_health_enemy(current_influence)
         case 3:
             if current_influence == 0:
                 if context.config_gameplay.get_money()> 0:
