@@ -79,8 +79,8 @@ class EventController:
                             context.maps_array_iterator.get_build_array()[i]['is_filled'] = False
                     context.buttons_groups_controller.change_buttons_active(context)
                 case 'buy_tower':
-                    is_free = context.config_modifier.get_is_free
-                    price_up = context.config_modifier.get_price_up
+                    is_free = context.config_modifier.get_is_free()
+                    price_up = context.config_modifier.get_price_up()
                     if not price_up and not is_free and context.config_gameplay.get_money()>= json.loads(self.__products)[event.parameter['type']]['cost']:
                         self.__create_tower(1, context, event.parameter['type'])
                         context.maps_array_iterator.get_build_array()[context.config_gameplay.get_current_tile()]['is_filled'] = True
@@ -96,8 +96,8 @@ class EventController:
                 case 'upgrade':
                     if context.towers_array_iterator.get_current_tower()and context.towers_array_iterator.get_current_tower().get_level() != 3:
                         cost = context.towers_array_iterator.get_current_tower().get_improve_cost_array()[context.towers_array_iterator.get_current_tower().get_level() - 1]
-                        is_free = context.config_modifier.get_is_free
-                        price_up = context.config_modifier.get_price_up
+                        is_free = context.config_modifier.get_is_free()
+                        price_up = context.config_modifier.get_price_up()
                         if is_free:
                             context.towers_array_iterator.get_current_tower().upgrade(1, 60)
                             context.towers_array_iterator.get_current_tower().set_level()

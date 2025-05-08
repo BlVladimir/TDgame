@@ -31,9 +31,6 @@ class ConfigGameplay:
     def set_current_tile(self, new_value):
         self.__current_tile = new_value
 
-    def set_amount_of_money(self, new_value):
-        self.__amount_of_money = new_value
-
     def draw_money(self, context):
         draw_text(self.__amount_of_money, ceil(context.config_parameter_scene.get_height()* 0.08), self.__amount_of_money_position, context)
         draw_text('wave: ' + str(self.__current_wave), ceil(context.config_parameter_scene.get_height()* 0.08), (self.__amount_of_money_position[0] + context.config_parameter_scene.get_height()* 0.2, self.__amount_of_money_position[1]), context)
@@ -49,6 +46,7 @@ class ConfigGameplay:
 
     def set_money(self, new_value):
         self.__money = self.__money + new_value
+        self.__amount_of_money = 'x ' + str(self.__money)
 
     def get_use_additional_parameters(self):
         return self.__use_additional_parameters
