@@ -5,10 +5,10 @@ from scripts.main_scripts.resourse_path import resource_path
 
 class Bullet(pygame.sprite.Sprite):  # наследование от спрайта
 
-    def __init__(self, image, started_coordinate_center, final_coordinate_center, fps):
+    def __init__(self, image, started_coordinate_center, final_coordinate_center, fps, scale):
         pygame.sprite.Sprite.__init__(self)
         self.__delta = (ceil((final_coordinate_center[0] - started_coordinate_center[0]) / fps), ceil((final_coordinate_center[1] - started_coordinate_center[1]) / fps))  # кортеж координат вектора перемещения
-        self.image = pygame.transform.rotate(image, degrees(atan2(self.__delta[0], self.__delta[1])) + 180)  # картинка
+        self.image = pygame.transform.rotate(pygame.transform.scale(image, (scale, scale)), degrees(atan2(self.__delta[0], self.__delta[1])) + 180)  # картинка
         self.rect = self.image.get_rect()  # координата левого верхнего угла пули
         self.rect.center = started_coordinate_center  # координата центра пули
         self.__time_to_destroy = fps  # количество кадров, через которое пуля долетит до конечно точки
@@ -27,8 +27,8 @@ class Bullet(pygame.sprite.Sprite):  # наследование от спрай�
         return self.__delta
 
 class BulletWithAnimation(Bullet):
-    def __init__(self, image, started_coordinate_center, final_coordinate_center, fps, animation_directory, scale):
-        Bullet.__init__(self, image, started_coordinate_center, final_coordinate_center, fps)
+    def __init__(self, animation_directory, started_coordinate_center, final_coordinate_center, fps, scale):
+        Bullet.__init__(self, pygame.image.load(resource_path('images/tower/Bullets/' + animation_directory + '/1')), started_coordinate_center, final_coordinate_center, fps, scale)
         files_animation = listdir(resource_path('images/tower/Bullets/' + animation_directory + '/'))  # получает имена всех файлов из пути
         self.__animation = []
         for i in files_animation:

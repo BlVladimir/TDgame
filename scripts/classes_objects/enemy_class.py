@@ -144,6 +144,16 @@ class Enemy:
         self.new_value_additional_tower_price(context)
         self.check_dying(context)
 
+    def to_poison(self, poison_damage):
+        self.__poison_dict.append({'damage': poison_damage, 'time': 2})
+
+    def reduce_health(self, damage):
+        self.__health -= damage
+
+    def reduce_health_with_armor(self, damage):
+        if damage - self.__armor > 0:
+            self.__health -= damage - self.__armor
+
     def treat(self, context):  # отравление/лечение
         if self.__treatment > 0:
             self.__health += self.__treatment
