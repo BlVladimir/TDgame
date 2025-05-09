@@ -4,7 +4,7 @@ import pygame
 from scripts.classes_objects.map_class import Map
 
 
-class MapsArrayIterator:
+class MapsArrayController:
     def __init__(self, width, height):
         if (width - 0.8 * height) / 1.2 <= height / 1.2:
             self.__tile_scale = (width - 0.8 * height) / 1.2

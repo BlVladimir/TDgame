@@ -31,8 +31,8 @@ class Information:
             self.__image_characteristic_dict[i] = pygame.transform.scale(self.__image_characteristic_dict[i], (height * 0.05, height * 0.05))
 
     def __draw_characteristic(self, height, context):  # рисует характеристики врага
-        if context.enemies_array_iterator.get_current_enemy() is not None:
-            characteristic_dict = context.enemies_array_iterator.get_current_enemy().get_characteristic()
+        if context.enemies_array_controller.get_current_enemy() is not None:
+            characteristic_dict = context.enemies_array_controller.get_current_enemy().get_characteristic()
             coordinate_array = get_coordinate_list(height * 0.38, height * 0.38, len(characteristic_dict), (context.config_parameter_scene.get_width() - height * 0.39, height * 0.01), 1)
             i = 0
             for j in characteristic_dict.keys():
