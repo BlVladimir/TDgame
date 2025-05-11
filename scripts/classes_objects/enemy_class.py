@@ -154,6 +154,9 @@ class Enemy:
         if damage - self.__armor > 0:
             self.__health -= damage - self.__armor
 
+    def increase_additional_money(self, additional_money):
+        self.__additional_tower_price = additional_money
+
     def treat(self, context):  # отравление/лечение
         if self.__treatment > 0:
             self.__health += self.__treatment

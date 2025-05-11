@@ -5,20 +5,17 @@ from scripts.main_scripts.resourse_path import resource_path
 
 class Tower:
     # инициализация класса
-    def __init__(self, image_foundation, scale, damage, coordinate, index, improve_cost_array, armor_piercing, poison, additional_money = 0, image_gun = None, radius = None):
+    def __init__(self, image_foundation, scale, coordinate, index, improve_cost_array, damage_state, image_gun = None, radius = None):
+        self.__damage_state = damage_state
         self.__is_used = False  # башня выстрелила или нет
         self.__index = index  # индекс, совпадает с номером тайла
         self.__image_foundation = pygame.image.load(resource_path(image_foundation))  # картинка фундамента
         self.__image_foundation = pygame.transform.scale(self.__image_foundation, (scale, scale))
-        self.__damage = damage  # урон
         self.__scale = scale  # размер
         self.__coordinate = coordinate  # координата левого верхнего угла
         self.__angle = 0  # угол поворота башни
-        self.__armor_piercing = armor_piercing  # бронебойный или нет
-        self.__poison = poison  # отравление
         self.__level = 1  # уровень башни
         self.__improve_cost_array = improve_cost_array  # массив цен улучшения
-        self.__additional_money = additional_money  # дополнительные монеты за убийство
         if image_gun is not None:  # картинка пушки и повернутой пушки
             self.__image_gun = pygame.image.load(resource_path(image_gun))
             self.__image_gun = pygame.transform.scale(self.__image_gun, (scale, scale))
