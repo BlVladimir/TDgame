@@ -1,87 +1,64 @@
 import pygame  # импорт библиотеки pygame
 import math
+
+from pygame.examples.cursors import image
+
 from scripts.main_scripts.resourse_path import resource_path
 
+class OnlyImageSprite(pygame.sprite.Sprite):
+    def __init__(self, image, rect):
+        super().__init__()
+        self.image = image
+        self.rect = rect
+
+class TowerSpritesGroup:
+    def __init__(self, image, coordinate, scale, gun_sprite):
+        self.__sprites_group = pygame.sprite.Group(OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path(image)),(scale, scale)), coordinate))
+        if gun_sprite:
+            self.__sprites_group.add(gun_sprite)
+        self.__rect = pygame.rect.Rect(coordinate, (scale, scale))
+        self.__is_charged_sprites_tuple = (OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/charged.png')), (scale / 6, scale / 6)), coordinate),
+                                           OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/not_charged.png')), (scale / 6, scale / 6)), coordinate))  # картинка заряжена башня или нет
+        self.__level_image_sprites_tuple = (OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/1lvl.png')), (scale / 4, scale / 4)), coordinate),
+                                            OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/2lvl.png')), (scale / 4, scale / 4)), coordinate),
+                                            OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/3lvl.png')), (scale / 4, scale / 4)), coordinate))  # картинка уровня башни
+
+    def update(self):
+        self.__sprites_group.update()
+
+    def update_state_group(self, level, is_charged, context):
+        for i in self.__is_charged_sprites_tuple:
+            if self.__sprites_group.has(i):
+                self.__sprites_group.remove(i)
+        for i in self.__level_image_sprites_tuple:
+            if self.__sprites_group.has(i):
+                self.__sprites_group.remove(i)
+        if context.config_gameplay.get_always_use_additional_parameters() or context.config_gameplay.get_use_additional_parameters():
+            self.__sprites_group.add(self.__is_charged_sprites_tuple[int(is_charged)])
+            self.__sprites_group.add(self.__is_charged_sprites_tuple[level-1])
+
+    def draw(self, context):
+            self.__sprites_group.draw(context.config_parameter_scene.get_screen())
 
 class Tower:
     # инициализация класса
-    def __init__(self, image_foundation, scale, coordinate, index, improve_cost_array, damage_state, image_gun = None, radius = None):
+    def __init__(self, image_foundation, scale, coordinate, index, improve_cost_array, damage_state, gun_strategy, radius_strategy):
         self.__damage_state = damage_state
+        self.__gun_strategy = gun_strategy
+        self.__radius_strategy = radius_strategy
+        self.__tower_sprites_group = TowerSpritesGroup(image, coordinate, scale, self.__gun_strategy.gun_sprite)
         self.__is_used = False  # башня выстрелила или нет
         self.__index = index  # индекс, совпадает с номером тайла
-        self.__image_foundation = pygame.image.load(resource_path(image_foundation))  # картинка фундамента
-        self.__image_foundation = pygame.transform.scale(self.__image_foundation, (scale, scale))
-        self.__scale = scale  # размер
-        self.__coordinate = coordinate  # координата левого верхнего угла
-        self.__angle = 0  # угол поворота башни
         self.__level = 1  # уровень башни
         self.__improve_cost_array = improve_cost_array  # массив цен улучшения
-        if image_gun is not None:  # картинка пушки и повернутой пушки
-            self.__image_gun = pygame.image.load(resource_path(image_gun))
-            self.__image_gun = pygame.transform.scale(self.__image_gun, (scale, scale))
-            self.__rotated_image = self.__image_gun
-            self.__rotated_image_rect = coordinate
-        else:
-            self.__image_gun = None
-            self.__rotated_image = self.__image_gun
-        if radius is not None:  # картинка радиуса
-            self.__radius = scale / 2 + radius * scale * 1.2
-            self.__radius_image = pygame.transform.scale(pygame.image.load(resource_path('images/UI/highlighting/radius.png')), (self.__radius * 2, self.__radius * 2))
-        self.__is_charged = (pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/charged.png')), (self.__scale / 6, self.__scale / 6)),
-                             pygame.transform.scale(pygame.image.load(resource_path('images/UI/enemy_characteristic/not_charged.png')), (self.__scale / 6, self.__scale / 6)))  # картинка заряжена башня или нет
-        self.__level_image_tuple = (pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/1lvl.png')), (self.__scale / 4, self.__scale / 4)),
-                                    pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/2lvl.png')), (self.__scale / 4, self.__scale / 4)),
-                                    pygame.transform.scale(pygame.image.load(resource_path('images/upgrade/3lvl.png')), (self.__scale / 4, self.__scale / 4)))  # картинка уровня башни
-
-
-
-    def is_in_radius(self, context):  # проверяет, в радиусе ли точка
-        if ((self.__coordinate[0] + self.__scale / 2 - context.enemies_array_controller.get_current_enemy().get_center()[0]) ** 2 + (self.__coordinate[1] + self.__scale / 2 - context.enemies_array_controller.get_current_enemy().get_center()[1]) ** 2) <= self.__radius**2 and self.__is_used == False:  # если башня не использованная и координаты центра врага в радиусе башни
-            return True
-        else:
-            return False
 
     def draw_tower(self, context):  # рисует башню на карте
-        context.config_parameter_scene.get_screen().blit(self.__image_foundation, self.__coordinate)
-        if self.__rotated_image is not None:
-            context.config_parameter_scene.get_screen().blit(self.__rotated_image, self.__rotated_image_rect)
-        if context.config_gameplay.get_always_use_additional_parameters()or context.config_gameplay.get_use_additional_parameters():
-            context.config_parameter_scene.get_screen().blit(self.__level_image_tuple[self.__level - 1], (self.__coordinate[0] + self.__scale / 8, self.__coordinate[1] + self.__scale / 14))
-            if self.__is_used:
-                context.config_parameter_scene.get_screen().blit(self.__is_charged[1], (self.__coordinate[0], self.__coordinate[1] + self.__scale / 8))
-            else:
-                context.config_parameter_scene.get_screen().blit(self.__is_charged[0], (self.__coordinate[0], self.__coordinate[1] + self.__scale / 8))
-
-    def draw_picture_tower(self, scale, coordinate_center, context):  # рисует башню с заданным размером(нужно для картинки в магазине)
-        context.config_parameter_scene.get_screen().blit(pygame.transform.scale(self.__image_foundation, (scale, scale)), (coordinate_center[0] - scale / 2, coordinate_center[1] - scale / 2))
-        if self.__rotated_image is not None:
-            __rotated_image = pygame.transform.scale(self.__image_gun, (scale, scale))
-            __rotated_image = pygame.transform.rotate(__rotated_image, self.__angle)
-            context.config_parameter_scene.get_screen().blit(__rotated_image, __rotated_image.get_rect(center = coordinate_center))
-
-
-    def draw_radius(self, context):  # рисует радиус
-        context.config_parameter_scene.get_screen().blit(self.__radius_image, (self.__coordinate[0] + self.__scale / 2 - self.__radius, self.__coordinate[1] + self.__scale / 2 - self.__radius))
-
-    def rotate_gun(self):  # поворачивает ствол в сторону мышки
-        if not self.__is_used:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            rel_x, rel_y = (mouse_x - self.__coordinate[0] - self.__scale / 2), (mouse_y - self.__coordinate[1] - self.__scale / 2)
-            self.__angle = (180 / math.pi) * -math.atan2(rel_y, rel_x) - 90 # угол от мышки до координаты башни, деленный на некоторое число для плавной анимации
-
-            rotated_coordinate_center = (self.__coordinate[0] + self.__scale / 2, self.__coordinate[1] + self.__scale / 2)  # координаты центра башни
-
-            self.__rotated_image = pygame.transform.rotate(self.__image_gun, self.__angle)  # вращает башню
-            self.__rotated_image_rect = self.__rotated_image.get_rect(center = rotated_coordinate_center)  # получает координату нового центра
-
+        self.__tower_sprites_group.update()
+        self.__tower_sprites_group.draw(context.config_parameter_scene.get_screen())
 
     def upgrade(self, increase_damage, increase_radius):  # улучшение башни(увеличивает урон и радиус на заданное значение)
         self.__damage += increase_damage
         self.__radius += increase_radius
-        self.__radius_image = pygame.transform.scale(pygame.image.load(resource_path('images/UI/highlighting/radius.png')), (self.__radius * 2, self.__radius * 2))
-
-    def get_additional_money(self):  # возвращает дополнительные деньги за башню
-        return self.__additional_money
 
     def get_characteristic(self):  # возвращает словарь характеристик и их значений
         characteristic_dict = {'damage': 'damage ' + str(self.__damage), 'radius': 'radius ' + str(round((self.__radius - self.__scale / 2) / (self.__scale * 1.2)))}
