@@ -11,6 +11,10 @@ class OnlyImageSprite(pygame.sprite.Sprite):
         self.image = image
         self.rect = rect
 
+    def __copy__(self, scale, coordinate):
+        new = self.__class__(pygame.transform.scale(self.image, (scale, scale)), coordinate)
+        return new
+
 class TowerSpritesGroup:
     def __init__(self, image, coordinate, scale, gun_sprite):
         self.__sprites_group = pygame.sprite.Group(OnlyImageSprite(pygame.transform.scale(pygame.image.load(resource_path(image)),(scale, scale)), coordinate))

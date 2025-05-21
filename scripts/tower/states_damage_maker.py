@@ -12,9 +12,6 @@ class StateDamageMaker:
                             'piercing_armor':self.__piercing_armor_func,
                             'common':self.__common_func,
                             'addition_money':self.__addition_money}
-        self.__images_bullets_dict = {'poison':'animation_poison_bullet',
-                                      'piercing_armor':'animation_electric_bullet',
-                                      'common':pygame.image.load(resource_path('images/tower/Bullets/common_bullet.png'))}
 
     @staticmethod
     def __common_func(enemy, func=None, **kwargs):
@@ -49,13 +46,13 @@ class StateDamageMaker:
                     flag = True
         return states
 
-    def create_state(self, *args, **kwargs):
+    def create_state(self, context, *args, **kwargs):
         states = self.__sort_by_priority(args)
         func_array = []
         for i in states:
             func_array.append(self.__func_dict[i])
         match states[0]:
             case 'common':
-                return StateDamage(func_array, self.__images_bullets_dict['common'], kwargs)
+                return StateDamage(func_array, context.tower_config.get_images_bullets_dict['common'], kwargs)
             case _:
-                return StateDamageWithAnimatedBullet(func_array, self.__images_bullets_dict[states[0]], kwargs)
+                return StateDamageWithAnimatedBullet(func_array, context.tower_config.get_images_bullets_dict[states[0]], kwargs)
