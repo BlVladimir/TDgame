@@ -1,6 +1,4 @@
-from scripts.main_scripts.resourse_path import resource_path
-from scripts.tower.state_damage import StateDamage, StateDamageWithAnimatedBullet
-import pygame
+from scripts.tower.states_strategy.state_damage import StateDamage
 
 class StateDamageMaker:
     def __init__(self):
@@ -46,13 +44,9 @@ class StateDamageMaker:
                     flag = True
         return states
 
-    def create_state(self, context, *args, **kwargs):
+    def create_state(self, *args, **kwargs):
         states = self.__sort_by_priority(args)
         func_array = []
         for i in states:
             func_array.append(self.__func_dict[i])
-        match states[0]:
-            case 'common':
-                return StateDamage(func_array, context.tower_config.get_images_bullets_dict['common'], kwargs)
-            case _:
-                return StateDamageWithAnimatedBullet(func_array, context.tower_config.get_images_bullets_dict[states[0]], kwargs)
+        return StateDamage(states[0], func_array, kwargs)

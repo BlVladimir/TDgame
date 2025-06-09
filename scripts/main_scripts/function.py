@@ -1,4 +1,6 @@
 from random import randrange
+from os import listdir
+from scripts.main_scripts.resourse_path import resource_path
 
 import pygame
 import random
@@ -12,6 +14,13 @@ def draw_text(words, size, coordinate, context, t = 0): #  рисует текс
     else:
         rect_text = coordinate
     context.config_parameter_scene.get_screen().blit(text, rect_text)
+
+def get_images_array_from_directory(directory):
+    files_animation = listdir(resource_path(directory))  # получает имена всех файлов из пути
+    animation = []
+    for i in files_animation:
+        animation.append(pygame.image.load(resource_path(directory + i)))  # загружает все картинки анимации
+    return animation
 
 def bugs(context): #  модификаторы при убийстве врагов
     type_of_bugs = randrange(1, 5)

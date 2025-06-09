@@ -1,5 +1,5 @@
 class Context:
-    def __init__(self, config_constant_object, config_gameplay, config_modifier, config_parameter_scene, animation_controller, enemies_array_controller, towers_array_controller, maps_array_controller, file_save_controller, sound_controller, event_controller, buttons_groups_controller):
+    def __init__(self, config_constant_object, config_gameplay, config_modifier, config_parameter_scene, animation_controller, enemies_array_controller, towers_array_controller, maps_array_controller, file_save_controller, sound_controller, event_controller, buttons_groups_controller, tower_config):
         self.__config_constant_object = config_constant_object
         self.__config_gameplay = config_gameplay
         self.__config_modifier = config_modifier
@@ -12,6 +12,7 @@ class Context:
         self.__sound_controller = sound_controller
         self.__event_controller = event_controller
         self.__buttons_groups_controller = buttons_groups_controller
+        self.__tower_config = tower_config
 
     @property
     def config_constant_object(self):
@@ -60,3 +61,7 @@ class Context:
     @property
     def buttons_groups_controller(self):
         return self.__buttons_groups_controller
+
+    @property
+    def tower_config(self):
+        return self.__tower_config
