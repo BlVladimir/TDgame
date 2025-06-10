@@ -1,7 +1,7 @@
 import abc
 
 class AbstractRadiusStrategy(abc.ABC):
-    def __init__(self, radius):
+    def __init__(self, radius:float):
         self.__radius = radius
 
     @abc.abstractmethod
@@ -14,12 +14,20 @@ class AbstractRadiusStrategy(abc.ABC):
     def upgrade(self, visitor):
         visitor.visit_radius_strategy(self)
 
+    def clone(self, tile):
+        if tile.improved_characteristic == 'radius':
+            c = tile.velue
+        else:
+            c = 1
+        new = self.__class__(self.__radius*c)
+        return new
+
     @property
     def radius(self):
         return self.__radius
 
 class RoundRadius(AbstractRadiusStrategy):
-    def __init__(self, radius, coordinate_center_tower):
+    def __init__(self, radius:float, coordinate_center_tower=(0, 0)):
         super().__init__(radius)
         self.__coordinate_center_tower = coordinate_center_tower
 
@@ -28,6 +36,15 @@ class RoundRadius(AbstractRadiusStrategy):
             return True
         else:
             return False
+
+    def clone(self, tile):
+        if tile.improved_characteristic == 'radius':
+            c = tile.velue
+        else:
+            c = 1
+        new = self.__class__(self.__radius*c, tile.rect.center)
+        return new
+
 
 class InfinityRadius(AbstractRadiusStrategy):
     def __init__(self):

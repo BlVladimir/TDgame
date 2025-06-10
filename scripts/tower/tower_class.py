@@ -46,7 +46,7 @@ class TowerSpritesGroup:
 
 class Tower:
     # инициализация класса
-    def __init__(self, type_tower:str, rect:pygame.Rect, index, improve_cost_array, damage_state, gun_strategy, radius_strategy):
+    def __init__(self, type_tower:str, rect:pygame.Rect, improve_cost_array, damage_state, gun_strategy, radius_strategy):
         self.__type_tower = type_tower
 
         self.__damage_state = damage_state
@@ -55,7 +55,6 @@ class Tower:
         self.__tower_sprites_group = TowerSpritesGroup(image, rect, self.__gun_strategy.gun_sprite)
 
         self.__is_used = False  # башня выстрелила или нет
-        self.__index = index  # индекс, совпадает с номером тайла
         self.__level = 1  # уровень башни
         self.__improve_cost_array = improve_cost_array  # массив цен улучшения
 

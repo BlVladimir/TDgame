@@ -120,3 +120,6 @@ class MapsArrayController:
 
     def get_level(self):
         return int(self.__level) + 1
+
+    def get_current_rect(self):
+        return pygame.Rect((0,0), (self.__tile_scale, self.__tile_scale))
